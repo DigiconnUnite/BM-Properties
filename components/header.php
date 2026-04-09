@@ -1,5 +1,9 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
+$currentScript = str_replace('\\', '/', $_SERVER['PHP_SELF'] ?? '');
+if ($currentPage === 'property-details.php' || str_contains($currentScript, '/property-details/')) {
+    $currentPage = 'properties.php';
+}
 $assetBasePath = isset($assetBasePath) ? rtrim($assetBasePath, '/') . '/' : '';
 $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
 ?>
@@ -14,7 +18,7 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
                             <div class="inner-header">
                                 <div class="inner-header-left">
                                     <div class="logo-box flex">
-                                        <div class="logo"><a href="<?php echo htmlspecialchars($siteBasePath, ENT_QUOTES, 'UTF-8'); ?>index.php"><img src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new3.png"
+                                        <div class="logo"><a href="<?php echo htmlspecialchars($siteBasePath, ENT_QUOTES, 'UTF-8'); ?>index.php"><img src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new.png"
                                                     alt="logo" width="166" height="48"></a></div>
                                     </div>
                                     <div class="nav-outer flex align-center">
@@ -74,7 +78,7 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
                 <div class="mobile-menu">
                     <div class="menu-backdrop"></div>
                     <nav class="menu-box">
-                        <div class="nav-logo"><a href="<?php echo htmlspecialchars($siteBasePath, ENT_QUOTES, 'UTF-8'); ?>index.php"><img src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new3.png" alt="nav-logo"
+                        <div class="nav-logo"><a href="<?php echo htmlspecialchars($siteBasePath, ENT_QUOTES, 'UTF-8'); ?>index.php"><img src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new.png" alt="nav-logo"
                                     width="174" height="44"></a></div>
                         <div class="bottom-canvas">
                             <!-- <div class="login-box flex align-center">

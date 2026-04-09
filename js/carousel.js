@@ -232,11 +232,12 @@ if ($(".tf-sw-partner").length > 0) {
     autoplay: {
       delay: 0,
       disableOnInteraction: false,
-      pauseOnMouseEnter: true,
+      pauseOnMouseEnter: false,
     },
     slidesPerView: mobile,
     spaceBetween: spacing,
     loop: true,
+    loopAdditionalSlides: 10,
     speed: 3000,
     navigation: {
       clickable: true,
@@ -263,14 +264,6 @@ if ($(".tf-sw-partner").length > 0) {
       },
     },
   });
-  $(".tf-sw-partner").hover(
-    function () {
-      this.swiper.autoplay.stop();
-    },
-    function () {
-      this.swiper.autoplay.start();
-    }
-  );
 }
 
 if ($(".tf-sw-categories").length > 0) {

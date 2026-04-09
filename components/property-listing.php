@@ -5,13 +5,119 @@ $properties = include __DIR__ . '/properties-data.php';
 if (!function_exists('render_property_card')) {
     function render_property_card(array $property): void
     {
+        if (!function_exists('property_feature_icon_class')) {
+            function property_feature_icon_class(string $feature): string
+            {
+                $featureLower = strtolower($feature);
+
+                if (str_contains($featureLower, 'security') || str_contains($featureLower, 'cctv') || str_contains($featureLower, 'safe')) {
+                    return 'fa-solid fa-shield-halved';
+                }
+
+                if (str_contains($featureLower, 'water') || str_contains($featureLower, 'supply') || str_contains($featureLower, 'faucet')) {
+                    return 'fa-solid fa-faucet';
+                }
+
+                if (str_contains($featureLower, 'park') || str_contains($featureLower, 'green') || str_contains($featureLower, 'garden') || str_contains($featureLower, 'tree')) {
+                    return 'fa-solid fa-tree';
+                }
+
+                if (str_contains($featureLower, 'club') || str_contains($featureLower, 'house')) {
+                    return 'fa-solid fa-house-chimney';
+                }
+
+                if (str_contains($featureLower, 'indoor game')) {
+                    return 'fa-solid fa-gamepad';
+                }
+
+                if (str_contains($featureLower, 'children')) {
+                    return 'fa-solid fa-child-reaching';
+                }
+
+                if (str_contains($featureLower, 'banquet')) {
+                    return 'fa-solid fa-champagne-glasses';
+                }
+
+                if (str_contains($featureLower, 'badminton')) {
+                    return 'fa-solid fa-table-tennis-paddle-ball';
+                }
+
+                if (str_contains($featureLower, 'corner property') || str_contains($featureLower, 'corner')) {
+                    return 'fa-solid fa-vector-square';
+                }
+
+                if (str_contains($featureLower, 'planned utilit') || str_contains($featureLower, 'utility')) {
+                    return 'fa-solid fa-screwdriver-wrench';
+                }
+
+                if (str_contains($featureLower, 'power backup') || str_contains($featureLower, 'power')) {
+                    return 'fa-solid fa-bolt';
+                }
+
+                if (str_contains($featureLower, 'lift') || str_contains($featureLower, 'elevator')) {
+                    return 'fa-solid fa-elevator';
+                }
+
+                if (str_contains($featureLower, 'temple') || str_contains($featureLower, 'gopuram')) {
+                    return 'fa-solid fa-gopuram';
+                }
+
+                if (str_contains($featureLower, 'gym')) {
+                    return 'fa-solid fa-dumbbell';
+                }
+
+                if (str_contains($featureLower, 'road') || str_contains($featureLower, 'access') || str_contains($featureLower, 'connectivity')) {
+                    return 'fa-solid fa-road';
+                }
+
+                return 'fa-solid fa-circle-check';
+            }
+        }
+
         $detailPage = $property['detailPage'] ?? ('property-details/' . $property['slug'] . '.php');
         $image = $property['heroImage'] ?? 'images/banner/banner-property-1.jpg';
         $name = $property['name'] ?? 'Property';
         $summary = $property['summary'] ?? '';
-        $beds = $property['beds'] ?? '3';
-        $baths = $property['baths'] ?? '2';
-        $sqft = $property['sqft'] ?? '1150';
+        $cardHighlights = [];
+
+        if (isset($property['cardHighlights']) && is_array($property['cardHighlights'])) {
+            foreach ($property['cardHighlights'] as $highlight) {
+                if (is_string($highlight) && trim($highlight) !== '') {
+                    $cardHighlights[] = trim($highlight);
+                }
+                if (count($cardHighlights) >= 4) {
+                    break;
+                }
+            }
+        }
+
+        if (empty($cardHighlights) && isset($property['features']) && is_array($property['features'])) {
+            foreach ($property['features'] as $featureGroup) {
+                if (!is_array($featureGroup)) {
+                    continue;
+                }
+
+                foreach ($featureGroup as $featureItem) {
+                    if (!is_string($featureItem)) {
+                        continue;
+                    }
+
+                    $trimmedFeature = trim($featureItem);
+                    if ($trimmedFeature === '' || in_array($trimmedFeature, $cardHighlights, true)) {
+                        continue;
+                    }
+
+                    $cardHighlights[] = $trimmedFeature;
+                    if (count($cardHighlights) >= 4) {
+                        break 2;
+                    }
+                }
+            }
+        }
+
+        if (empty($cardHighlights)) {
+            $cardHighlights = ['Prime Location', 'Smart Investment', 'Premium Amenities'];
+        }
         ?>
         <div class="col-xl-4 col-lg-6 col-md-6">
             <div class="homelengo-box">
@@ -38,22 +144,13 @@ if (!function_exists('render_property_card')) {
                 <div class="archive-bottom">
                     <div class="content-top">
                         <h6 class="text-capitalize"><a href="<?php echo htmlspecialchars($detailPage, ENT_QUOTES, 'UTF-8'); ?>" class="link"><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></a></h6>
-                        <ul class="meta-list">
-                            <li class="item">
-                                <i class="icon icon-bed"></i>
-                                <span class="text-variant-1">Beds:</span>
-                                <span class="fw-6"><?php echo htmlspecialchars($beds, ENT_QUOTES, 'UTF-8'); ?></span>
-                            </li>
-                            <li class="item">
-                                <i class="icon icon-bath"></i>
-                                <span class="text-variant-1">Baths:</span>
-                                <span class="fw-6"><?php echo htmlspecialchars($baths, ENT_QUOTES, 'UTF-8'); ?></span>
-                            </li>
-                            <li class="item">
-                                <i class="icon icon-sqft"></i>
-                                <span class="text-variant-1">Sqft:</span>
-                                <span class="fw-6"><?php echo htmlspecialchars($sqft, ENT_QUOTES, 'UTF-8'); ?></span>
-                            </li>
+                        <ul class="meta-list feature-meta-list">
+                            <?php foreach ($cardHighlights as $highlight): ?>
+                                <li class="item">
+                                    <i class="feature-icon <?php echo htmlspecialchars(property_feature_icon_class($highlight), ENT_QUOTES, 'UTF-8'); ?>" aria-hidden="true"></i>
+                                    <span class="feature-text"><?php echo htmlspecialchars($highlight, ENT_QUOTES, 'UTF-8'); ?></span>
+                                </li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                     <div class="content-bottom">

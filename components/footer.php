@@ -14,7 +14,7 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
                         <div class="row">
                             <div class="col-lg-4 col-md-6">
                                 <div class="footer-cl-1">
-                                    <div class="footer-logo mb-16"><a href="<?php echo htmlspecialchars($siteBasePath, ENT_QUOTES, 'UTF-8'); ?>index.php"><img src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-footer-new3.png"
+                                    <div class="footer-logo mb-16"><a href="<?php echo htmlspecialchars($siteBasePath, ENT_QUOTES, 'UTF-8'); ?>index.php"><img src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-footer-new.png"
                                                 alt="logo" width="166" height="48"></a></div>
                                     <p class="text-variant-2">BM Real Estate is committed to helping you find the right property with ease and confidence. We specialize in offering trusted real estate solutions, including under-construction and investment-ready projects in prime locations.</p>
                                     
@@ -41,7 +41,7 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
                                     <div class="fw-7 text-white footer-heading-mobile">Our Properties</div>
                                     <div class="tf-collapse-content">
                                         <ul class="mt-10 navigation-menu-footer">
-                                            <li> <a href="properties.php" class="caption-1 text-variant-2">The Grand Green Valley</a> </li>
+                                            <li> <a href="properties.php" class="caption-1 text-variant-2">Grand Green Valley</a> </li>
 
                                             <li> <a href="properties.php" class="caption-1 text-variant-2">UPSIC Govt Project</a> </li>
 

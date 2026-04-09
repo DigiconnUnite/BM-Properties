@@ -426,6 +426,20 @@
     });  
   };
 
+  var configureFancybox = function () {
+    if (!$.fancybox || !$.fancybox.defaults) {
+      return;
+    }
+
+    $.extend($.fancybox.defaults, {
+      buttons: ["close"],
+      smallBtn: true,
+      clickContent: "close",
+      clickSlide: "close",
+      clickOutside: "close",
+    });
+  };
+
 
   // Dom Ready
   $(function () {
@@ -436,5 +450,6 @@
     ajaxContactForm();
     ajaxSubscribe.eventLoad();
     alertBox();
+    configureFancybox();
   });
 })(jQuery);

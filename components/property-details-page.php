@@ -13,6 +13,7 @@ $assetBasePath = $basePath;
 $siteBasePath = $basePath;
 
 $propertyName = $property['name'] ?? 'Property';
+$propertySlug = $property['slug'] ?? '';
 $pageTitle = $property['pageTitle'] ?? ($propertyName . ' - BM Real Estate');
 $category = $property['category'] ?? 'Property';
 $heroImage = $property['heroImage'] ?? 'images/banner/banner-property-1.jpg';
@@ -29,6 +30,10 @@ $baths = $property['baths'] ?? '2';
 $sqft = $property['sqft'] ?? '1150';
 $overviewId = $property['overviewId'] ?? 'BM-001';
 $nearby = $property['nearby'] ?? 'Located near local conveniences, road access, and neighborhood facilities.';
+$nearbyItems = $property['nearbyItems'] ?? [
+    'Main connectivity routes and daily commute options.',
+    'Shops, schools, and neighborhood services close by.',
+];
 $attachments = $property['attachments'] ?? [
     ['image' => 'images/home/file-1.png', 'name' => $propertyName . '-Document.pdf'],
     ['image' => 'images/home/file-2.png', 'name' => $propertyName . '-Brochure.pdf'],
@@ -69,6 +74,13 @@ $map = $property['map'] ?? [
     'country' => 'India',
 ];
 $mapEmbed = $property['mapEmbed'] ?? 'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d135905.11693909427!2d-73.95165795400088!3d41.17584829642291!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sNew%20York!5e0!3m2!1sen!2s!4v1727094281524!5m2!1sen!2s';
+$defaultWebsiteUrl = property_asset_url($basePath, 'contact.php');
+if ($propertySlug !== '') {
+    $defaultWebsiteUrl .= '?property=' . rawurlencode($propertySlug);
+}
+$websiteUrl = $property['websiteUrl'] ?? $defaultWebsiteUrl;
+$websiteLabel = $property['websiteLabel'] ?? 'Click here for more info';
+$websiteIsExternal = preg_match('/^https?:\/\//i', $websiteUrl) === 1;
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
@@ -91,16 +103,25 @@ $mapEmbed = $property['mapEmbed'] ?? 'https://www.google.com/maps/embed?pb=!1m14
                 <div class="container">
                     <div class="header-property-detail">
                         <div class="content-top d-flex justify-content-between align-items-center">
-                            <h3 class="title link fw-8"><?php echo htmlspecialchars($propertyName, ENT_QUOTES, 'UTF-8'); ?></h3>
+                            <div class="property-title-group">
+                                <h3 class="title link fw-8"><?php echo htmlspecialchars($propertyName, ENT_QUOTES, 'UTF-8'); ?></h3>
+                               
+                            </div>
                             <div class="box-price d-flex align-items-end">
-                                <h3 class="fw-8"><?php echo htmlspecialchars($price, ENT_QUOTES, 'UTF-8'); ?></h3>
-                                <?php if ($priceSuffix !== ''): ?>
-                                    <span class="body-1 text-variant-1"><?php echo htmlspecialchars($priceSuffix, ENT_QUOTES, 'UTF-8'); ?></span>
+                                <!-- <h3 class="fw-8"><?php echo htmlspecialchars($price, ENT_QUOTES, 'UTF-8'); ?></h3> -->
+                                <?php if ($websiteUrl !== ''): ?>
+                                    <a
+                                        href="<?php echo htmlspecialchars($websiteUrl, ENT_QUOTES, 'UTF-8'); ?>"
+                                        class="property-more-info-link"
+                                        <?php if ($websiteIsExternal): ?>target="_blank" rel="noopener noreferrer"<?php endif; ?>
+                                    >
+                                        <?php echo htmlspecialchars($websiteLabel, ENT_QUOTES, 'UTF-8'); ?>
+                                    </a>
                                 <?php endif; ?>
                             </div>
                         </div>
                         <div class="content-bottom">
-                            <div class="box-left">
+                            <!-- <div class="box-left">
                                 <div class="info-box">
                                     <div class="label">Features</div>
                                     <ul class="meta">
@@ -120,11 +141,11 @@ $mapEmbed = $property['mapEmbed'] ?? 'https://www.google.com/maps/embed?pb=!1m14
                                             <span class="fw-6"><?php echo htmlspecialchars($sqft, ENT_QUOTES, 'UTF-8'); ?></span>
                                         </li>
                                     </ul>
-                                </div>
-                                <div class="info-box">
+                                </div> -->
+                                <!-- <div class="info-box">
                                     <div class="label">Location</div>
                                     <p class="meta-item"><span class="icon icon-mapPin"></span><span class="text-variant-1"><?php echo htmlspecialchars($location, ENT_QUOTES, 'UTF-8'); ?></span></p>
-                                </div>
+                                </div> -->
                             </div>
                             <!-- <ul class="icon-box">
                                 <li><a href="#" class="item">
@@ -152,9 +173,9 @@ $mapEmbed = $property['mapEmbed'] ?? 'https://www.google.com/maps/embed?pb=!1m14
                     </div>
                 </div>
             </div>
-            <section class="flat-slider-detail-v1 px-10">
+            <section class="flat-slider-detail-v1 flat-slider-detail-v2 px-10">
                 <div class="container">
-                    <div dir="ltr" class="swiper tf-sw-location" data-preview="3" data-tablet="2" data-mobile-sm="2" data-mobile="1" data-space-lg="10" data-space-md="10" data-space="10" data-pagination="1" data-pagination-sm="2" data-pagination-md="2" data-pagination-lg="3">
+                    <div dir="ltr" class="swiper tf-sw-location" data-preview="3" data-tablet="2" data-mobile-sm="1" data-mobile="1" data-space-lg="10" data-space-md="10" data-space="10" data-pagination="1" data-pagination-sm="1" data-pagination-md="1" data-pagination-lg="3">
                     <div class="swiper-wrapper">
                         <?php foreach ($galleryImages as $galleryImage): ?>
                             <div class="swiper-slide">
@@ -178,7 +199,7 @@ $mapEmbed = $property['mapEmbed'] ?? 'https://www.google.com/maps/embed?pb=!1m14
                                     <p class="<?php echo $index === 0 ? 'text-variant-1' : 'mt-8 text-variant-1'; ?>"><?php echo htmlspecialchars($paragraph, ENT_QUOTES, 'UTF-8'); ?></p>
                                 <?php endforeach; ?>
                             </div>
-                            <div class="single-property-element single-property-overview">
+                            <!-- <div class="single-property-element single-property-overview">
                                 <h6 class="title fw-6">Overview</h6>
                                 <ul class="info-box">
                                     <?php foreach ($overview as $item): ?>
@@ -191,7 +212,7 @@ $mapEmbed = $property['mapEmbed'] ?? 'https://www.google.com/maps/embed?pb=!1m14
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
-                            </div>
+                            </div> -->
                             <div class="single-property-element single-property-info">
                                 <h5 class="title fw-6">Property Details</h5>
                                 <div class="row">
@@ -272,20 +293,14 @@ $mapEmbed = $property['mapEmbed'] ?? 'https://www.google.com/maps/embed?pb=!1m14
                             <div class="single-property-element single-property-nearby">
                                 <h5 class="title fw-6">What's nearby?</h5>
                                 <p><?php echo htmlspecialchars($nearby, ENT_QUOTES, 'UTF-8'); ?></p>
-                                <div class="row box-nearby">
-                                    <div class="col-md-6">
-                                        <div class="box-item">
-                                            <span class="label">Road access</span>
-                                            <span class="text-variant-1">Main connectivity routes and daily commute options.</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="box-item">
-                                            <span class="label">Daily needs</span>
-                                            <span class="text-variant-1">Shops, schools, and neighborhood services close by.</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <ul class="nearby-list mt-12">
+                                    <?php foreach ($nearbyItems as $nearbyItem): ?>
+                                        <li class="text-variant-1 mb-8">
+                                            <span class="nearby-bullet" aria-hidden="true"></span>
+                                            <span class="nearby-text"><?php echo htmlspecialchars($nearbyItem, ENT_QUOTES, 'UTF-8'); ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
                             </div>
                         </div>
                     </div>
