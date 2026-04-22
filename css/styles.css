@@ -2944,12 +2944,18 @@ label {
   margin-bottom: 10px;
 }
 .flat-slider.home-5 .thumbs-swiper-column1 .swiper-wrapper .image-detail {
-  border-radius: 50px;
+  border-radius: 50%;
   overflow: hidden;
   width: 80px;
   height: 80px;
   cursor: pointer;
   opacity: 0.7;
+}
+.flat-slider.home-5 .thumbs-swiper-column1 .swiper-wrapper .image-detail img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 .flat-slider.home-5 .thumbs-swiper-column1 .swiper-wrapper .swiper-slide-thumb-active .image-detail {
   opacity: 1;

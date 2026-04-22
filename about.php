@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
 <head>
     <meta charset="utf-8">
-    <title>About BM Properties â€“ Trusted Real Estate Experts</title>
+    <title>About BM Properties: Trusted Real Estate Experts</title>
     <meta name="keywords" content="HTML, CSS, JavaScript, Bootstrap">
     <meta name="description" content="Learn about BM Properties, your trusted partner in real estate. We provide transparent, reliable, and customer-focused property solutions for buying, selling, and renting.">
 
@@ -44,7 +44,7 @@
                                 <div class="text-subtitle text-primary">About BM Properties</div>
                                 <h1 class="about-welcome-title">Welcome to the BM Properties</h1>
                                 <p class="about-welcome-desc">BM Properties is dedicated to simplifying the property search experience by connecting buyers with reliable and well-planned real estate projects. With a strong presence in growing locations, we focus on offering under-construction and investment-friendly properties that match modern lifestyle needs as well as future growth expectations. Our goal is to make property buying smooth, transparent, and trustworthy for every client.</p>
-                                <p class="about-welcome-desc">We believe that real estate is more than just land or buildings â€” itâ€™s about creating spaces where people build their future. Thatâ€™s why we carefully select projects that offer good location advantages, planned infrastructure, and long-term value. Whether you are looking for a residential plot, a family home, or an investment opportunity, we ensure that every option we present meets quality and reliability standards.</p>
+                                <p class="about-welcome-desc">We believe that real estate is more than just land or buildings and about creating spaces where people build their future. that's why we carefully select projects that offer good location advantages, planned infrastructure, and long-term value. Whether you are looking for a residential plot, a family home, or an investment opportunity, we ensure that every option we present meets quality and reliability standards.</p>
                                 <!-- <div class="about-welcome-signature">
                                     <div class="top">
                                         <h6>Leslie Alexander</h6>

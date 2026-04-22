@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
 <head>
     <meta charset="utf-8">
-    <title>BM Properties â€“ Buy, Sell & Rent Properties in Agra</title>
+    <title>BM Properties : Buy, Sell & Rent Properties in Agra</title>
     <meta name="keywords" content="HTML, CSS, JavaScript, Bootstrap">
     <meta name="description" content="Discover premium residential and commercial properties with BM Properties. Explore verified listings for buying, selling, and renting in prime locations with expert guidance.">
     <meta name="author" content="BM Properties">
@@ -82,22 +82,22 @@
                                         <div class="swiper-wrapper">
                                             <div class="swiper-slide">
                                                 <div class="image-detail">
-                                                    <img src="images/slider/slider-pagi.jpg" alt="images">
+                                                    <img src="images/slider/sli-1.jpg" alt="images">
                                                 </div>
                                             </div>
                                             <div class="swiper-slide">
                                                 <div class="image-detail">
-                                                    <img src="images/slider/slider-pagi2.jpg" alt="images">
+                                                    <img src="images/slider/sli-2.jpg" alt="images">
                                                 </div>
                                             </div>
                                             <div class="swiper-slide">
                                                 <div class="image-detail">
-                                                    <img src="images/slider/slider-pagi3.jpg" alt="images">
+                                                    <img src="images/slider/sli-3.jpg" alt="images">
                                                 </div>
                                             </div>
                                             <div class="swiper-slide">
                                                 <div class="image-detail">
-                                                    <img src="images/slider/slider-pagi4.jpg" alt="images">
+                                                    <img src="images/slider/sli-4.jpg" alt="images">
                                                 </div>
                                             </div>
 
