@@ -1,6 +1,9 @@
 <?php
+require_once __DIR__ . '/../includes/app.php';
 $assetBasePath = isset($assetBasePath) ? rtrim($assetBasePath, '/') . '/' : '';
 $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
+$footerProperties = array_slice(array_values(get_all_properties()), 0, 6);
+$settings = get_site_settings();
 ?>
             <a href="https://wa.me/919837029310?text=Hello%20BM%20Real%20Estate" class="whatsapp-float-btn" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
                 <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -41,18 +44,13 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
                                     <div class="fw-7 text-white footer-heading-mobile">Our Properties</div>
                                     <div class="tf-collapse-content">
                                         <ul class="mt-10 navigation-menu-footer">
-                                            <li> <a href="properties.php" class="caption-1 text-variant-2">Grand Green Valley</a> </li>
-
-                                            <li> <a href="properties.php" class="caption-1 text-variant-2">UPSIC Govt Project</a> </li>
-
-                                            <li> <a href="properties.php" class="caption-1 text-variant-2">Green Valley Emprire</a>
-                                            </li>
-                                            <li> <a href="properties.php" class="caption-1 text-variant-2">Dream Avenues</a>
-                                            </li>
-                                            <li> <a href="properties.php" class="caption-1 text-variant-2">Landmark City</a>
-                                            </li>
-                                            <li> <a href="properties.php" class="caption-1 text-variant-2">Vrindavan Global</a>
-                                            </li>
+                                            <?php foreach ($footerProperties as $footerProperty): ?>
+                                                <li>
+                                                    <a href="<?php echo htmlspecialchars($siteBasePath, ENT_QUOTES, 'UTF-8'); ?>property-details.php?slug=<?php echo rawurlencode((string) $footerProperty['slug']); ?>" class="caption-1 text-variant-2">
+                                                        <?php echo htmlspecialchars((string) $footerProperty['name'], ENT_QUOTES, 'UTF-8'); ?>
+                                                    </a>
+                                                </li>
+                                            <?php endforeach; ?>
                                         </ul>
                                     </div>
 
@@ -65,15 +63,15 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
                                     <ul class="mt-12">
                                         <li class="mt-12 d-flex align-items-center gap-8">
                                             <i class="icon icon-mapPinLine fs-20 text-variant-2"></i>
-                                            <p class="text-white">Block No-25, Sanjay Place, Agra – 282002</p>
+                                            <p class="text-white"><?php echo htmlspecialchars((string) ($settings['office_address'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></p>
                                         </li>
                                         <li class="mt-12 d-flex align-items-center gap-8">
                                             <i class="icon icon-phone2 fs-20 text-variant-2"></i>
-                                            <a href="tel:1-333-345-6868" class="text-white caption-1">+91 98370 29310</a>
+                                            <a href="tel:<?php echo preg_replace('/[^0-9+]/', '', (string) ($settings['phone'] ?? '')); ?>" class="text-white caption-1"><?php echo htmlspecialchars((string) ($settings['phone'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></a>
                                         </li>
                                         <li class="mt-12 d-flex align-items-center gap-8">
                                             <i class="icon icon-mail fs-20 text-variant-2"></i>
-                                            <p class="text-white">bmrealestateagra@gmail.com</p>
+                                            <p class="text-white"><?php echo htmlspecialchars((string) ($settings['email'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></p>
                                         </li>
                                     </ul>
                                     <div class="wd-social mt-20">

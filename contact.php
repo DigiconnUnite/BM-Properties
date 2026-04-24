@@ -1,3 +1,36 @@
+<?php
+
+require_once __DIR__ . '/includes/app.php';
+
+$settings = get_site_settings();
+$contactMessage = '';
+$contactError = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_csrf_post();
+
+    $name = clean_text((string) ($_POST['name'] ?? ''));
+    $email = clean_text((string) ($_POST['email'] ?? ''));
+    $phone = clean_text((string) ($_POST['phone'] ?? ''));
+    $subject = clean_text((string) ($_POST['subject'] ?? 'Property Inquiry'));
+    $messageText = clean_text((string) ($_POST['message'] ?? ''));
+
+    if ($name === '' || $email === '' || $phone === '' || $messageText === '') {
+        $contactError = 'Please fill all required fields.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $contactError = 'Please enter a valid email address.';
+    } else {
+        save_contact_message([
+            'name' => $name,
+            'email' => $email,
+            'phone' => $phone,
+            'subject' => $subject,
+            'message' => $messageText,
+        ]);
+        $contactMessage = 'Thank you. Your message has been received.';
+    }
+}
+?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
 <head>
@@ -22,11 +55,11 @@
 
         <?php include 'components/header.php';?>
             <!-- Page Title -->
-            <section class="flat-title-page" style="background-image: url(images/banner/banner2.jpg);">
+            <section class="flat-title-page page-title-default-bg">
                 <div class="container">
                     <div class="breadcrumb-content">
                         <ul class="breadcrumb">
-                            <li><a href="index-2.html" class="text-white">Home</a></li>
+                            <li><a href="index.php" class="text-white">Home</a></li>
                             <!-- <li class="text-white">/ Pages</li> -->
                             <li class="text-white">/ Contact Us</li>
                         </ul>
@@ -43,8 +76,16 @@
                                 <h4>Drop Us A Line</h4>
                                 <p class="body-2 text-variant-1">Feel free to connect with us through our online
                                     channels for updates, news, and more.</p>
-                                <form id="contactform" method="post" action="https://homelengo.vercel.app/contact/contact-process.php"
+                                <?php if ($contactMessage !== ''): ?>
+                                    <div class="alert alert-success"><?php echo htmlspecialchars($contactMessage, ENT_QUOTES, 'UTF-8'); ?></div>
+                                <?php endif; ?>
+                                <?php if ($contactError !== ''): ?>
+                                    <div class="alert alert-danger"><?php echo htmlspecialchars($contactError, ENT_QUOTES, 'UTF-8'); ?></div>
+                                <?php endif; ?>
+
+                                <form id="contactform" method="post" action=""
                                     class="form-contact">
+                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
                                     <div class="box grid-2">
                                         <fieldset>
                                             <label for="name">Full Name:</label>
@@ -86,25 +127,21 @@
                                 <ul>
                                     <li class="box">
                                         <h6 class="title">Address:</h6>
-                                        <p class="text-variant-1">Block No-25, Sanjay Place, Agra – 282002
-
-
-                                        </p>
+                                        <p class="text-variant-1"><?php echo htmlspecialchars((string) ($settings['office_address'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></p>
                                     </li>
                                     <li class="box">
                                         <h6 class="title">Infomation:</h6>
-                                        <p class="text-variant-1">+91 98370 29310 <br> bmrealestateagra@gmail.com</p>
+                                        <p class="text-variant-1"><?php echo htmlspecialchars((string) ($settings['phone'] ?? ''), ENT_QUOTES, 'UTF-8'); ?> <br> <?php echo htmlspecialchars((string) ($settings['email'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></p>
                                     </li>
                                     <li class="box">
                                         <div class="title">Opentime:</div>
-                                        <p class="text-variant-1">Monay - Friday: 08:00 - 20:00 <br> Saturday - Sunday:
-                                            10:00 - 18:00</p>
+                                        <p class="text-variant-1"><?php echo htmlspecialchars((string) ($settings['open_time'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></p>
 
                                     </li>
                                     <li class="box">
                                         <div class="title">Follow Us:</div>
                                         <ul class="box-social">
-                                            <li><a href="#" class="item">
+                                            <li><a href="<?php echo htmlspecialchars((string) ($settings['facebook_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>" class="item" target="_blank" rel="noopener noreferrer">
                                                     <svg width="10" height="18" viewBox="0 0 10 18" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -112,7 +149,7 @@
                                                             fill="#161E2D" />
                                                     </svg>
                                                 </a></li>
-                                            <li><a href="#" class="item">
+                                            <li><a href="<?php echo htmlspecialchars((string) ($settings['instagram_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>" class="item" target="_blank" rel="noopener noreferrer">
                                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -121,7 +158,7 @@
                                                     </svg>
 
                                                 </a></li>
-                                            <li><a href="#" class="item">
+                                            <li><a href="<?php echo htmlspecialchars((string) ($settings['youtube_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>" class="item" target="_blank" rel="noopener noreferrer">
                                                     <svg width="20" height="14" viewBox="0 0 20 14" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -263,8 +300,7 @@
     <!-- go top -->
     <div class="progress-wrap">
         <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
-            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"
-                style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 286.138;">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" class="progress-path-style">
             </path>
         </svg>
     </div>

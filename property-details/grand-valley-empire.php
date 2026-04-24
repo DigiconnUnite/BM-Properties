@@ -1,6 +1,3 @@
 <?php
-$properties = include __DIR__ . '/../components/properties-data.php';
-$property = $properties['grand-valley-empire'];
-$basePath = '..';
-
-include __DIR__ . '/../components/property-details-page.php';
+header('Location: ../property-details.php?slug=grand-valley-empire', true, 301);
+exit;

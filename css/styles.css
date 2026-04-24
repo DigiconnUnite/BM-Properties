@@ -3281,7 +3281,7 @@ label {
 }
 .tf-btn.size-1 {
   padding: 11px 36px;
-  min-width: 244px;
+  /* min-width: 244px; */
 }
 .tf-btn.size-2 {
   padding: 11px 40px;
@@ -5279,6 +5279,16 @@ label {
   padding-right: 22%;
   position: relative;
 }
+
+.page-title-default-bg {
+  background-image: url("../images/banner/banner2.jpg");
+}
+
+.progress-path-style {
+  transition: stroke-dashoffset 10ms linear 0s;
+  stroke-dasharray: 307.919, 307.919;
+  stroke-dashoffset: 286.138;
+}
 .flat-blog-detail .post-navigation .previous-post::after {
   position: absolute;
   content: "";
@@ -5654,6 +5664,7 @@ label {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
   width: 100%;
+  height: 300px;
 }
 .homelengo-box .content-top {
   padding-bottom: 24px;
@@ -8674,8 +8685,8 @@ label {
   margin-bottom: 20px;
 }
 .flat-contact .contact-content .form-contact .tf-btn {
-  margin-top: 8px;
-  width: 100%;
+  margin-top: 20px;
+  /* width: 100%; */
 }
 
 .contact-info {

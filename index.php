@@ -111,63 +111,7 @@
                 <div class="overlay"></div>
             </section>
             <!-- /Slider -->
-            <!-- Filter -->
-          
-            <!-- /Filter -->
-            <!-- Service -->
-            <!-- <section class="flat-spacing-service bg-primary-new">
-                <div class="container">
-                    <div class="box-title text-center wow fadeInUp">
-                        <div class="text-subtitle text-primary">Our Services</div>
-                        <h3 class="mt-4 title">Welcome the HomeLengo</h3>
-                    </div>
-                    <div class="tf-grid-layout md-col-3 wow fadeInUp" data-wow-delay=".2s">
-                        <div class="box-service border-0">
-                            <div class="image">
-                                <img class="lazyload" data-src="images/service/home-1.png"
-                                    src="images/service/home-1.png" alt="image-location">
-                            </div>
-                            <div class="content">
-                                <h5 class="title">Buy A New Home</h5>
-                                <p class="description">Discover your dream home effortlessly. Explore diverse properties
-                                    and expert guidance for a seamless buying experience.</p>
-                                <a href="sidebar-grid.html" class="tf-btn btn-line">Learn More <span
-                                        class="icon icon-arrow-right2"></span></a>
-                            </div>
-                        </div>
-                        <div class="box-service border-0">
-                            <div class="image">
-                                <img class="lazyload" data-src="images/service/home-2.png"
-                                    src="images/service/home-2.png" alt="image-location">
-                            </div>
-                            <div class="content">
-                                <h5 class="title">Sell a home</h5>
-                                <p class="description">Sell confidently with expert guidance and effective strategies,
-                                    showcasing your property's best features for a successful sale.</p>
-                                <a href="sidebar-grid.html" class="tf-btn btn-line">Learn More <span
-                                        class="icon icon-arrow-right2"></span></a>
-                            </div>
-                        </div>
-                        <div class="box-service border-0">
-                            <div class="image">
-                                <img class="lazyload" data-src="images/service/home-3.png"
-                                    src="images/service/home-3.png" alt="image-location">
-                            </div>
-                            <div class="content">
-                                <h5 class="title">Rent a home</h5>
-                                <p class="description">Discover your perfect rental effortlessly. Explore a diverse
-                                    variety of listings tailored precisely to suit your unique lifestyle needs.</p>
-                                <a href="sidebar-grid.html" class="tf-btn btn-line">Learn More <span
-                                        class="icon icon-arrow-right2"></span></a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </section> -->
-            <!-- End Service -->
-
-                        <!-- Categories -->
+            <!-- Categories -->
             <section class="flat-section flat-categories bg-primary-new">
                 <div class="container">
                     <div class="box-title text-center wow fadeInUp">

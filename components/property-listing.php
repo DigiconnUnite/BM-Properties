@@ -1,6 +1,9 @@
 <?php
 
-$properties = include __DIR__ . '/properties-data.php';
+require_once __DIR__ . '/../includes/app.php';
+
+$properties = get_all_properties();
+$categories = get_categories(true);
 
 if (!function_exists('render_property_card')) {
     function render_property_card(array $property): void
@@ -170,19 +173,23 @@ $tabDefinitions = [
         'label' => 'View All',
         'slugs' => array_keys($properties),
     ],
-    'plot' => [
-        'label' => 'Plot',
-        'slugs' => ['grand-valley-empire', 'landmark-city', 'dream-avenue'],
-    ],
-    'farmhouse' => [
-        'label' => 'Farmhouse',
-        'slugs' => ['vrindavan-global', 'green-valley-empire', 'upsic-project'],
-    ],
-    'office' => [
-        'label' => 'Office',
-        'slugs' => ['emporium-block', 'corporate-park-agra', 'padamdeep-tower'],
-    ],
 ];
+
+foreach ($categories as $category) {
+    $categorySlugs = [];
+    foreach ($properties as $slug => $property) {
+        if (($property['category_slug'] ?? '') === $category['slug']) {
+            $categorySlugs[] = $slug;
+        }
+    }
+
+    if (!empty($categorySlugs)) {
+        $tabDefinitions[$category['slug']] = [
+            'label' => $category['name'],
+            'slugs' => $categorySlugs,
+        ];
+    }
+}
 
 $sectionSubtitle = $sectionSubtitle ?? 'Discover Premium Properties';
 $sectionTitle = $sectionTitle ?? 'Prime locations, smart investment.';
