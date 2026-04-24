@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS properties (
     map_embed TEXT NOT NULL,
     website_url VARCHAR(255) NOT NULL DEFAULT '',
     website_label VARCHAR(120) NOT NULL DEFAULT '',
+    whatsapp_number VARCHAR(25) NOT NULL DEFAULT '',
     card_highlights_json LONGTEXT NOT NULL,
     is_featured TINYINT(1) NOT NULL DEFAULT 1,
     status ENUM('active','inactive') NOT NULL DEFAULT 'active',
@@ -83,10 +84,41 @@ CREATE TABLE IF NOT EXISTS contact_messages (
 CREATE TABLE IF NOT EXISTS admin_users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(80) NOT NULL UNIQUE,
+    email VARCHAR(120) NOT NULL DEFAULT '',
+    full_name VARCHAR(140) NOT NULL DEFAULT '',
     password_hash VARCHAR(255) NOT NULL,
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     last_login_at DATETIME NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS admin_password_resets (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    admin_user_id INT UNSIGNED NOT NULL,
+    token_hash CHAR(64) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used_at DATETIME NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_admin_reset_hash (token_hash),
+    INDEX idx_admin_reset_expiry (expires_at),
+    CONSTRAINT fk_admin_password_resets_user FOREIGN KEY (admin_user_id) REFERENCES admin_users(id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS enquiries (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(140) NOT NULL,
+    email VARCHAR(120) NOT NULL,
+    phone VARCHAR(25) NOT NULL,
+    subject VARCHAR(180) NOT NULL,
+    message TEXT NOT NULL,
+    looking_to ENUM('sell','rent','pg') NOT NULL DEFAULT 'sell',
+    property_group ENUM('residential','commercial') NOT NULL DEFAULT 'residential',
+    property_type VARCHAR(100) NOT NULL,
+    source VARCHAR(60) NOT NULL DEFAULT 'header-modal',
+    page_url VARCHAR(255) NOT NULL DEFAULT '',
+    ip_address VARCHAR(45) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_enquiry_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS admin_login_attempts (

@@ -76,6 +76,7 @@ function map_property_row(array $row): array
         'mapEmbed' => (string) ($row['map_embed'] ?? ''),
         'websiteUrl' => (string) ($row['website_url'] ?? ''),
         'websiteLabel' => (string) ($row['website_label'] ?? ''),
+        'whatsappNumber' => (string) ($row['whatsapp_number'] ?? ''),
         'cardHighlights' => $cardHighlights,
         'isFeatured' => (int) ($row['is_featured'] ?? 0) === 1,
         'status' => (string) ($row['status'] ?? 'active'),
@@ -179,6 +180,7 @@ function save_property(array $data, ?int $id = null): int
         'map_embed' => $data['map_embed'],
         'website_url' => $data['website_url'],
         'website_label' => $data['website_label'],
+        'whatsapp_number' => $data['whatsapp_number'],
         'card_highlights_json' => to_json($data['card_highlights']),
         'is_featured' => !empty($data['is_featured']) ? 1 : 0,
         'status' => $data['status'],
@@ -190,9 +192,9 @@ function save_property(array $data, ?int $id = null): int
             description_json, location, price, price_suffix, beds, baths, sqft, overview_id,
             nearby, nearby_items_json, details_json, features_json,
             map_address, map_city, map_state, map_postal, map_area, map_country,
-            map_embed, website_url, website_label, card_highlights_json, is_featured, status
+            map_embed, website_url, website_label, whatsapp_number, card_highlights_json, is_featured, status
         ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         )';
         $stmt = $conn->prepare($sql);
         $values = [
@@ -224,11 +226,12 @@ function save_property(array $data, ?int $id = null): int
             $sqlData['map_embed'],
             $sqlData['website_url'],
             $sqlData['website_label'],
+            $sqlData['whatsapp_number'],
             $sqlData['card_highlights_json'],
             $sqlData['is_featured'],
             $sqlData['status'],
         ];
-        bind_params_dynamic($stmt, 'i' . str_repeat('s', 28) . 'is', $values);
+        bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'is', $values);
         $stmt->execute();
 
         return (int) $conn->insert_id;
@@ -239,7 +242,7 @@ function save_property(array $data, ?int $id = null): int
         description_json = ?, location = ?, price = ?, price_suffix = ?, beds = ?, baths = ?, sqft = ?, overview_id = ?,
         nearby = ?, nearby_items_json = ?, details_json = ?, features_json = ?,
         map_address = ?, map_city = ?, map_state = ?, map_postal = ?, map_area = ?, map_country = ?,
-        map_embed = ?, website_url = ?, website_label = ?, card_highlights_json = ?, is_featured = ?, status = ?
+        map_embed = ?, website_url = ?, website_label = ?, whatsapp_number = ?, card_highlights_json = ?, is_featured = ?, status = ?
         WHERE id = ?';
     $stmt = $conn->prepare($sql);
     $values = [
@@ -271,12 +274,13 @@ function save_property(array $data, ?int $id = null): int
         $sqlData['map_embed'],
         $sqlData['website_url'],
         $sqlData['website_label'],
+        $sqlData['whatsapp_number'],
         $sqlData['card_highlights_json'],
         $sqlData['is_featured'],
         $sqlData['status'],
         $id,
     ];
-    bind_params_dynamic($stmt, 'i' . str_repeat('s', 28) . 'isi', $values);
+    bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'isi', $values);
     $stmt->execute();
 
     return $id;
@@ -411,7 +415,7 @@ function delete_contact_message(int $id): void
 function get_admin_by_username(string $username): ?array
 {
     $conn = db();
-    $stmt = $conn->prepare('SELECT id, username, password_hash, is_active FROM admin_users WHERE username = ? LIMIT 1');
+    $stmt = $conn->prepare('SELECT id, username, email, full_name, password_hash, is_active FROM admin_users WHERE username = ? LIMIT 1');
     $stmt->bind_param('s', $username);
     $stmt->execute();
     $row = $stmt->get_result()->fetch_assoc();
@@ -477,4 +481,137 @@ function delete_category(int $id): void
     $stmt = $conn->prepare('DELETE FROM categories WHERE id = ?');
     $stmt->bind_param('i', $id);
     $stmt->execute();
+}
+
+function get_admin_by_email(string $email): ?array
+{
+    $conn = db();
+    $stmt = $conn->prepare('SELECT id, username, email, full_name, password_hash, is_active FROM admin_users WHERE email = ? LIMIT 1');
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+
+    return $row ?: null;
+}
+
+function get_admin_by_id(int $id): ?array
+{
+    $conn = db();
+    $stmt = $conn->prepare('SELECT id, username, email, full_name, password_hash, is_active, last_login_at FROM admin_users WHERE id = ? LIMIT 1');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+
+    return $row ?: null;
+}
+
+function update_admin_profile(int $id, string $username, string $fullName, string $email): void
+{
+    $conn = db();
+    $stmt = $conn->prepare('UPDATE admin_users SET username = ?, full_name = ?, email = ? WHERE id = ?');
+    $stmt->bind_param('sssi', $username, $fullName, $email, $id);
+    $stmt->execute();
+}
+
+function update_admin_password(int $id, string $passwordHash): void
+{
+    $conn = db();
+    $stmt = $conn->prepare('UPDATE admin_users SET password_hash = ? WHERE id = ?');
+    $stmt->bind_param('si', $passwordHash, $id);
+    $stmt->execute();
+}
+
+function create_admin_password_reset_token(int $adminUserId, int $minutes = 30): string
+{
+    $token = bin2hex(random_bytes(32));
+    $tokenHash = hash('sha256', $token);
+
+    $conn = db();
+    $expiresAt = (new DateTimeImmutable('+' . $minutes . ' minutes'))->format('Y-m-d H:i:s');
+    $stmt = $conn->prepare('INSERT INTO admin_password_resets (admin_user_id, token_hash, expires_at) VALUES (?, ?, ?)');
+    $stmt->bind_param('iss', $adminUserId, $tokenHash, $expiresAt);
+    $stmt->execute();
+
+    return $token;
+}
+
+function get_admin_password_reset_by_token(string $token): ?array
+{
+    $tokenHash = hash('sha256', $token);
+    $conn = db();
+    $stmt = $conn->prepare('SELECT r.id, r.admin_user_id, r.expires_at, r.used_at, u.username, u.email, u.is_active
+        FROM admin_password_resets r
+        INNER JOIN admin_users u ON u.id = r.admin_user_id
+        WHERE r.token_hash = ?
+        ORDER BY r.id DESC
+        LIMIT 1');
+    $stmt->bind_param('s', $tokenHash);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+
+    if (!$row) {
+        return null;
+    }
+
+    $isExpired = strtotime((string) $row['expires_at']) < time();
+    if (!empty($row['used_at']) || $isExpired || (int) $row['is_active'] !== 1) {
+        return null;
+    }
+
+    return $row;
+}
+
+function mark_admin_password_reset_used(int $id): void
+{
+    $conn = db();
+    $stmt = $conn->prepare('UPDATE admin_password_resets SET used_at = NOW() WHERE id = ?');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+}
+
+function save_enquiry(array $data): int
+{
+    $conn = db();
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+    $stmt = $conn->prepare('INSERT INTO enquiries (full_name, email, phone, subject, message, looking_to, property_group, property_type, source, page_url, ip_address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $stmt->bind_param(
+        'sssssssssss',
+        $data['full_name'],
+        $data['email'],
+        $data['phone'],
+        $data['subject'],
+        $data['message'],
+        $data['looking_to'],
+        $data['property_group'],
+        $data['property_type'],
+        $data['source'],
+        $data['page_url'],
+        $ip
+    );
+    $stmt->execute();
+
+    return (int) $conn->insert_id;
+}
+
+function get_enquiries(): array
+{
+    $conn = db();
+    $result = $conn->query('SELECT id, full_name, email, phone, subject, message, looking_to, property_group, property_type, source, page_url, created_at FROM enquiries ORDER BY created_at DESC');
+
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
+function delete_enquiry(int $id): void
+{
+    $conn = db();
+    $stmt = $conn->prepare('DELETE FROM enquiries WHERE id = ?');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+}
+
+function get_enquiry_count(): int
+{
+    $conn = db();
+    $row = $conn->query('SELECT COUNT(*) AS total FROM enquiries')->fetch_assoc();
+    return (int) ($row['total'] ?? 0);
 }

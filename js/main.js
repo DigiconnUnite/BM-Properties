@@ -98,9 +98,9 @@
                   text: result,
                 }).append(
                   $(
-                    '<a class="close" href="#"><i class="icon icon-close2"></i></a>'
-                  )
-                )
+                    '<a class="close" href="#"><i class="icon icon-close2"></i></a>',
+                  ),
+                ),
               );
 
               $form.find(":input").not(".submit").val("");
@@ -117,7 +117,6 @@
   ------------------------------------------------------------------------------------- */
   var headerFixed = function () {
     if ($("header").hasClass("header-fixed")) {
-
       var nav = $("#header");
       if (nav.length) {
         var offsetTop = nav.offset().top,
@@ -143,7 +142,7 @@
   };
 
   $("#showlogo").prepend(
-    '<a href="index.html"><img id="theImg" src="assets/images/logo/logo2.png" /></a>'
+    '<a href="index.html"><img id="theImg" src="assets/images/logo/logo2.png" /></a>',
   );
 
   // =========NICE SELECT=========
@@ -167,14 +166,14 @@
 
     //Disable dropdown parent link
     $(
-      ".main-header .navigation li.dropdown2 > a,.hidden-bar .side-menu li.dropdown2 > a"
+      ".main-header .navigation li.dropdown2 > a,.hidden-bar .side-menu li.dropdown2 > a",
     ).on("click", function (e) {
       e.preventDefault();
     });
 
     $(".price-block .features .arrow").on("click", function (e) {
       $(e.target.offsetParent.offsetParent.offsetParent).toggleClass(
-        "active-show-hidden"
+        "active-show-hidden",
       );
     });
   }
@@ -219,12 +218,12 @@
           $(this).parent("li").toggleClass("open");
           $(this).parent("li").children("ul").slideToggle(args);
         }
-      }
+      },
     );
 
     //3rd Level Nav
     $(
-      ".mobile-menu .navigation > li.dropdown2 > ul  > li.dropdown2 > .dropdown2-btn"
+      ".mobile-menu .navigation > li.dropdown2 > ul  > li.dropdown2 > .dropdown2-btn",
     ).on("click", function (e) {
       e.preventDefault();
       var targetInner = $(this).parent("li").children("ul");
@@ -330,40 +329,40 @@
                 messageDiv.html(
                   objUse.noticeError.replace(
                     "{msg}",
-                    "Error! <strong>Email is required.</strong>"
-                  )
+                    "Error! <strong>Email is required.</strong>",
+                  ),
                 );
                 break;
               case "email-err":
                 messageDiv.html(
                   objUse.noticeError.replace(
                     "{msg}",
-                    "Error! <strong>Email invalid.</strong>"
-                  )
+                    "Error! <strong>Email invalid.</strong>",
+                  ),
                 );
                 break;
               case "duplicate":
                 messageDiv.html(
                   objUse.noticeError.replace(
                     "{msg}",
-                    "Error! <strong>Email is duplicate.</strong>"
-                  )
+                    "Error! <strong>Email is duplicate.</strong>",
+                  ),
                 );
                 break;
               case "filewrite":
                 messageDiv.html(
                   objUse.noticeInfo.replace(
                     "{msg}",
-                    "Error! <strong>Mail list file is open.</strong>"
-                  )
+                    "Error! <strong>Mail list file is open.</strong>",
+                  ),
                 );
                 break;
               case "undefined":
                 messageDiv.html(
                   objUse.noticeInfo.replace(
                     "{msg}",
-                    "Error! <strong>undefined error.</strong>"
-                  )
+                    "Error! <strong>undefined error.</strong>",
+                  ),
                 );
                 break;
               case "api-error":
@@ -393,7 +392,7 @@
     });
   };
 
-    /* footer accordion
+  /* footer accordion
   -------------------------------------------------------------------------*/
   var handleFooter = function () {
     var footerAccordion = function () {
@@ -411,19 +410,21 @@
       if (matchMedia("only screen and (max-width: 767px)").matches) {
         if (!$(".footer-heading-mobile").data("accordion-initialized")) {
           footerAccordion();
-          $(".footer-heading-mobile").data("accordion-initialized", true); 
+          $(".footer-heading-mobile").data("accordion-initialized", true);
         }
       } else {
         $(".footer-heading-mobile").off("click");
-        $(".footer-heading-mobile").parent(".footer-col-block").removeClass("open");
+        $(".footer-heading-mobile")
+          .parent(".footer-col-block")
+          .removeClass("open");
         $(".footer-heading-mobile").next().removeAttr("style");
-        $(".footer-heading-mobile").data("accordion-initialized", false); 
+        $(".footer-heading-mobile").data("accordion-initialized", false);
       }
     }
     handleAccordion();
     window.addEventListener("resize", function () {
       handleAccordion();
-    });  
+    });
   };
 
   var configureFancybox = function () {
@@ -440,6 +441,51 @@
     });
   };
 
+  var enquiryModal = function () {
+    var $modal = $("#enquiryModal");
+    if (!$modal.length) {
+      return;
+    }
+
+    var openModal = function () {
+      $modal.addClass("is-visible").attr("aria-hidden", "false");
+      $("body").addClass("enquiry-open");
+    };
+
+    var closeModal = function () {
+      $modal.removeClass("is-visible").attr("aria-hidden", "true");
+      $("body").removeClass("enquiry-open");
+    };
+
+    $(document).on("click", "[data-enquiry-open]", function () {
+      openModal();
+    });
+
+    $(document).on("click", "[data-enquiry-close]", function () {
+      closeModal();
+    });
+
+    $(document).on("keydown", function (e) {
+      if (e.key === "Escape") {
+        closeModal();
+      }
+    });
+  };
+
+  var globalNoticePopup = function () {
+    var $notice = $(".global-popup-notice");
+    if (!$notice.length) {
+      return;
+    }
+
+    setTimeout(function () {
+      $notice.addClass("is-visible");
+    }, 120);
+
+    setTimeout(function () {
+      $notice.removeClass("is-visible");
+    }, 4500);
+  };
 
   // Dom Ready
   $(function () {
@@ -451,5 +497,7 @@
     ajaxSubscribe.eventLoad();
     alertBox();
     configureFancybox();
+    enquiryModal();
+    globalNoticePopup();
   });
 })(jQuery);

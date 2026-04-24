@@ -23,28 +23,40 @@ include __DIR__ . '/_layout_top.php';
     <h2>Incoming Messages</h2>
     <div class="table-responsive">
         <table class="table admin-table">
-            <thead><tr><th>Date</th><th>Name</th><th>Contact</th><th>Subject</th><th>Message</th><th>Action</th></tr></thead>
-            <tbody>
-            <?php foreach ($messages as $message): ?>
+            <thead>
                 <tr>
-                    <td><?php echo htmlspecialchars((string) $message['created_at'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td><?php echo htmlspecialchars((string) $message['name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td>
-                        <?php echo htmlspecialchars((string) $message['phone'], ENT_QUOTES, 'UTF-8'); ?><br>
-                        <?php echo htmlspecialchars((string) $message['email'], ENT_QUOTES, 'UTF-8'); ?>
-                    </td>
-                    <td><?php echo htmlspecialchars((string) $message['subject'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td class="message-cell"><?php echo nl2br(htmlspecialchars((string) $message['message'], ENT_QUOTES, 'UTF-8')); ?></td>
-                    <td>
-                        <form method="post" class="inline-form" onsubmit="return confirm('Delete this message?');">
-                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="id" value="<?php echo (int) $message['id']; ?>">
-                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
-                        </form>
-                    </td>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Action</th>
                 </tr>
-            <?php endforeach; ?>
+            </thead>
+            <tbody>
+                <?php foreach ($messages as $message): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars((string) $message['created_at'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?php echo htmlspecialchars((string) $message['name'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td>
+                            <?php echo htmlspecialchars((string) $message['phone'], ENT_QUOTES, 'UTF-8'); ?><br>
+                            <?php echo htmlspecialchars((string) $message['email'], ENT_QUOTES, 'UTF-8'); ?>
+                        </td>
+                        <td><?php echo htmlspecialchars((string) $message['subject'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="message-cell">
+                            <?php echo nl2br(htmlspecialchars((string) $message['message'], ENT_QUOTES, 'UTF-8')); ?></td>
+                        <td>
+                            <form method="post" class="inline-form" action="modules/messages/delete.php"
+                                onsubmit="return confirm('Delete this message?');">
+                                <input type="hidden" name="csrf_token"
+                                    value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="id" value="<?php echo (int) $message['id']; ?>">
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>

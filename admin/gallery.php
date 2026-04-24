@@ -34,6 +34,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sortOrder = (int) ($_POST['sort_order'] ?? 0);
         $isActive = isset($_POST['is_active']) ? 1 : 0;
 
+        $uploadRoot = realpath(__DIR__ . '/..');
+        if (is_string($uploadRoot) && $uploadRoot !== '') {
+            $galleryUploadDir = $uploadRoot . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'gallery';
+            $uploadedImage = upload_image_file($_FILES['image_file'] ?? [], $galleryUploadDir, 'images/uploads/gallery');
+            if ($uploadedImage !== null) {
+                $imagePath = $uploadedImage;
+            }
+        }
+
         if ($title === '' || $imagePath === '') {
             $error = 'Title and image path are required.';
         } else {
@@ -57,19 +66,30 @@ include __DIR__ . '/_layout_top.php';
 ?>
 <section class="admin-card">
     <h2><?php echo $editing ? 'Edit Gallery Item' : 'Add Gallery Item'; ?></h2>
-    <?php if ($message !== ''): ?><div class="alert alert-success"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
-    <?php if ($error !== ''): ?><div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
-    <form method="post" class="admin-form-grid">
-        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+    <?php if ($message !== ''): ?>
+        <div class="alert alert-success"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
+    <?php if ($error !== ''): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
+    <form method="post" class="admin-form-grid" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token"
+            value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
         <input type="hidden" name="id" value="<?php echo (int) ($editing['id'] ?? 0); ?>">
         <input type="hidden" name="action" value="save">
-        <div><label>Title</label><input class="form-control" name="title" value="<?php echo htmlspecialchars((string) ($editing['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required></div>
-        <div><label>Image Path</label><input class="form-control" name="image_path" value="<?php echo htmlspecialchars((string) ($editing['image_path'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required></div>
-        <div><label>Sort Order</label><input class="form-control" type="number" name="sort_order" value="<?php echo (int) ($editing['sort_order'] ?? 0); ?>"></div>
+        <div><label>Title</label><input class="form-control" name="title"
+                value="<?php echo htmlspecialchars((string) ($editing['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                required></div>
+        <div><label>Image Path</label><input class="form-control" name="image_path"
+                value="<?php echo htmlspecialchars((string) ($editing['image_path'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                required></div>
+        <div><label>Upload Image</label><input class="form-control" type="file" name="image_file"
+                accept=".jpg,.jpeg,.png,.webp,.gif,.avif"></div>
+        <div><label>Sort Order</label><input class="form-control" type="number" name="sort_order"
+                value="<?php echo (int) ($editing['sort_order'] ?? 0); ?>"></div>
         <div class="admin-checkbox-wrap"><label><input type="checkbox" name="is_active" <?php echo isset($editing) ? ((int) ($editing['is_active'] ?? 1) === 1 ? 'checked' : '') : 'checked'; ?>> Active</label></div>
         <div class="admin-form-full">
             <button class="btn btn-primary admin-btn" type="submit">Save Gallery Item</button>
-            <?php if ($editing): ?><a class="btn btn-outline-secondary admin-btn" href="gallery.php">Cancel</a><?php endif; ?>
+            <?php if ($editing): ?><a class="btn btn-outline-secondary admin-btn"
+                    href="gallery.php">Cancel</a><?php endif; ?>
         </div>
     </form>
 </section>
@@ -77,25 +97,36 @@ include __DIR__ . '/_layout_top.php';
     <h2>Gallery Items</h2>
     <div class="table-responsive">
         <table class="table admin-table">
-            <thead><tr><th>Title</th><th>Image</th><th>Order</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody>
-            <?php foreach ($items as $item): ?>
+            <thead>
                 <tr>
-                    <td><?php echo htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td><?php echo htmlspecialchars($item['image_path'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td><?php echo (int) $item['sort_order']; ?></td>
-                    <td><?php echo (int) $item['is_active'] === 1 ? 'Active' : 'Inactive'; ?></td>
-                    <td>
-                        <a class="btn btn-sm btn-outline-primary" href="gallery.php?edit=<?php echo (int) $item['id']; ?>">Edit</a>
-                        <form method="post" class="inline-form" onsubmit="return confirm('Delete this gallery item?');">
-                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="id" value="<?php echo (int) $item['id']; ?>">
-                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
-                        </form>
-                    </td>
+                    <th>Title</th>
+                    <th>Image</th>
+                    <th>Order</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
-            <?php endforeach; ?>
+            </thead>
+            <tbody>
+                <?php foreach ($items as $item): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?php echo htmlspecialchars($item['image_path'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?php echo (int) $item['sort_order']; ?></td>
+                        <td><?php echo (int) $item['is_active'] === 1 ? 'Active' : 'Inactive'; ?></td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary"
+                                href="modules/gallery/edit.php?id=<?php echo (int) $item['id']; ?>">Edit</a>
+                            <form method="post" class="inline-form" action="modules/gallery/delete.php"
+                                onsubmit="return confirm('Delete this gallery item?');">
+                                <input type="hidden" name="csrf_token"
+                                    value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="id" value="<?php echo (int) $item['id']; ?>">
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>

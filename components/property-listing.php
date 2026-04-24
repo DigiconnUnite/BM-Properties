@@ -4,10 +4,14 @@ require_once __DIR__ . '/../includes/app.php';
 
 $properties = get_all_properties();
 $categories = get_categories(true);
+$settings = get_site_settings();
+$defaultWhatsappNumber = normalize_phone((string) ($settings['phone'] ?? ''));
 
 if (!function_exists('render_property_card')) {
     function render_property_card(array $property): void
     {
+        global $defaultWhatsappNumber;
+
         if (!function_exists('property_feature_icon_class')) {
             function property_feature_icon_class(string $feature): string
             {
@@ -81,6 +85,11 @@ if (!function_exists('render_property_card')) {
         $image = $property['heroImage'] ?? 'images/banner/banner-property-1.jpg';
         $name = $property['name'] ?? 'Property';
         $summary = $property['summary'] ?? '';
+        $whatsappNumber = normalize_phone((string) ($property['whatsappNumber'] ?? ''));
+        if ($whatsappNumber === '') {
+            $whatsappNumber = $defaultWhatsappNumber;
+        }
+        $whatsappMessage = rawurlencode('Hello, I am interested in ' . $name . '. Please share more details.');
         $cardHighlights = [];
 
         if (isset($property['cardHighlights']) && is_array($property['cardHighlights'])) {
@@ -127,18 +136,31 @@ if (!function_exists('render_property_card')) {
                 <div class="archive-top">
                     <a href="<?php echo htmlspecialchars($detailPage, ENT_QUOTES, 'UTF-8'); ?>" class="images-group">
                         <div class="images-style">
-                            <img class="lazyload" data-src="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>" src="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>">
+                            <img class="lazyload" data-src="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>"
+                                src="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>"
+                                alt="<?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>">
                         </div>
                         <div class="top">
                             <ul class="d-flex gap-6">
                                 <li class="flag-tag primary">Featured</li>
                                 <li class="flag-tag style-1">For Sale</li>
                             </ul>
+                            <?php if ($whatsappNumber !== ''): ?>
+                                <a class="property-whatsapp-icon"
+                                    href="https://wa.me/<?php echo htmlspecialchars($whatsappNumber, ENT_QUOTES, 'UTF-8'); ?>?text=<?php echo $whatsappMessage; ?>"
+                                    target="_blank" rel="noopener noreferrer" aria-label="Enquire on WhatsApp">
+                                    <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                                </a>
+                            <?php endif; ?>
                         </div>
                         <div class="bottom">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path
+                                    d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
+                                    stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path
+                                    d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
+                                    stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                             <?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>
                         </div>
@@ -146,19 +168,23 @@ if (!function_exists('render_property_card')) {
                 </div>
                 <div class="archive-bottom">
                     <div class="content-top">
-                        <h6 class="text-capitalize"><a href="<?php echo htmlspecialchars($detailPage, ENT_QUOTES, 'UTF-8'); ?>" class="link"><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></a></h6>
+                        <h6 class="text-capitalize"><a href="<?php echo htmlspecialchars($detailPage, ENT_QUOTES, 'UTF-8'); ?>"
+                                class="link"><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></a></h6>
                         <ul class="meta-list feature-meta-list">
                             <?php foreach ($cardHighlights as $highlight): ?>
                                 <li class="item">
-                                    <i class="feature-icon <?php echo htmlspecialchars(property_feature_icon_class($highlight), ENT_QUOTES, 'UTF-8'); ?>" aria-hidden="true"></i>
-                                    <span class="feature-text"><?php echo htmlspecialchars($highlight, ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <i class="feature-icon <?php echo htmlspecialchars(property_feature_icon_class($highlight), ENT_QUOTES, 'UTF-8'); ?>"
+                                        aria-hidden="true"></i>
+                                    <span
+                                        class="feature-text"><?php echo htmlspecialchars($highlight, ENT_QUOTES, 'UTF-8'); ?></span>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
                     <div class="content-bottom">
                         <div class="d-flex gap-8 align-items-center">
-                            <span><span class="text-line-clamp-2"><?php echo htmlspecialchars($summary, ENT_QUOTES, 'UTF-8'); ?></span></span>
+                            <span><span
+                                    class="text-line-clamp-2"><?php echo htmlspecialchars($summary, ENT_QUOTES, 'UTF-8'); ?></span></span>
                         </div>
                     </div>
                 </div>
@@ -198,7 +224,8 @@ $showViewAllButton = $showViewAllButton ?? true;
 <section class="flat-section flat-recommended">
     <div class="container">
         <div class="box-title text-center wow fadeInUp">
-            <div class="text-subtitle text-primary"><?php echo htmlspecialchars($sectionSubtitle, ENT_QUOTES, 'UTF-8'); ?></div>
+            <div class="text-subtitle text-primary">
+                <?php echo htmlspecialchars($sectionSubtitle, ENT_QUOTES, 'UTF-8'); ?></div>
             <h3 class="title mt-4"><?php echo htmlspecialchars($sectionTitle, ENT_QUOTES, 'UTF-8'); ?></h3>
         </div>
         <div class="flat-tab-recommended flat-animate-tab wow fadeInUp" data-wow-delay=".2s">
@@ -206,7 +233,9 @@ $showViewAllButton = $showViewAllButton ?? true;
                 <?php $firstTab = true; ?>
                 <?php foreach ($tabDefinitions as $tabId => $tabDefinition): ?>
                     <li class="nav-tab-item" role="presentation">
-                        <a href="#<?php echo htmlspecialchars($tabId, ENT_QUOTES, 'UTF-8'); ?>" class="nav-link-item<?php echo $firstTab ? ' active' : ''; ?>" data-bs-toggle="tab"><?php echo htmlspecialchars($tabDefinition['label'], ENT_QUOTES, 'UTF-8'); ?></a>
+                        <a href="#<?php echo htmlspecialchars($tabId, ENT_QUOTES, 'UTF-8'); ?>"
+                            class="nav-link-item<?php echo $firstTab ? ' active' : ''; ?>"
+                            data-bs-toggle="tab"><?php echo htmlspecialchars($tabDefinition['label'], ENT_QUOTES, 'UTF-8'); ?></a>
                     </li>
                     <?php $firstTab = false; ?>
                 <?php endforeach; ?>
@@ -214,7 +243,8 @@ $showViewAllButton = $showViewAllButton ?? true;
             <div class="tab-content">
                 <?php $firstPane = true; ?>
                 <?php foreach ($tabDefinitions as $tabId => $tabDefinition): ?>
-                    <div class="tab-pane<?php echo $firstPane ? ' active show' : ''; ?>" id="<?php echo htmlspecialchars($tabId, ENT_QUOTES, 'UTF-8'); ?>" role="tabpanel">
+                    <div class="tab-pane<?php echo $firstPane ? ' active show' : ''; ?>"
+                        id="<?php echo htmlspecialchars($tabId, ENT_QUOTES, 'UTF-8'); ?>" role="tabpanel">
                         <div class="row">
                             <?php foreach ($tabDefinition['slugs'] as $slug): ?>
                                 <?php if (isset($properties[$slug])): ?>
@@ -224,7 +254,8 @@ $showViewAllButton = $showViewAllButton ?? true;
                         </div>
                         <?php if ($tabId === 'viewAll' && $showViewAllButton): ?>
                             <div class="text-center view-all">
-                                <a href="properties.php" class="tf-btn btn-view primary size-1 hover-btn-view">View All Properties <span class="icon icon-arrow-right2"></span></a>
+                                <a href="properties.php" class="tf-btn btn-view primary size-1 hover-btn-view">View All
+                                    Properties <span class="icon icon-arrow-right2"></span></a>
                             </div>
                         <?php endif; ?>
                     </div>

@@ -18,6 +18,10 @@ $pageTitle = $property['pageTitle'] ?? ($propertyName . ' - BM Real Estate');
 $category = $property['category'] ?? 'Property';
 $heroImage = $property['heroImage'] ?? 'images/banner/banner-property-1.jpg';
 $galleryImages = $property['galleryImages'] ?? [$heroImage, 'images/banner/banner-property-2.jpg', 'images/banner/banner-property-3.jpg', $heroImage];
+$galleryImages = array_values(array_filter(array_map(static fn($image) => trim((string) $image), is_array($galleryImages) ? $galleryImages : []), static fn($image) => $image !== ''));
+if (empty($galleryImages)) {
+    $galleryImages = [$heroImage];
+}
 $description = $property['description'] ?? [
     $propertyName . ' is presented as a premium investment opportunity with strong connectivity and thoughtful planning.',
     'The layout supports comfortable living while keeping the project suitable for buyers who want long-term value and practical access.',
@@ -74,6 +78,13 @@ $map = $property['map'] ?? [
     'country' => 'India',
 ];
 $mapEmbed = $property['mapEmbed'] ?? 'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d135905.11693909427!2d-73.95165795400088!3d41.17584829642291!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sNew%20York!5e0!3m2!1sen!2s!4v1727094281524!5m2!1sen!2s';
+if (trim($mapEmbed) === '') {
+    $mapQuery = trim(implode(', ', array_filter([$map['address'] ?? '', $map['city'] ?? '', $map['state'] ?? '', $map['country'] ?? ''])));
+    if ($mapQuery === '') {
+        $mapQuery = $location;
+    }
+    $mapEmbed = 'https://maps.google.com/maps?q=' . rawurlencode($mapQuery) . '&output=embed';
+}
 $defaultWebsiteUrl = property_asset_url($basePath, 'contact.php');
 if ($propertySlug !== '') {
     $defaultWebsiteUrl .= '?property=' . rawurlencode($propertySlug);
@@ -84,6 +95,7 @@ $websiteIsExternal = preg_match('/^https?:\/\//i', $websiteUrl) === 1;
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+
 <head>
     <meta charset="utf-8">
     <title><?php echo htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'); ?></title>
@@ -93,6 +105,7 @@ $websiteIsExternal = preg_match('/^https?:\/\//i', $websiteUrl) === 1;
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <?php include $basePath . '/components/links.php'; ?>
 </head>
+
 <body class="body">
     <?php include $basePath . '/components/loader.php'; ?>
 
@@ -104,17 +117,16 @@ $websiteIsExternal = preg_match('/^https?:\/\//i', $websiteUrl) === 1;
                     <div class="header-property-detail">
                         <div class="content-top d-flex justify-content-between align-items-center">
                             <div class="property-title-group">
-                                <h3 class="title link fw-8"><?php echo htmlspecialchars($propertyName, ENT_QUOTES, 'UTF-8'); ?></h3>
-                               
+                                <h3 class="title link fw-8">
+                                    <?php echo htmlspecialchars($propertyName, ENT_QUOTES, 'UTF-8'); ?></h3>
+
                             </div>
                             <div class="box-price d-flex align-items-end">
                                 <!-- <h3 class="fw-8"><?php echo htmlspecialchars($price, ENT_QUOTES, 'UTF-8'); ?></h3> -->
                                 <?php if ($websiteUrl !== ''): ?>
-                                    <a
-                                        href="<?php echo htmlspecialchars($websiteUrl, ENT_QUOTES, 'UTF-8'); ?>"
-                                        class="property-more-info-link"
-                                        <?php if ($websiteIsExternal): ?>target="_blank" rel="noopener noreferrer"<?php endif; ?>
-                                    >
+                                    <a href="<?php echo htmlspecialchars($websiteUrl, ENT_QUOTES, 'UTF-8'); ?>"
+                                        class="property-more-info-link" <?php if ($websiteIsExternal): ?>target="_blank"
+                                            rel="noopener noreferrer" <?php endif; ?>>
                                         <?php echo htmlspecialchars($websiteLabel, ENT_QUOTES, 'UTF-8'); ?>
                                     </a>
                                 <?php endif; ?>
@@ -142,12 +154,12 @@ $websiteIsExternal = preg_match('/^https?:\/\//i', $websiteUrl) === 1;
                                         </li>
                                     </ul>
                                 </div> -->
-                                <!-- <div class="info-box">
+                            <!-- <div class="info-box">
                                     <div class="label">Location</div>
                                     <p class="meta-item"><span class="icon icon-mapPin"></span><span class="text-variant-1"><?php echo htmlspecialchars($location, ENT_QUOTES, 'UTF-8'); ?></span></p>
                                 </div> -->
-                            </div>
-                            <!-- <ul class="icon-box">
+                        </div>
+                        <!-- <ul class="icon-box">
                                 <li><a href="#" class="item">
                                         <svg class="icon" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M15.75 6.1875C15.75 4.32375 14.1758 2.8125 12.234 2.8125C10.7828 2.8125 9.53625 3.657 9 4.86225C8.46375 3.657 7.21725 2.8125 5.76525 2.8125C3.825 2.8125 2.25 4.32375 2.25 6.1875C2.25 11.6025 9 15.1875 9 15.1875C9 15.1875 15.75 11.6025 15.75 6.1875Z" stroke="#A3ABB0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -169,37 +181,42 @@ $websiteIsExternal = preg_match('/^https?:\/\//i', $websiteUrl) === 1;
                                         </svg>
                                     </a></li>
                             </ul> -->
-                        </div>
                     </div>
                 </div>
             </div>
-            <section class="flat-slider-detail-v1 flat-slider-detail-v2 px-10">
-                <div class="container">
-                    <div dir="ltr" class="swiper tf-sw-location" data-preview="3" data-tablet="2" data-mobile-sm="1" data-mobile="1" data-space-lg="10" data-space-md="10" data-space="10" data-pagination="1" data-pagination-sm="1" data-pagination-md="1" data-pagination-lg="3">
+        </div>
+        <section class="flat-slider-detail-v1 flat-slider-detail-v2 px-10">
+            <div class="container">
+                <div dir="ltr" class="swiper tf-sw-location" data-preview="3" data-tablet="2" data-mobile-sm="1"
+                    data-mobile="1" data-space-lg="10" data-space-md="10" data-space="10" data-pagination="1"
+                    data-pagination-sm="1" data-pagination-md="1" data-pagination-lg="3">
                     <div class="swiper-wrapper">
                         <?php foreach ($galleryImages as $galleryImage): ?>
                             <div class="swiper-slide">
-                                <a href="<?php echo htmlspecialchars(property_asset_url($basePath, $galleryImage), ENT_QUOTES, 'UTF-8'); ?>" data-fancybox="gallery" class="box-img-detail d-block">
-                                    <img src="<?php echo htmlspecialchars(property_asset_url($basePath, $galleryImage), ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($propertyName, ENT_QUOTES, 'UTF-8'); ?>">
+                                <a href="<?php echo htmlspecialchars(property_asset_url($basePath, $galleryImage), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-fancybox="gallery" class="box-img-detail d-block">
+                                    <img src="<?php echo htmlspecialchars(property_asset_url($basePath, $galleryImage), ENT_QUOTES, 'UTF-8'); ?>"
+                                        alt="<?php echo htmlspecialchars($propertyName, ENT_QUOTES, 'UTF-8'); ?>">
                                 </a>
                             </div>
                         <?php endforeach; ?>
                     </div>
                     <div class="sw-pagination sw-pagination-location text-center"></div>
                 </div>
-                </div>
-            </section>
-            <section class="flat-section-v3 flat-property-detail">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-7">
-                            <div class="single-property-element single-property-desc">
-                                <h5 class="fw-6 title">Description</h5>
-                                <?php foreach ($description as $index => $paragraph): ?>
-                                    <p class="<?php echo $index === 0 ? 'text-variant-1' : 'mt-8 text-variant-1'; ?>"><?php echo htmlspecialchars($paragraph, ENT_QUOTES, 'UTF-8'); ?></p>
-                                <?php endforeach; ?>
-                            </div>
-                            <!-- <div class="single-property-element single-property-overview">
+            </div>
+        </section>
+        <section class="flat-section-v3 flat-property-detail">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-7">
+                        <div class="single-property-element single-property-desc">
+                            <h5 class="fw-6 title">Description</h5>
+                            <?php foreach ($description as $index => $paragraph): ?>
+                                <p class="<?php echo $index === 0 ? 'text-variant-1' : 'mt-8 text-variant-1'; ?>">
+                                    <?php echo htmlspecialchars($paragraph, ENT_QUOTES, 'UTF-8'); ?></p>
+                            <?php endforeach; ?>
+                        </div>
+                        <!-- <div class="single-property-element single-property-overview">
                                 <h6 class="title fw-6">Overview</h6>
                                 <ul class="info-box">
                                     <?php foreach ($overview as $item): ?>
@@ -213,68 +230,79 @@ $websiteIsExternal = preg_match('/^https?:\/\//i', $websiteUrl) === 1;
                                     <?php endforeach; ?>
                                 </ul>
                             </div> -->
-                            <div class="single-property-element single-property-info">
-                                <h5 class="title fw-6">Property Details</h5>
-                                <div class="row">
-                                    <?php foreach ($details as $item): ?>
-                                        <div class="col-md-6">
-                                            <div class="inner-box">
-                                                <span class="label text-black-3"><?php echo htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8'); ?></span>
-                                                <div class="content text-black-3"><?php echo htmlspecialchars($item['value'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                            </div>
+                        <div class="single-property-element single-property-info">
+                            <h5 class="title fw-6">Property Details</h5>
+                            <div class="row">
+                                <?php foreach ($details as $item): ?>
+                                    <div class="col-md-6">
+                                        <div class="inner-box">
+                                            <span
+                                                class="label text-black-3"><?php echo htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                            <div class="content text-black-3">
+                                                <?php echo htmlspecialchars($item['value'], ENT_QUOTES, 'UTF-8'); ?></div>
                                         </div>
-                                    <?php endforeach; ?>
-                                </div>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
-                            <div class="single-property-element single-property-feature">
-                                <h5 class="title fw-6">Amenities and features</h5>
-                                <div class="wrap-feature">
-                                    <?php foreach ($features as $featureGroup): ?>
-                                        <div class="box-feature">
-                                            <ul>
-                                                <?php foreach ($featureGroup as $featureItem): ?>
-                                                    <li class="feature-item"><?php echo htmlspecialchars($featureItem, ENT_QUOTES, 'UTF-8'); ?></li>
-                                                <?php endforeach; ?>
-                                            </ul>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
+                        </div>
+                        <div class="single-property-element single-property-feature">
+                            <h5 class="title fw-6">Amenities and features</h5>
+                            <div class="wrap-feature">
+                                <?php foreach ($features as $featureGroup): ?>
+                                    <div class="box-feature">
+                                        <ul>
+                                            <?php foreach ($featureGroup as $featureItem): ?>
+                                                <li class="feature-item">
+                                                    <?php echo htmlspecialchars($featureItem, ENT_QUOTES, 'UTF-8'); ?></li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
-                            <div class="single-property-element single-property-map">
-                                <h5 class="title fw-6">Map location</h5>
-                                <iframe class="map" src="<?php echo htmlspecialchars($mapEmbed, ENT_QUOTES, 'UTF-8'); ?>" height="478" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                                <div class="info-map">
-                                    <ul class="box-left">
-                                        <li>
-                                            <span class="label fw-6">Address</span>
-                                            <div class="text text-variant-1"><?php echo htmlspecialchars($map['address'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                        </li>
-                                        <li>
-                                            <span class="label fw-6">City</span>
-                                            <div class="text text-variant-1"><?php echo htmlspecialchars($map['city'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                        </li>
-                                        <li>
-                                            <span class="label fw-6">State/county</span>
-                                            <div class="text text-variant-1"><?php echo htmlspecialchars($map['state'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                        </li>
-                                    </ul>
-                                    <ul class="box-right">
-                                        <li>
-                                            <span class="label fw-6">Postal code</span>
-                                            <div class="text text-variant-1"><?php echo htmlspecialchars($map['postal'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                        </li>
-                                        <li>
-                                            <span class="label fw-6">Area</span>
-                                            <div class="text text-variant-1"><?php echo htmlspecialchars($map['area'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                        </li>
-                                        <li>
-                                            <span class="label fw-6">Country</span>
-                                            <div class="text text-variant-1"><?php echo htmlspecialchars($map['country'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                        </li>
-                                    </ul>
-                                </div>
+                        </div>
+                        <div class="single-property-element single-property-map">
+                            <h5 class="title fw-6">Map location</h5>
+                            <iframe class="map" src="<?php echo htmlspecialchars($mapEmbed, ENT_QUOTES, 'UTF-8'); ?>"
+                                height="478" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <div class="info-map">
+                                <ul class="box-left">
+                                    <li>
+                                        <span class="label fw-6">Address</span>
+                                        <div class="text text-variant-1">
+                                            <?php echo htmlspecialchars($map['address'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                    </li>
+                                    <li>
+                                        <span class="label fw-6">City</span>
+                                        <div class="text text-variant-1">
+                                            <?php echo htmlspecialchars($map['city'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                    </li>
+                                    <li>
+                                        <span class="label fw-6">State/county</span>
+                                        <div class="text text-variant-1">
+                                            <?php echo htmlspecialchars($map['state'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                    </li>
+                                </ul>
+                                <ul class="box-right">
+                                    <li>
+                                        <span class="label fw-6">Postal code</span>
+                                        <div class="text text-variant-1">
+                                            <?php echo htmlspecialchars($map['postal'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                    </li>
+                                    <li>
+                                        <span class="label fw-6">Area</span>
+                                        <div class="text text-variant-1">
+                                            <?php echo htmlspecialchars($map['area'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                    </li>
+                                    <li>
+                                        <span class="label fw-6">Country</span>
+                                        <div class="text text-variant-1">
+                                            <?php echo htmlspecialchars($map['country'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                    </li>
+                                </ul>
                             </div>
-                            <!-- <div class="single-property-element single-property-attachments">
+                        </div>
+                        <!-- <div class="single-property-element single-property-attachments">
                                 <h6 class="title fw-6">File Attachments</h6>
                                 <div class="row">
                                     <?php foreach ($attachments as $attachment): ?>
@@ -290,24 +318,25 @@ $websiteIsExternal = preg_match('/^https?:\/\//i', $websiteUrl) === 1;
                                     <?php endforeach; ?>
                                 </div>
                             </div> -->
-                            <div class="single-property-element single-property-nearby">
-                                <h5 class="title fw-6">What's nearby?</h5>
-                                <p><?php echo htmlspecialchars($nearby, ENT_QUOTES, 'UTF-8'); ?></p>
-                                <ul class="nearby-list mt-12">
-                                    <?php foreach ($nearbyItems as $nearbyItem): ?>
-                                        <li class="text-variant-1 mb-8">
-                                            <span class="nearby-bullet" aria-hidden="true"></span>
-                                            <span class="nearby-text"><?php echo htmlspecialchars($nearbyItem, ENT_QUOTES, 'UTF-8'); ?></span>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
+                        <div class="single-property-element single-property-nearby">
+                            <h5 class="title fw-6">What's nearby?</h5>
+                            <p><?php echo htmlspecialchars($nearby, ENT_QUOTES, 'UTF-8'); ?></p>
+                            <ul class="nearby-list mt-12">
+                                <?php foreach ($nearbyItems as $nearbyItem): ?>
+                                    <li class="text-variant-1 mb-8">
+                                        <span class="nearby-bullet" aria-hidden="true"></span>
+                                        <span
+                                            class="nearby-text"><?php echo htmlspecialchars($nearbyItem, ENT_QUOTES, 'UTF-8'); ?></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </section>
-            <?php include $basePath . '/components/footer.php'; ?>
-        </div>
+            </div>
+        </section>
+        <?php include $basePath . '/components/footer.php'; ?>
+    </div>
     </div>
 
     <div class="progress-wrap">
@@ -318,4 +347,5 @@ $websiteIsExternal = preg_match('/^https?:\/\//i', $websiteUrl) === 1;
 
     <?php include $basePath . '/components/script.php'; ?>
 </body>
+
 </html>

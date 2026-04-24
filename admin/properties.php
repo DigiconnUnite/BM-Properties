@@ -22,11 +22,19 @@ include __DIR__ . '/_layout_top.php';
 <section class="admin-card">
     <div class="admin-card-head">
         <h2>All Properties</h2>
-        <a class="btn btn-primary admin-btn" href="property-form.php">Add New Property</a>
+        <a class="btn btn-primary admin-btn" href="modules/properties/create.php">Add New Property</a>
     </div>
     <div class="table-responsive">
         <table class="table admin-table">
-            <thead><tr><th>Name</th><th>Category</th><th>Slug</th><th>Status</th><th>Action</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Slug</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
             <tbody>
                 <?php foreach ($properties as $property): ?>
                     <tr>
@@ -35,10 +43,15 @@ include __DIR__ . '/_layout_top.php';
                         <td><?php echo htmlspecialchars($property['slug'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($property['status'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td>
-                            <a class="btn btn-sm btn-outline-primary" href="property-form.php?id=<?php echo (int) $property['id']; ?>">Edit</a>
-                            <a class="btn btn-sm btn-outline-secondary" href="../property-details.php?slug=<?php echo rawurlencode($property['slug']); ?>" target="_blank" rel="noopener noreferrer">View</a>
-                            <form method="post" class="inline-form" onsubmit="return confirm('Delete this property?');">
-                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                            <a class="btn btn-sm btn-outline-primary"
+                                href="modules/properties/edit.php?id=<?php echo (int) $property['id']; ?>">Edit</a>
+                            <a class="btn btn-sm btn-outline-secondary"
+                                href="../property-details.php?slug=<?php echo rawurlencode($property['slug']); ?>"
+                                target="_blank" rel="noopener noreferrer">View</a>
+                            <form method="post" class="inline-form" action="modules/properties/delete.php"
+                                onsubmit="return confirm('Delete this property?');">
+                                <input type="hidden" name="csrf_token"
+                                    value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?php echo (int) $property['id']; ?>">
                                 <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>

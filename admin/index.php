@@ -7,6 +7,7 @@ $activePage = 'dashboard';
 $propertyCount = get_property_count();
 $galleryCount = get_gallery_count();
 $messageCount = get_message_count();
+$enquiryCount = get_enquiry_count();
 
 include __DIR__ . '/_layout_top.php';
 ?>
@@ -23,6 +24,10 @@ include __DIR__ . '/_layout_top.php';
         <h2>Contact Messages</h2>
         <p class="admin-stat"><?php echo (int) $messageCount; ?></p>
     </article>
+    <article class="admin-card">
+        <h2>Total Enquiries</h2>
+        <p class="admin-stat"><?php echo (int) $enquiryCount; ?></p>
+    </article>
 </section>
 
 <section class="admin-card">
@@ -31,6 +36,8 @@ include __DIR__ . '/_layout_top.php';
         <a class="btn btn-primary admin-btn" href="property-form.php">Add Property</a>
         <a class="btn btn-outline-primary admin-btn" href="gallery.php">Manage Gallery</a>
         <a class="btn btn-outline-primary admin-btn" href="messages.php">View Messages</a>
+        <a class="btn btn-outline-primary admin-btn" href="enquiries.php">View Enquiries</a>
+        <a class="btn btn-outline-primary admin-btn" href="profile.php">Manage Profile</a>
     </div>
 </section>
 <?php include __DIR__ . '/_layout_bottom.php'; ?>

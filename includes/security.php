@@ -129,6 +129,8 @@ function admin_login(array $user): void
     $_SESSION['admin_user'] = [
         'id' => (int) $user['id'],
         'username' => (string) $user['username'],
+        'email' => (string) ($user['email'] ?? ''),
+        'full_name' => (string) ($user['full_name'] ?? ''),
     ];
 }
 
@@ -155,4 +157,74 @@ function json_decode_or_default(?string $value, array $default = []): array
 function to_json(array $value): string
 {
     return json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?: '[]';
+}
+
+function normalize_phone(string $value): string
+{
+    return preg_replace('/[^0-9]/', '', $value) ?? '';
+}
+
+function is_valid_phone(string $value, int $minDigits = 10): bool
+{
+    return strlen(normalize_phone($value)) >= $minDigits;
+}
+
+function set_flash(string $key, string $message): void
+{
+    if (!isset($_SESSION['flash']) || !is_array($_SESSION['flash'])) {
+        $_SESSION['flash'] = [];
+    }
+    $_SESSION['flash'][$key] = $message;
+}
+
+function get_flash(string $key): string
+{
+    if (!isset($_SESSION['flash'][$key]) || !is_string($_SESSION['flash'][$key])) {
+        return '';
+    }
+
+    $message = $_SESSION['flash'][$key];
+    unset($_SESSION['flash'][$key]);
+
+    return $message;
+}
+
+function upload_image_file(array $file, string $directory, string $baseUrlPath): ?string
+{
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        return null;
+    }
+
+    $tmpName = (string) ($file['tmp_name'] ?? '');
+    if ($tmpName === '' || !is_uploaded_file($tmpName)) {
+        return null;
+    }
+
+    $allowedMimeTypes = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+        'image/gif' => 'gif',
+        'image/avif' => 'avif',
+    ];
+
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mimeType = (string) $finfo->file($tmpName);
+    if (!isset($allowedMimeTypes[$mimeType])) {
+        return null;
+    }
+
+    if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) {
+        return null;
+    }
+
+    $extension = $allowedMimeTypes[$mimeType];
+    $randomName = bin2hex(random_bytes(16)) . '.' . $extension;
+    $targetPath = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $randomName;
+
+    if (!move_uploaded_file($tmpName, $targetPath)) {
+        return null;
+    }
+
+    return rtrim($baseUrlPath, '/') . '/' . $randomName;
 }

@@ -12085,3 +12085,199 @@ tr {
   /* background: rgba(0, 0, 0, 0.5) url(../images/background.jpg); */
 
 }
+
+.enquiry-float-btn {
+  position: fixed;
+  right: 22px;
+  bottom: 156px;
+  border: 0;
+  border-radius: 28px;
+  height: 52px;
+  padding: 0 24px;
+  background: #1563df;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 12px 24px rgba(21, 99, 223, 0.34);
+  z-index: 110;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.enquiry-float-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 28px rgba(21, 99, 223, 0.4);
+}
+
+.global-popup-notice {
+  position: fixed;
+  right: 22px;
+  bottom: 224px;
+  max-width: 320px;
+  background: #0f1f3d;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  box-shadow: 0 12px 24px rgba(15, 31, 61, 0.28);
+  transform: translateY(14px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 120;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.global-popup-notice.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.header-enquiry-btn {
+  margin-right: 10px;
+}
+
+.enquiry-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: none;
+}
+
+.enquiry-modal.is-visible {
+  display: block;
+}
+
+.enquiry-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 25, 50, 0.68);
+}
+
+.enquiry-modal-dialog {
+  position: relative;
+  width: min(94vw, 760px);
+  margin: 40px auto;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 26px;
+  max-height: calc(100vh - 80px);
+  overflow: auto;
+  box-shadow: 0 22px 40px rgba(15, 31, 61, 0.25);
+}
+
+.enquiry-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  border: 0;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  color: #6b768d;
+}
+
+.enquiry-modal h4 {
+  font-size: 36px;
+  line-height: 1.18;
+  margin-bottom: 10px;
+}
+
+.enquiry-subtitle {
+  color: #6d7890;
+  margin-bottom: 14px;
+}
+
+.enquiry-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.enquiry-form-full {
+  grid-column: 1 / -1;
+}
+
+.enquiry-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  color: #161e2d;
+}
+
+.enquiry-choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.enquiry-choice-row label {
+  border: 1px solid #d9dfeb;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f3f6f;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.enquiry-submit-btn {
+  width: 100%;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.property-whatsapp-icon {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 10px 18px rgba(8, 98, 48, 0.32);
+}
+
+.homelengo-box .archive-top {
+  position: relative;
+}
+
+.property-whatsapp-icon:hover {
+  transform: translateY(-2px);
+}
+
+body.enquiry-open {
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .enquiry-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .enquiry-modal h4 {
+    font-size: 28px;
+  }
+
+  .whatsapp-float-btn {
+    right: 14px;
+    bottom: 86px;
+  }
+
+  .enquiry-float-btn {
+    right: 14px;
+    bottom: 152px;
+  }
+
+  .global-popup-notice {
+    right: 14px;
+    bottom: 214px;
+    max-width: calc(100vw - 28px);
+  }
+}
