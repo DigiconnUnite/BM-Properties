@@ -129,6 +129,8 @@ function admin_login(array $user): void
     $_SESSION['admin_user'] = [
         'id' => (int) $user['id'],
         'username' => (string) $user['username'],
+        'email' => (string) ($user['email'] ?? ''),
+        'full_name' => (string) ($user['full_name'] ?? ''),
     ];
 }
 
@@ -155,4 +157,115 @@ function json_decode_or_default(?string $value, array $default = []): array
 function to_json(array $value): string
 {
     return json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?: '[]';
+}
+
+function normalize_phone(string $value): string
+{
+    return preg_replace('/[^0-9]/', '', $value) ?? '';
+}
+
+function is_valid_phone(string $value, int $minDigits = 10): bool
+{
+    return strlen(normalize_phone($value)) >= $minDigits;
+}
+
+function set_flash(string $key, string $message): void
+{
+    if (!isset($_SESSION['flash']) || !is_array($_SESSION['flash'])) {
+        $_SESSION['flash'] = [];
+    }
+    $_SESSION['flash'][$key] = $message;
+}
+
+function get_flash(string $key): string
+{
+    if (!isset($_SESSION['flash'][$key]) || !is_string($_SESSION['flash'][$key])) {
+        return '';
+    }
+
+    $message = $_SESSION['flash'][$key];
+    unset($_SESSION['flash'][$key]);
+
+    return $message;
+}
+
+function upload_image_file(array $file, string $directory, string $baseUrlPath): ?string
+{
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        return null;
+    }
+
+    $tmpName = (string) ($file['tmp_name'] ?? '');
+    if ($tmpName === '' || !is_uploaded_file($tmpName)) {
+        return null;
+    }
+
+    $maxBytes = 1024 * 1024; // 1MB
+    $size = (int) ($file['size'] ?? 0);
+    if ($size <= 0 || $size > $maxBytes) {
+        return null;
+    }
+
+    $mimeType = '';
+    if (function_exists('mime_content_type')) {
+        $mimeType = (string) mime_content_type($tmpName);
+    } elseif (function_exists('finfo_file')) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = (string) finfo_file($finfo, $tmpName);
+        finfo_close($finfo);
+    } else {
+        $imageInfo = @getimagesize($tmpName);
+        if ($imageInfo !== false && isset($imageInfo['mime'])) {
+            $mimeType = (string) $imageInfo['mime'];
+        }
+    }
+    
+    if (!in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp'], true)) {
+        return null;
+    }
+
+    if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) {
+        return null;
+    }
+
+    $randomName = bin2hex(random_bytes(16)) . '.webp';
+    $targetPath = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $randomName;
+
+    $image = null;
+    if ($mimeType === 'image/webp') {
+        if (function_exists('imagecreatefromwebp')) {
+            $image = @imagecreatefromwebp($tmpName) ?: null;
+        }
+    } elseif ($mimeType === 'image/jpeg') {
+        $image = @imagecreatefromjpeg($tmpName) ?: null;
+    } elseif ($mimeType === 'image/png') {
+        $image = @imagecreatefrompng($tmpName) ?: null;
+        if (is_resource($image) || $image instanceof GdImage) {
+            imagealphablending($image, true);
+            imagesavealpha($image, true);
+        }
+    }
+
+    if ($image === null) {
+        return null;
+    }
+
+    $quality = 82;
+    if (!function_exists('imagewebp') || !@imagewebp($image, $targetPath, $quality)) {
+        if (is_resource($image) || $image instanceof GdImage) {
+            imagedestroy($image);
+        }
+        return null;
+    }
+
+    if (is_resource($image) || $image instanceof GdImage) {
+        imagedestroy($image);
+    }
+
+    if (filesize($targetPath) === false || (int) filesize($targetPath) > $maxBytes) {
+        @unlink($targetPath);
+        return null;
+    }
+
+    return rtrim($baseUrlPath, '/') . '/' . $randomName;
 }

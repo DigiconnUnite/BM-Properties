@@ -1,0 +1,18 @@
+<?php
+
+return [
+  // Copy to config/mail.local.php and fill values.
+  // This file is optional and overrides config/mail.php.
+  'mailer' => 'smtp',
+  'host' => 'smtp.gmail.com',
+  'port' => 587,
+  'username' => 'your-email@gmail.com',
+  'password' => 'your-app-password',
+  'encryption' => 'tls', // tls or ssl
+  'from_email' => 'your-email@gmail.com',
+  'from_name' => 'BM Properties',
+  // Optional:
+  // 'reply_to_email' => 'support@yourdomain.com',
+  // 'reply_to_name' => 'BM Properties Support',
+];
+

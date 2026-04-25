@@ -1,10 +1,12 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+
 <head>
     <meta charset="utf-8">
     <title>BM Properties : Buy, Sell & Rent Properties in Agra</title>
     <meta name="keywords" content="HTML, CSS, JavaScript, Bootstrap">
-    <meta name="description" content="Discover premium residential and commercial properties with BM Properties. Explore verified listings for buying, selling, and renting in prime locations with expert guidance.">
+    <meta name="description"
+        content="Discover premium residential and commercial properties with BM Properties. Explore verified listings for buying, selling, and renting in prime locations with expert guidance.">
     <meta name="author" content="BM Properties">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <?php include 'components/links.php'; ?>
@@ -12,11 +14,11 @@
 </head>
 
 <body class="body">
-    <?php include 'components/loader.php';?>
+
 
     <div id="wrapper">
         <div id="pagee" class="clearfix">
-         <?php include 'components/header.php';?>
+            <?php include 'components/header.php'; ?>
 
             <!-- Slider -->
             <section class="flat-slider home-5">
@@ -64,7 +66,11 @@
                                                 </span>
                                             </h1>
                                             <p class="subtitle text-white body-2 wow fadeInUp" data-wow-delay=".2s">
-                                               At BM Properties, we help you discover the perfect property that fits your lifestyle and budget. Whether you are looking to buy, sell, or rent, our carefully selected listings in prime locations ensure quality, comfort, and long-term value. Start your journey with us and find a place you can truly call home.</p>
+                                                At BM Properties, we help you discover the perfect property that fits
+                                                your lifestyle and budget. Whether you are looking to buy, sell, or
+                                                rent, our carefully selected listings in prime locations ensure quality,
+                                                comfort, and long-term value. Start your journey with us and find a
+                                                place you can truly call home.</p>
                                         </div>
                                         <!-- <div class="wrap-search-link">
                                             <div class="categories-list style-2">
@@ -267,8 +273,10 @@
                                             <div class="archive-top">
                                                 <a href="property-details.php" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/grand-green-valley.jpg"
-                                                            src="images/featured-properties/grand-green-valley.jpg" alt="img">
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/grand-green-valley.jpg"
+                                                            src="images/featured-properties/grand-green-valley.jpg"
+                                                            alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -299,7 +307,7 @@
                                                     <h6 class="text-capitalize"><a href="property-details-v1.html"
                                                             class="link"> Grand Valley Empire</a>
                                                     </h6>
-                                                    
+
                                                     <ul class="meta-list">
                                                         <li class="item">
                                                             <i class="icon icon-bed"></i>
@@ -325,8 +333,11 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png2.png" alt="avt">
                                                         </div> -->
-                                                        <span> <span class="text-line-clamp-2"> Dream Avenue is an upcoming residential project currently under construction, ideally located on Main Firozabad Road near K.P. 
-                                                </span></span>
+                                                        <span> <span class="text-line-clamp-2"> Dream Avenue is an
+                                                                upcoming residential project currently under
+                                                                construction, ideally located on Main Firozabad Road
+                                                                near K.P.
+                                                            </span></span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
@@ -338,8 +349,10 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/vrindavan-global.jpg"
-                                                            src="images/featured-properties/vrindavan-global.jpg" alt="img">
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/vrindavan-global.jpg"
+                                                            src="images/featured-properties/vrindavan-global.jpg"
+                                                            alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -387,14 +400,18 @@
                                                             <span class="fw-6">1150</span>
                                                         </li>
                                                     </ul>
-                                                   
+
                                                 </div>
                                                 <div class="content-bottom">
                                                     <div class="d-flex gap-8 align-items-center">
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png2.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2"> Vrindavan Global is an ambitious residential township currently under construction, designed to offer a harmonious blend of nature, spirituality, and modern living. Inspired by the serene essence of Vrindavan.
+                                                        <span class="text-line-clamp-2"> Vrindavan Global is an
+                                                            ambitious residential township currently under construction,
+                                                            designed to offer a harmonious blend of nature,
+                                                            spirituality, and modern living. Inspired by the serene
+                                                            essence of Vrindavan.
                                                         </span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
@@ -407,8 +424,10 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/green-valley-empire.jpg"
-                                                            src="images/featured-properties/green-valley-empire.jpg" alt="img">
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/green-valley-empire.jpg"
+                                                            src="images/featured-properties/green-valley-empire.jpg"
+                                                            alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -463,7 +482,11 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png4.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">The Grand green valley is a promising residential project currently under construction, located on the Etmadpur to Behran Road in Agra. Thoughtfully planned to deliver a comfortable and modern lifestyle.</span>
+                                                        <span class="text-line-clamp-2">The Grand green valley is a
+                                                            promising residential project currently under construction,
+                                                            located on the Etmadpur to Behran Road in Agra. Thoughtfully
+                                                            planned to deliver a comfortable and modern
+                                                            lifestyle.</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
@@ -475,7 +498,8 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/upsic.jpg"
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/upsic.jpg"
                                                             src="images/featured-properties/upsic.jpg" alt="img">
                                                     </div>
                                                     <div class="top">
@@ -497,7 +521,7 @@
                                                                 stroke="white" stroke-width="1.5" stroke-linecap="round"
                                                                 stroke-linejoin="round" />
                                                         </svg>
-                                                       The UPSIC Project
+                                                        The UPSIC Project
                                                     </div>
                                                 </a>
 
@@ -531,7 +555,11 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png5.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">The UPSIC Project is an upcoming development currently under construction, planned to offer well-structured plots and modern infrastructure in a strategic location. Designed with a focus on organized growth and accessibility</span>
+                                                        <span class="text-line-clamp-2">The UPSIC Project is an upcoming
+                                                            development currently under construction, planned to offer
+                                                            well-structured plots and modern infrastructure in a
+                                                            strategic location. Designed with a focus on organized
+                                                            growth and accessibility</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
@@ -543,8 +571,10 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/landmark-city.jpg"
-                                                            src="images/featured-properties/landmark-city.jpg" alt="img">
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/landmark-city.jpg"
+                                                            src="images/featured-properties/landmark-city.jpg"
+                                                            alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -599,7 +629,12 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png6.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">The Landmark City is an emerging residential project currently under construction, designed to offer a modern and well-planned living experience. With a focus on organized layouts, wide roads, and essential infrastructure, the project aims to create a comfortable and secure environment for families.</span>
+                                                        <span class="text-line-clamp-2">The Landmark City is an emerging
+                                                            residential project currently under construction, designed
+                                                            to offer a modern and well-planned living experience. With a
+                                                            focus on organized layouts, wide roads, and essential
+                                                            infrastructure, the project aims to create a comfortable and
+                                                            secure environment for families.</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
@@ -611,7 +646,8 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/dream-avenue.jpg"
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/dream-avenue.jpg"
                                                             src="images/featured-properties/dream-avenue.jpg" alt="img">
                                                     </div>
                                                     <div class="top">
@@ -633,7 +669,7 @@
                                                                 stroke="white" stroke-width="1.5" stroke-linecap="round"
                                                                 stroke-linejoin="round" />
                                                         </svg>
-                                                       Dream Avenue
+                                                        Dream Avenue
                                                     </div>
                                                 </a>
 
@@ -642,7 +678,7 @@
                                                 <div class="content-top">
                                                     <h6 class="text-capitalize"><a href="property-details.php"
                                                             class="link"> Dream Avenue
-</a></h6>
+                                                        </a></h6>
                                                     <ul class="meta-list">
                                                         <li class="item">
                                                             <i class="icon icon-bed"></i>
@@ -668,20 +704,26 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png1.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">Dream Avenue is a thoughtfully planned residential project currently under construction, aimed at delivering a modern and comfortable lifestyle. The project features well-organized layouts, open surroundings, and a peaceful environment suitable for families.</span>
+                                                        <span class="text-line-clamp-2">Dream Avenue is a thoughtfully
+                                                            planned residential project currently under construction,
+                                                            aimed at delivering a modern and comfortable lifestyle. The
+                                                            project features well-organized layouts, open surroundings,
+                                                            and a peaceful environment suitable for families.</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                     <div class="col-xl-4 col-lg-6 col-md-6">
+                                    <div class="col-xl-4 col-lg-6 col-md-6">
                                         <div class="homelengo-box">
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/corporate-park.png"
-                                                            src="images/featured-properties/corporate-park.png" alt="img">
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/corporate-park.png"
+                                                            src="images/featured-properties/corporate-park.png"
+                                                            alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -702,7 +744,7 @@
                                                                 stroke="white" stroke-width="1.5" stroke-linecap="round"
                                                                 stroke-linejoin="round" />
                                                         </svg>
-                                                      Corporate Park
+                                                        Corporate Park
                                                     </div>
                                                 </a>
 
@@ -711,7 +753,7 @@
                                                 <div class="content-top">
                                                     <h6 class="text-capitalize"><a href="property-details.php"
                                                             class="link"> Corporate Park, Agra
-</a></h6>
+                                                        </a></h6>
                                                     <ul class="meta-list">
                                                         <li class="item">
                                                             <i class="icon icon-bed"></i>
@@ -737,7 +779,9 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png1.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">Corporate Park Agra is a modern commercial project currently under construction, designed to cater to growing business and investment needs.</span>
+                                                        <span class="text-line-clamp-2">Corporate Park Agra is a modern
+                                                            commercial project currently under construction, designed to
+                                                            cater to growing business and investment needs.</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
@@ -749,8 +793,10 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/padamdeep-tower.png"
-                                                            src="images/featured-properties/padamdeep-tower.png" alt="img">
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/padamdeep-tower.png"
+                                                            src="images/featured-properties/padamdeep-tower.png"
+                                                            alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -771,7 +817,7 @@
                                                                 stroke="white" stroke-width="1.5" stroke-linecap="round"
                                                                 stroke-linejoin="round" />
                                                         </svg>
-                                                       Padamdeep Tower
+                                                        Padamdeep Tower
                                                     </div>
                                                 </a>
 
@@ -780,7 +826,7 @@
                                                 <div class="content-top">
                                                     <h6 class="text-capitalize"><a href="property-details.php"
                                                             class="link"> Padamdeep Tower
-</a></h6>
+                                                        </a></h6>
                                                     <ul class="meta-list">
                                                         <li class="item">
                                                             <i class="icon icon-bed"></i>
@@ -806,7 +852,10 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png1.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">Padamdeep Tower Agra is an upcoming commercial development currently under construction, designed to offer modern business spaces in a prime location.</span>
+                                                        <span class="text-line-clamp-2">Padamdeep Tower Agra is an
+                                                            upcoming commercial development currently under
+                                                            construction, designed to offer modern business spaces in a
+                                                            prime location.</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
@@ -818,7 +867,8 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/dream-avenue.jpg"
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/dream-avenue.jpg"
                                                             src="images/featured-properties/dream-avenue.jpg" alt="img">
                                                     </div>
                                                     <div class="top">
@@ -840,7 +890,7 @@
                                                                 stroke="white" stroke-width="1.5" stroke-linecap="round"
                                                                 stroke-linejoin="round" />
                                                         </svg>
-                                                       Dream Avenue
+                                                        Dream Avenue
                                                     </div>
                                                 </a>
 
@@ -849,7 +899,7 @@
                                                 <div class="content-top">
                                                     <h6 class="text-capitalize"><a href="property-details.php"
                                                             class="link"> Emporium Block
-</a></h6>
+                                                        </a></h6>
                                                     <ul class="meta-list">
                                                         <li class="item">
                                                             <i class="icon icon-bed"></i>
@@ -875,7 +925,10 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png1.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">Emporium Block is an upcoming commercial project currently under construction, designed to offer premium retail and business spaces in a well-connected location.</span>
+                                                        <span class="text-line-clamp-2">Emporium Block is an upcoming
+                                                            commercial project currently under construction, designed to
+                                                            offer premium retail and business spaces in a well-connected
+                                                            location.</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
@@ -884,20 +937,21 @@
                                     </div>
                                 </div>
                                 <div class="text-center view-all">
-                                    <a href="properties.php"
-                                        class="tf-btn btn-view primary size-1 hover-btn-view">View All Properties <span
-                                            class="icon icon-arrow-right2"></span></a>
+                                    <a href="properties.php" class="tf-btn btn-view primary size-1 hover-btn-view">View
+                                        All Properties <span class="icon icon-arrow-right2"></span></a>
                                 </div>
                             </div>
                             <div class="tab-pane" id="old-plot" role="tabpanel">
                                 <div class="row">
-                                     <div class="col-xl-4 col-lg-6 col-md-6">
+                                    <div class="col-xl-4 col-lg-6 col-md-6">
                                         <div class="homelengo-box">
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/grand-green-valley.jpg"
-                                                            src="images/featured-properties/grand-green-valley.jpg" alt="img">
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/grand-green-valley.jpg"
+                                                            src="images/featured-properties/grand-green-valley.jpg"
+                                                            alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -928,7 +982,7 @@
                                                     <h6 class="text-capitalize"><a href="property-details-v1.html"
                                                             class="link"> Grand Valley Empire</a>
                                                     </h6>
-                                                    
+
                                                     <ul class="meta-list">
                                                         <li class="item">
                                                             <i class="icon icon-bed"></i>
@@ -954,21 +1008,26 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png2.png" alt="avt">
                                                         </div> -->
-                                                        <span> <span class="text-line-clamp-2"> Dream Avenue is an upcoming residential project currently under construction, ideally located on Main Firozabad Road near K.P. 
-                                                </span></span>
+                                                        <span> <span class="text-line-clamp-2"> Dream Avenue is an
+                                                                upcoming residential project currently under
+                                                                construction, ideally located on Main Firozabad Road
+                                                                near K.P.
+                                                            </span></span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                     <div class="col-xl-4 col-lg-6 col-md-6">
+                                    <div class="col-xl-4 col-lg-6 col-md-6">
                                         <div class="homelengo-box">
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/green-valley-empire.jpg"
-                                                            src="images/featured-properties/green-valley-empire.jpg" alt="img">
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/green-valley-empire.jpg"
+                                                            src="images/featured-properties/green-valley-empire.jpg"
+                                                            alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -1023,7 +1082,11 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png4.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">Grand Valley Empire is a promising residential project currently under construction, located on the Etmadpur to Behran Road in Agra. Thoughtfully planned to deliver a comfortable and modern lifestyle.</span>
+                                                        <span class="text-line-clamp-2">Grand Valley Empire is a
+                                                            promising residential project currently under construction,
+                                                            located on the Etmadpur to Behran Road in Agra. Thoughtfully
+                                                            planned to deliver a comfortable and modern
+                                                            lifestyle.</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
@@ -1035,7 +1098,8 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/dream-avenue.jpg"
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/dream-avenue.jpg"
                                                             src="images/featured-properties/dream-avenue.jpg" alt="img">
                                                     </div>
                                                     <div class="top">
@@ -1057,7 +1121,7 @@
                                                                 stroke="white" stroke-width="1.5" stroke-linecap="round"
                                                                 stroke-linejoin="round" />
                                                         </svg>
-                                                       Dream Avenue
+                                                        Dream Avenue
                                                     </div>
                                                 </a>
 
@@ -1066,7 +1130,7 @@
                                                 <div class="content-top">
                                                     <h6 class="text-capitalize"><a href="property-details.php"
                                                             class="link"> Dream Avenue
-</a></h6>
+                                                        </a></h6>
                                                     <ul class="meta-list">
                                                         <li class="item">
                                                             <i class="icon icon-bed"></i>
@@ -1092,19 +1156,22 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png1.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">Dream Avenue is a thoughtfully planned residential project currently under construction, aimed at delivering a modern and comfortable lifestyle. The project features well-organized layouts, open surroundings, and a peaceful environment suitable for families.</span>
+                                                        <span class="text-line-clamp-2">Dream Avenue is a thoughtfully
+                                                            planned residential project currently under construction,
+                                                            aimed at delivering a modern and comfortable lifestyle. The
+                                                            project features well-organized layouts, open surroundings,
+                                                            and a peaceful environment suitable for families.</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="text-center">
-                                    <a href="properties.php"
-                                        class="tf-btn btn-view primary size-1 hover-btn-view">View All Properties <span
-                                            class="icon icon-arrow-right2"></span></a>
+                                    <a href="properties.php" class="tf-btn btn-view primary size-1 hover-btn-view">View
+                                        All Properties <span class="icon icon-arrow-right2"></span></a>
                                 </div>
                             </div>
                             <div class="tab-pane" id="old-farmhouse" role="tabpanel">
@@ -1114,8 +1181,10 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/grand-green-valley.jpg"
-                                                            src="images/featured-properties/grand-green-valley.jpg" alt="img">
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/grand-green-valley.jpg"
+                                                            src="images/featured-properties/grand-green-valley.jpg"
+                                                            alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -1146,7 +1215,7 @@
                                                     <h6 class="text-capitalize"><a href="property-details-v1.html"
                                                             class="link"> Grand Valley Empire</a>
                                                     </h6>
-                                                    
+
                                                     <ul class="meta-list">
                                                         <li class="item">
                                                             <i class="icon icon-bed"></i>
@@ -1172,23 +1241,25 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png2.png" alt="avt">
                                                         </div> -->
-                                                        <span> <span class="text-line-clamp-2"> Dream Avenue is an upcoming residential project currently under construction, ideally located on Main Firozabad Road near K.P. 
-                                                </span></span>
+                                                        <span> <span class="text-line-clamp-2"> Dream Avenue is an
+                                                                upcoming residential project currently under
+                                                                construction, ideally located on Main Firozabad Road
+                                                                near K.P.
+                                                            </span></span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="text-center">
-                                    <a href="properties.php"
-                                        class="tf-btn btn-view primary size-1 hover-btn-view">View All Properties <span
-                                            class="icon icon-arrow-right2"></span></a>
+                                    <a href="properties.php" class="tf-btn btn-view primary size-1 hover-btn-view">View
+                                        All Properties <span class="icon icon-arrow-right2"></span></a>
                                 </div>
                             </div>
-                            
+
                             <div class="tab-pane" id="old-office" role="tabpanel">
                                 <div class="row">
                                     <div class="col-xl-4 col-lg-6 col-md-6">
@@ -1196,7 +1267,8 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/dream-avenue.jpg"
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/dream-avenue.jpg"
                                                             src="images/featured-properties/dream-avenue.jpg" alt="img">
                                                     </div>
                                                     <div class="top">
@@ -1218,7 +1290,7 @@
                                                                 stroke="white" stroke-width="1.5" stroke-linecap="round"
                                                                 stroke-linejoin="round" />
                                                         </svg>
-                                                       Dream Avenue
+                                                        Dream Avenue
                                                     </div>
                                                 </a>
 
@@ -1227,7 +1299,7 @@
                                                 <div class="content-top">
                                                     <h6 class="text-capitalize"><a href="property-details.php"
                                                             class="link"> Corporate Park, Agra
-</a></h6>
+                                                        </a></h6>
                                                     <ul class="meta-list">
                                                         <li class="item">
                                                             <i class="icon icon-bed"></i>
@@ -1253,7 +1325,9 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png1.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">Corporate Park Agra is a modern commercial project currently under construction, designed to cater to growing business and investment needs.</span>
+                                                        <span class="text-line-clamp-2">Corporate Park Agra is a modern
+                                                            commercial project currently under construction, designed to
+                                                            cater to growing business and investment needs.</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
@@ -1265,8 +1339,10 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/padamdeep-tower.png"
-                                                            src="images/featured-properties/padamdeep-tower.png" alt="img">
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/padamdeep-tower.png"
+                                                            src="images/featured-properties/padamdeep-tower.png"
+                                                            alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -1287,7 +1363,7 @@
                                                                 stroke="white" stroke-width="1.5" stroke-linecap="round"
                                                                 stroke-linejoin="round" />
                                                         </svg>
-                                                       Dream Avenue
+                                                        Dream Avenue
                                                     </div>
                                                 </a>
 
@@ -1296,7 +1372,7 @@
                                                 <div class="content-top">
                                                     <h6 class="text-capitalize"><a href="property-details.php"
                                                             class="link"> Padamdeep Tower
-</a></h6>
+                                                        </a></h6>
                                                     <ul class="meta-list">
                                                         <li class="item">
                                                             <i class="icon icon-bed"></i>
@@ -1322,7 +1398,10 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png1.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">Padamdeep Tower Agra is an upcoming commercial development currently under construction, designed to offer modern business spaces in a prime location.</span>
+                                                        <span class="text-line-clamp-2">Padamdeep Tower Agra is an
+                                                            upcoming commercial development currently under
+                                                            construction, designed to offer modern business spaces in a
+                                                            prime location.</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
@@ -1334,7 +1413,8 @@
                                             <div class="archive-top">
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
-                                                        <img class="lazyload" data-src="images/featured-properties/dream-avenue.jpg"
+                                                        <img class="lazyload"
+                                                            data-src="images/featured-properties/dream-avenue.jpg"
                                                             src="images/featured-properties/dream-avenue.jpg" alt="img">
                                                     </div>
                                                     <div class="top">
@@ -1356,7 +1436,7 @@
                                                                 stroke="white" stroke-width="1.5" stroke-linecap="round"
                                                                 stroke-linejoin="round" />
                                                         </svg>
-                                                      Emporium Block
+                                                        Emporium Block
                                                     </div>
                                                 </a>
 
@@ -1365,7 +1445,7 @@
                                                 <div class="content-top">
                                                     <h6 class="text-capitalize"><a href="property-details.php"
                                                             class="link"> Emporium Block
-</a></h6>
+                                                        </a></h6>
                                                     <ul class="meta-list">
                                                         <li class="item">
                                                             <i class="icon icon-bed"></i>
@@ -1391,19 +1471,21 @@
                                                         <!-- <div class="avatar avt-40 round">
                                                             <img src="images/avatar/avt-png1.png" alt="avt">
                                                         </div> -->
-                                                        <span class="text-line-clamp-2">Emporium Block is an upcoming commercial project currently under construction, designed to offer premium retail and business spaces in a well-connected location.</span>
+                                                        <span class="text-line-clamp-2">Emporium Block is an upcoming
+                                                            commercial project currently under construction, designed to
+                                                            offer premium retail and business spaces in a well-connected
+                                                            location.</span>
                                                     </div>
                                                     <!-- <h6 class="price">$7250,00</h6> -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="text-center">
-                                    <a href="properties.php"
-                                        class="tf-btn btn-view primary size-1 hover-btn-view">View All Properties <span
-                                            class="icon icon-arrow-right2"></span></a>
+                                    <a href="properties.php" class="tf-btn btn-view primary size-1 hover-btn-view">View
+                                        All Properties <span class="icon icon-arrow-right2"></span></a>
                                 </div>
                             </div>
                         </div>
@@ -1413,9 +1495,9 @@
 
             </section>
             <!-- End Recommended -->
-          
 
-                        <!-- Location -->
+
+            <!-- Location -->
             <!-- <section class="flat-section flat-location-v2">
                 <div class="container">
                     <div class="box-title text-center wow fadeInUp">
@@ -1489,87 +1571,87 @@
             </section> -->
             <!-- End Location -->
 
-              <!-- Location -->
+            <!-- Location -->
             <section class="px-10 home-explore-cities">
                 <div class="container">
-                <div class="box-title text-center wow fadeInUp">
-                    <div class="text-subtitle text-primary">Explore Cities</div>
-                    <h3 class="mt-4 title">Our Location For You</h3>
-                </div>
-                <div class="wow fadeInUp" data-wow-delay=".2s">
-                    <div dir="ltr" class="swiper tf-sw-location" data-preview="4" data-tablet="2" data-mobile-sm="1"
-                        data-mobile="1" data-space-lg="12" data-space-md="12" data-space="10" data-pagination="1"
-                        data-pagination-sm="2" data-pagination-md="2" data-pagination-lg="4">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="box-location">
-                                    <a class="image img-style">
-                                        <img class="lazyload" data-src="images/locations/fatehabad-road.jpg"
-                                            src="images/locations/fatehabad-road.jpg" alt="image-location">
-                                    </a>
-                                    <div class="content">
-                                        <div class="inner-left">
-                                            <span class="sub-title fw-6">20 Properties</span>
-                                            <h6 class="title text-line-clamp-1 link">Fatehabad Road</h6>
-                                        </div>
-                                        <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
-                                                class="icon icon-arrow-right2"></i></a> -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="box-location">
-                                    <a class="image img-style">
-                                        <img class="lazyload" data-src="images/locations/corporate-park.png"
-                                            src="images/locations/corporate-park.png" alt="image-location">
-                                    </a>
-                                    <div class="content">
-                                        <div class="inner-left">
-                                            <span class="sub-title fw-6">15 Properties</span>
-                                            <h6 class="title text-line-clamp-1 link">Sanjay Palace</h6>
-                                        </div>
-                                        <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
-                                                class="icon icon-arrow-right2"></i></a> -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="box-location">
-                                    <a class="image img-style">
-                                        <img class="lazyload" data-src="images/locations/firozabad.png"
-                                            src="images/locations/firozabad.png" alt="image-location">
-                                    </a>
-                                    <div class="content">
-                                        <div class="inner-left">
-                                            <span class="sub-title fw-6">10 Properties</span>
-                                            <h6 class="title text-line-clamp-1 link">Firozabad</h6>
-                                        </div>
-                                        <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
-                                                class="icon icon-arrow-right2"></i></a> -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="box-location">
-                                    <a class="image img-style">
-                                        <img class="lazyload" data-src="images/locations/runakta.png"
-                                            src="images/locations/runakta.png" alt="image-location">
-                                    </a>
-                                    <div class="content">
-                                        <div class="inner-left">
-                                            <span class="sub-title fw-6">12 Properties</span>
-                                            <h6 class="title text-line-clamp-1 link">Runakta</h6>
-                                        </div>
-                                        <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
-                                                class="icon icon-arrow-right2"></i></a> -->
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="sw-pagination sw-pagination-location text-center"></div>
+                    <div class="box-title text-center wow fadeInUp">
+                        <div class="text-subtitle text-primary">Explore Cities</div>
+                        <h3 class="mt-4 title">Our Location For You</h3>
                     </div>
-                </div>
+                    <div class="wow fadeInUp" data-wow-delay=".2s">
+                        <div dir="ltr" class="swiper tf-sw-location" data-preview="4" data-tablet="2" data-mobile-sm="1"
+                            data-mobile="1" data-space-lg="12" data-space-md="12" data-space="10" data-pagination="1"
+                            data-pagination-sm="2" data-pagination-md="2" data-pagination-lg="4">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <div class="box-location">
+                                        <a class="image img-style">
+                                            <img class="lazyload" data-src="images/locations/fatehabad-road.jpg"
+                                                src="images/locations/fatehabad-road.jpg" alt="image-location">
+                                        </a>
+                                        <div class="content">
+                                            <div class="inner-left">
+                                                <span class="sub-title fw-6">20 Properties</span>
+                                                <h6 class="title text-line-clamp-1 link">Fatehabad Road</h6>
+                                            </div>
+                                            <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
+                                                class="icon icon-arrow-right2"></i></a> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="box-location">
+                                        <a class="image img-style">
+                                            <img class="lazyload" data-src="images/locations/corporate-park.png"
+                                                src="images/locations/corporate-park.png" alt="image-location">
+                                        </a>
+                                        <div class="content">
+                                            <div class="inner-left">
+                                                <span class="sub-title fw-6">15 Properties</span>
+                                                <h6 class="title text-line-clamp-1 link">Sanjay Palace</h6>
+                                            </div>
+                                            <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
+                                                class="icon icon-arrow-right2"></i></a> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="box-location">
+                                        <a class="image img-style">
+                                            <img class="lazyload" data-src="images/locations/firozabad.png"
+                                                src="images/locations/firozabad.png" alt="image-location">
+                                        </a>
+                                        <div class="content">
+                                            <div class="inner-left">
+                                                <span class="sub-title fw-6">10 Properties</span>
+                                                <h6 class="title text-line-clamp-1 link">Firozabad</h6>
+                                            </div>
+                                            <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
+                                                class="icon icon-arrow-right2"></i></a> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="box-location">
+                                        <a class="image img-style">
+                                            <img class="lazyload" data-src="images/locations/runakta.png"
+                                                src="images/locations/runakta.png" alt="image-location">
+                                        </a>
+                                        <div class="content">
+                                            <div class="inner-left">
+                                                <span class="sub-title fw-6">12 Properties</span>
+                                                <h6 class="title text-line-clamp-1 link">Runakta</h6>
+                                            </div>
+                                            <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
+                                                class="icon icon-arrow-right2"></i></a> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="sw-pagination sw-pagination-location text-center"></div>
+                        </div>
+                    </div>
                 </div>
             </section>
             <!-- End Location -->
@@ -1657,7 +1739,7 @@
             </section> -->
             <!-- End Property  -->
 
-                 <!-- Property  -->
+            <!-- Property  -->
             <section class="flat-section bg-primary-new">
                 <div class="container">
                     <div class="box-title text-center wow fadeInUp">
@@ -1667,7 +1749,8 @@
                     <div dir="ltr" class="swiper tf-sw-mobile" data-screen="991" data-preview="1" data-space="15">
                         <div class="tf-layout-mobile-lg lg-col-2 swiper-wrapper">
                             <div class="swiper-slide">
-                                <div class="homelengo-box top-properties list-style-1 wow fadeInUp" data-wow-delay=".1s">
+                                <div class="homelengo-box top-properties list-style-1 wow fadeInUp"
+                                    data-wow-delay=".1s">
                                     <div class="archive-top">
                                         <a class="images-group">
                                             <div class="images-style">
@@ -1684,9 +1767,8 @@
                                     </div>
                                     <div class="archive-bottom">
                                         <div class="content-top">
-                                            <h6 class="text-capitalize"><a
-                                                    class="link text-line-clamp-4"> Dream Avenues
-</a>
+                                            <h6 class="text-capitalize"><a class="link text-line-clamp-4"> Dream Avenues
+                                                </a>
                                             </h6>
                                             <ul class="meta-list top-feature-meta-list">
                                                 <li class="item">
@@ -1717,7 +1799,11 @@
                                                         stroke="#A3ABB0" stroke-width="1.5" stroke-linecap="round"
                                                         stroke-linejoin="round" />
                                                 </svg>
-                                                <span class="text-line-clamp-1"> Dream Avenue is an upcoming residential project currently under construction, ideally located on Main Firozabad Road near K.P. Engineering College, NH-2/19, Agra. Designed to offer a perfect blend of modern living and everyday convenience
+                                                <span class="text-line-clamp-1"> Dream Avenue is an upcoming residential
+                                                    project currently under construction, ideally located on Main
+                                                    Firozabad Road near K.P. Engineering College, NH-2/19, Agra.
+                                                    Designed to offer a perfect blend of modern living and everyday
+                                                    convenience
                                                 </span>
                                             </div>
                                         </div>
@@ -1736,7 +1822,8 @@
                                 </div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="homelengo-box top-properties list-style-1 wow fadeInUp" data-wow-delay=".2s">
+                                <div class="homelengo-box top-properties list-style-1 wow fadeInUp"
+                                    data-wow-delay=".2s">
                                     <div class="archive-top">
                                         <a class="images-group">
                                             <div class="images-style">
@@ -1753,9 +1840,9 @@
                                     </div>
                                     <div class="archive-bottom">
                                         <div class="content-top">
-                                            <h6 class="text-capitalize"><a
-                                                    class="link text-line-clamp-4">Green Valley Empire
-</a>
+                                            <h6 class="text-capitalize"><a class="link text-line-clamp-4">Green Valley
+                                                    Empire
+                                                </a>
                                             </h6>
                                             <ul class="meta-list top-feature-meta-list">
                                                 <li class="item">
@@ -1786,7 +1873,11 @@
                                                         stroke="#A3ABB0" stroke-width="1.5" stroke-linecap="round"
                                                         stroke-linejoin="round" />
                                                 </svg>
-                                                <span class="text-line-clamp-1"> Grand Valley Empire is a promising residential project currently under construction, located on the Etmadpur to Behran Road in Agra. Thoughtfully planned to deliver a comfortable and modern lifestyle, the project focuses on spacious layouts, open surroundings, and a serene living environment.
+                                                <span class="text-line-clamp-1"> Grand Valley Empire is a promising
+                                                    residential project currently under construction, located on the
+                                                    Etmadpur to Behran Road in Agra. Thoughtfully planned to deliver a
+                                                    comfortable and modern lifestyle, the project focuses on spacious
+                                                    layouts, open surroundings, and a serene living environment.
                                                 </span>
                                             </div>
                                         </div>
@@ -1805,11 +1896,13 @@
                                 </div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="homelengo-box top-properties list-style-1 wow fadeInUp" data-wow-delay=".3s">
+                                <div class="homelengo-box top-properties list-style-1 wow fadeInUp"
+                                    data-wow-delay=".3s">
                                     <div class="archive-top">
                                         <a class="images-group">
                                             <div class="images-style">
-                                                <img class="lazyload" data-src="images/top-properties/vrindavan-global.jpg"
+                                                <img class="lazyload"
+                                                    data-src="images/top-properties/vrindavan-global.jpg"
                                                     src="images/top-properties/vrindavan-global.jpg" alt="img-property">
                                             </div>
                                             <div class="top">
@@ -1822,8 +1915,8 @@
                                     </div>
                                     <div class="archive-bottom">
                                         <div class="content-top">
-                                            <h6 class="text-capitalize"><a
-                                                    class="link text-line-clamp-4"> Vrindavan Global</a>
+                                            <h6 class="text-capitalize"><a class="link text-line-clamp-4"> Vrindavan
+                                                    Global</a>
                                             </h6>
                                             <ul class="meta-list top-feature-meta-list">
                                                 <li class="item">
@@ -1837,7 +1930,7 @@
                                                     <!-- <span class="fw-6">2</span> -->
                                                 </li>
                                                 <li class="item">
-                                                   <i class="fa-solid fa-house-chimney"></i>
+                                                    <i class="fa-solid fa-house-chimney"></i>
                                                     <span class="text-variant-1">Club House</span>
                                                     <!-- <span class="fw-6">1150</span> -->
                                                 </li>
@@ -1854,7 +1947,12 @@
                                                         stroke="#A3ABB0" stroke-width="1.5" stroke-linecap="round"
                                                         stroke-linejoin="round" />
                                                 </svg>
-                                                <span class="text-line-clamp-4"> Vrindavan Global is an ambitious residential township currently under construction, designed to offer a harmonious blend of nature, spirituality, and modern living. Inspired by the serene essence of Vrindavan, the project features beautifully planned landscapes, open green spaces, and thoughtfully designed infrastructure.
+                                                <span class="text-line-clamp-4"> Vrindavan Global is an ambitious
+                                                    residential township currently under construction, designed to offer
+                                                    a harmonious blend of nature, spirituality, and modern living.
+                                                    Inspired by the serene essence of Vrindavan, the project features
+                                                    beautifully planned landscapes, open green spaces, and thoughtfully
+                                                    designed infrastructure.
                                                 </span>
                                             </div>
                                         </div>
@@ -1873,7 +1971,8 @@
                                 </div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="homelengo-box top-properties list-style-1 wow fadeInUp" data-wow-delay=".4s">
+                                <div class="homelengo-box top-properties list-style-1 wow fadeInUp"
+                                    data-wow-delay=".4s">
                                     <div class="archive-top">
                                         <a class="images-group">
                                             <div class="images-style">
@@ -1890,8 +1989,8 @@
                                     </div>
                                     <div class="archive-bottom">
                                         <div class="content-top">
-                                            <h6 class="text-capitalize"><a
-                                                    class="link text-line-clamp-1"> The Grand Green Valley Empire</a>
+                                            <h6 class="text-capitalize"><a class="link text-line-clamp-1"> The Grand
+                                                    Green Valley Empire</a>
                                             </h6>
                                             <ul class="meta-list top-feature-meta-list">
                                                 <li class="item">
@@ -1900,7 +1999,7 @@
                                                     <!-- <span class="fw-6">3</span>s -->
                                                 </li>
                                                 <li class="item">
-                                                   <i class="fa-solid fa-video"></i>
+                                                    <i class="fa-solid fa-video"></i>
                                                     <span class="text-variant-1">CCTV</span>
                                                     <!-- <span class="fw-6">2</span> -->
                                                 </li>
@@ -1922,7 +2021,11 @@
                                                         stroke="#A3ABB0" stroke-width="1.5" stroke-linecap="round"
                                                         stroke-linejoin="round" />
                                                 </svg>
-                                                <span class="text-line-clamp-4"> Grand Valley Empire is a developing residential project situated on the Etmadpur to Behran Road in Agra, currently under construction. The project is planned with a focus on modern infrastructure, organized layouts, and a comfortable living environment suited for families. 
+                                                <span class="text-line-clamp-4"> Grand Valley Empire is a developing
+                                                    residential project situated on the Etmadpur to Behran Road in Agra,
+                                                    currently under construction. The project is planned with a focus on
+                                                    modern infrastructure, organized layouts, and a comfortable living
+                                                    environment suited for families.
                                                 </span>
                                             </div>
                                         </div>
@@ -1966,7 +2069,9 @@
                                 <div class="box-tes-item style-2">
                                     <span class="icon icon-quote"></span>
                                     <p class="note body-2">
-                                        "BM Properties made my home-buying experience smooth and stress-free. They guided me at every step and helped me find a property that perfectly fits my needs and budget."
+                                        "BM Properties made my home-buying experience smooth and stress-free. They
+                                        guided me at every step and helped me find a property that perfectly fits my
+                                        needs and budget."
                                     </p>
                                     <div class="box-avt d-flex align-items-center gap-12">
                                         <div class="avatar avt-60 round">
@@ -1990,7 +2095,9 @@
                                 <div class="box-tes-item style-2">
                                     <span class="icon icon-quote"></span>
                                     <p class="note body-2">
-                                        "I was looking for a good investment option, and BM Properties suggested some really promising projects. Their knowledge of locations and future growth is impressive. Iâ€™m very satisfied with my decision."
+                                        "I was looking for a good investment option, and BM Properties suggested some
+                                        really promising projects. Their knowledge of locations and future growth is
+                                        impressive. Iâ€™m very satisfied with my decision."
                                     </p>
                                     <div class="box-avt d-flex align-items-center gap-12">
                                         <div class="avatar avt-60 round">
@@ -2014,7 +2121,9 @@
                                 <div class="box-tes-item style-2">
                                     <span class="icon icon-quote"></span>
                                     <p class="note body-2">
-                                        "Finding a rental property was never this easy. BM Properties provided multiple options and handled everything quickly and efficiently. The entire process was smooth and hassle-free."
+                                        "Finding a rental property was never this easy. BM Properties provided multiple
+                                        options and handled everything quickly and efficiently. The entire process was
+                                        smooth and hassle-free."
                                     </p>
                                     <div class="box-avt d-flex align-items-center gap-12">
                                         <div class="avatar avt-60 round">
@@ -2038,7 +2147,9 @@
                                 <div class="box-tes-item style-2">
                                     <span class="icon icon-quote"></span>
                                     <p class="note body-2">
-                                        "What I liked most about BM Properties is their transparency and honest guidance. They donâ€™t just sell properties â€” they actually help you make the right decision. Truly reliable team."
+                                        "What I liked most about BM Properties is their transparency and honest
+                                        guidance. They donâ€™t just sell properties â€” they actually help you make the
+                                        right decision. Truly reliable team."
                                     </p>
                                     <div class="box-avt d-flex align-items-center gap-12">
                                         <div class="avatar avt-60 round">
@@ -2069,61 +2180,73 @@
             <section class="flat-section pt-0">
                 <div class="container2">
                     <h6 class="mb-20 text-center text-capitalize text-black-4">Trusted by over 20+ major companies</h6>
-                    <div dir="ltr" class="swiper tf-sw-partner" data-preview="6" data-tablet="4" data-mobile-sm="3" data-mobile="3" data-space="15" data-space-md="30" data-space-lg="30" data-loop="true" data-autoplay="true" data-delay="0">
+                    <div dir="ltr" class="swiper tf-sw-partner" data-preview="6" data-tablet="4" data-mobile-sm="3"
+                        data-mobile="3" data-space="15" data-space-md="30" data-space-lg="30" data-loop="true"
+                        data-autoplay="true" data-delay="0">
                         <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <div class="partner-item">
-                                <img class="lazyload" data-src="images/partners/ahinsa.png" src="images/partners/ahinsa.png" alt="Ahinsa" />
+                            <div class="swiper-slide">
+                                <div class="partner-item">
+                                    <img class="lazyload" data-src="images/partners/ahinsa.png"
+                                        src="images/partners/ahinsa.png" alt="Ahinsa" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="partner-item">
-                                <img class="lazyload" data-src="images/partners/corporate-park.png" src="images/partners/corporate-park.png" alt="Corporate Park" />
+                            <div class="swiper-slide">
+                                <div class="partner-item">
+                                    <img class="lazyload" data-src="images/partners/corporate-park.png"
+                                        src="images/partners/corporate-park.png" alt="Corporate Park" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="partner-item">
-                                <img class="lazyload" data-src="images/partners/landmark-city.png" src="images/partners/landmark-city.png" alt="Landmark City" />
+                            <div class="swiper-slide">
+                                <div class="partner-item">
+                                    <img class="lazyload" data-src="images/partners/landmark-city.png"
+                                        src="images/partners/landmark-city.png" alt="Landmark City" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="partner-item">
-                                <img class="lazyload" data-src="images/partners/lodha.png" src="images/partners/lodha.png" alt="Lodha" />
+                            <div class="swiper-slide">
+                                <div class="partner-item">
+                                    <img class="lazyload" data-src="images/partners/lodha.png"
+                                        src="images/partners/lodha.png" alt="Lodha" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="partner-item">
-                                <img class="lazyload" data-src="images/partners/upsic.png" src="images/partners/upsic.png" alt="UPSIC" />
+                            <div class="swiper-slide">
+                                <div class="partner-item">
+                                    <img class="lazyload" data-src="images/partners/upsic.png"
+                                        src="images/partners/upsic.png" alt="UPSIC" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="partner-item">
-                                <img class="lazyload" data-src="images/partners/ahinsa.png" src="images/partners/ahinsa.png" alt="Ahinsa" />
+                            <div class="swiper-slide">
+                                <div class="partner-item">
+                                    <img class="lazyload" data-src="images/partners/ahinsa.png"
+                                        src="images/partners/ahinsa.png" alt="Ahinsa" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="partner-item">
-                                <img class="lazyload" data-src="images/partners/corporate-park.png" src="images/partners/corporate-park.png" alt="Corporate Park" />
+                            <div class="swiper-slide">
+                                <div class="partner-item">
+                                    <img class="lazyload" data-src="images/partners/corporate-park.png"
+                                        src="images/partners/corporate-park.png" alt="Corporate Park" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="partner-item">
-                                <img class="lazyload" data-src="images/partners/landmark-city.png" src="images/partners/landmark-city.png" alt="Landmark City" />
+                            <div class="swiper-slide">
+                                <div class="partner-item">
+                                    <img class="lazyload" data-src="images/partners/landmark-city.png"
+                                        src="images/partners/landmark-city.png" alt="Landmark City" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="partner-item">
-                                <img class="lazyload" data-src="images/partners/lodha.png" src="images/partners/lodha.png" alt="Lodha" />
+                            <div class="swiper-slide">
+                                <div class="partner-item">
+                                    <img class="lazyload" data-src="images/partners/lodha.png"
+                                        src="images/partners/lodha.png" alt="Lodha" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="partner-item">
-                                <img class="lazyload" data-src="images/partners/upsic.png" src="images/partners/upsic.png" alt="UPSIC" />
+                            <div class="swiper-slide">
+                                <div class="partner-item">
+                                    <img class="lazyload" data-src="images/partners/upsic.png"
+                                        src="images/partners/upsic.png" alt="UPSIC" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </section>
             <!-- End partner -->
             <!-- Benefit -->
@@ -2179,7 +2302,7 @@
             </section> -->
             <!-- End Benefit -->
 
-              <!-- img with text -->
+            <!-- img with text -->
             <section class="flat-section bg-primary-new">
                 <div class="container3">
                     <div class="flat-img-with-text-v2">
@@ -2225,7 +2348,10 @@
                             <div class="box-title wow fadeInUp">
                                 <div class="text-subtitle text-primary">Our Benefits</div>
                                 <h3 class="title mt-4">Why Choose BM Properties</h3>
-                                <p class="desc text-variant-1">At BM Properties, we combine local market expertise with a customer-first approach to deliver reliable real estate solutions. Whether you are buying, renting, or selling, we ensure a smooth, transparent, and hassle-free experience at every step.</p>
+                                <p class="desc text-variant-1">At BM Properties, we combine local market expertise with
+                                    a customer-first approach to deliver reliable real estate solutions. Whether you are
+                                    buying, renting, or selling, we ensure a smooth, transparent, and hassle-free
+                                    experience at every step.</p>
                             </div>
                             <div class="flat-service wow fadeInUp" data-wow-delay=".2s">
                                 <a class="box-benefit hover-btn-view">
@@ -2348,9 +2474,9 @@
             </section>
             <!-- img with text -->
 
-            
 
-             <!-- banner -->
+
+            <!-- banner -->
             <!-- <section class="flat-section flat-banner">
                 <div class="container">
                     <div class="wrap-banner bg-primary-new">
@@ -2369,11 +2495,11 @@
             </section> -->
             <!-- end banner -->
 
-                            <section class="flat-slider-detail-v1 px-10 home-gallery-section">
-                                <div class="box-title text-center wow fadeInUp">
-                                        <div class="text-subtitle text-primary">Gallery</div>
-                                        <h3 class="mt-4 title">Project Gallery</h3>
-                                </div>
+            <section class="flat-slider-detail-v1 px-10 home-gallery-section">
+                <div class="box-title text-center wow fadeInUp">
+                    <div class="text-subtitle text-primary">Gallery</div>
+                    <h3 class="mt-4 title">Project Gallery</h3>
+                </div>
                 <div dir="ltr" class="swiper tf-sw-location" data-preview="3" data-tablet="2" data-mobile-sm="2"
                     data-mobile="1" data-space-lg="10" data-space-md="10" data-space="10" data-pagination="1"
                     data-pagination-sm="2" data-pagination-md="2" data-pagination-lg="3" data-loop="true"
@@ -2404,8 +2530,7 @@
                             </a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="images/gallery/upsic.jpg" data-fancybox="gallery"
-                                class="box-img-detail d-block">
+                            <a href="images/gallery/upsic.jpg" data-fancybox="gallery" class="box-img-detail d-block">
                                 <img src="images/gallery/upsic.jpg" alt="img-property">
                             </a>
                         </div>
@@ -2424,7 +2549,7 @@
                 </div>
             </section>
 
-        <?php include 'components/footer.php';?>
+            <?php include 'components/footer.php'; ?>
 
         </div>
         <!-- /#page -->
@@ -2445,7 +2570,5 @@
     <?php include 'components/script.php'; ?>
 
 </body>
+
 </html>
-
-
-

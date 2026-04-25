@@ -108,6 +108,7 @@ $form = [
     'map_embed' => (string) ($property['mapEmbed'] ?? ''),
     'website_url' => (string) ($property['websiteUrl'] ?? ''),
     'website_label' => (string) ($property['websiteLabel'] ?? ''),
+    'whatsapp_number' => (string) ($property['whatsappNumber'] ?? ''),
     'card_highlights' => isset($property['cardHighlights']) ? implode("\n", $property['cardHighlights']) : '',
     'status' => (string) ($property['status'] ?? 'active'),
     'is_featured' => !empty($property['isFeatured']) ? '1' : '1',
@@ -122,8 +123,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $form['is_featured'] = isset($_POST['is_featured']) ? '1' : '0';
 
-    if ($form['name'] === '' || $form['category_id'] === '' || $form['hero_image'] === '') {
-        $error = 'Name, category, and hero image are required.';
+    $uploadRoot = realpath(__DIR__ . '/..');
+    if (is_string($uploadRoot) && $uploadRoot !== '') {
+        $propertyUploadDir = $uploadRoot . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'properties';
+
+        $heroUpload = upload_image_file($_FILES['hero_image_file'] ?? [], $propertyUploadDir, 'uploads/properties');
+        if ($heroUpload !== null) {
+            $form['hero_image'] = $heroUpload;
+        }
+
+        if (isset($_FILES['gallery_images_files']) && is_array($_FILES['gallery_images_files']['name'] ?? null)) {
+            $fileCount = count((array) $_FILES['gallery_images_files']['name']);
+            $uploadedGalleryPaths = [];
+            for ($i = 0; $i < $fileCount; $i++) {
+                $singleFile = [
+                    'name' => (string) ($_FILES['gallery_images_files']['name'][$i] ?? ''),
+                    'type' => (string) ($_FILES['gallery_images_files']['type'][$i] ?? ''),
+                    'tmp_name' => (string) ($_FILES['gallery_images_files']['tmp_name'][$i] ?? ''),
+                    'error' => (int) ($_FILES['gallery_images_files']['error'][$i] ?? UPLOAD_ERR_NO_FILE),
+                    'size' => (int) ($_FILES['gallery_images_files']['size'][$i] ?? 0),
+                ];
+                $galleryUpload = upload_image_file($singleFile, $propertyUploadDir, 'uploads/properties');
+                if ($galleryUpload !== null) {
+                    $uploadedGalleryPaths[] = $galleryUpload;
+                }
+            }
+
+            if (!empty($uploadedGalleryPaths)) {
+                $manualGallery = split_lines($form['gallery_images']);
+                $form['gallery_images'] = implode("\n", array_values(array_unique(array_merge($manualGallery, $uploadedGalleryPaths))));
+            }
+        }
+    }
+
+    if ($form['name'] === '' || $form['category_id'] === '') {
+        $error = 'Name and category are required.';
+    } elseif ($form['hero_image'] === '') {
+        $error = 'Hero image is required. Please provide an image URL or upload a file.';
     } else {
         $slug = $form['slug'] !== '' ? normalize_slug($form['slug']) : normalize_slug($form['name']);
         if ($slug === '') {
@@ -158,6 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'map_embed' => $form['map_embed'],
                 'website_url' => $form['website_url'],
                 'website_label' => $form['website_label'],
+                'whatsapp_number' => normalize_phone($form['whatsapp_number']),
                 'card_highlights' => split_lines($form['card_highlights']),
                 'is_featured' => $form['is_featured'] === '1' ? 1 : 0,
                 'status' => in_array($form['status'], ['active', 'inactive'], true) ? $form['status'] : 'active',
@@ -180,11 +217,14 @@ $activePage = 'properties';
 include __DIR__ . '/_layout_top.php';
 ?>
 <section class="admin-card">
-    <?php if ($message !== ''): ?><div class="alert alert-success"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
-    <?php if ($error !== ''): ?><div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
+    <?php if ($message !== ''): ?>
+        <div class="alert alert-success"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
+    <?php if ($error !== ''): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
 
-    <form method="post" class="admin-form-grid">
-        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+    <form method="post" class="admin-form-grid" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token"
+            value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
         <div><label>Category</label>
             <select class="form-control" name="category_id" required>
@@ -195,16 +235,29 @@ include __DIR__ . '/_layout_top.php';
                 <?php endforeach; ?>
             </select>
         </div>
-        <div><label>Property Name</label><input class="form-control" name="name" value="<?php echo htmlspecialchars($form['name'], ENT_QUOTES, 'UTF-8'); ?>" required></div>
-        <div><label>Slug</label><input class="form-control" name="slug" value="<?php echo htmlspecialchars($form['slug'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="auto-generated"></div>
-        <div><label>Page Title</label><input class="form-control" name="page_title" value="<?php echo htmlspecialchars($form['page_title'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Hero Image Path</label><input class="form-control" name="hero_image" value="<?php echo htmlspecialchars($form['hero_image'], ENT_QUOTES, 'UTF-8'); ?>" required></div>
-        <div><label>Price</label><input class="form-control" name="price" value="<?php echo htmlspecialchars($form['price'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Price Suffix</label><input class="form-control" name="price_suffix" value="<?php echo htmlspecialchars($form['price_suffix'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Beds</label><input class="form-control" name="beds" value="<?php echo htmlspecialchars($form['beds'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Baths</label><input class="form-control" name="baths" value="<?php echo htmlspecialchars($form['baths'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Sqft</label><input class="form-control" name="sqft" value="<?php echo htmlspecialchars($form['sqft'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Overview ID</label><input class="form-control" name="overview_id" value="<?php echo htmlspecialchars($form['overview_id'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Property Name</label><input class="form-control" name="name"
+                value="<?php echo htmlspecialchars($form['name'], ENT_QUOTES, 'UTF-8'); ?>" required></div>
+        <div><label>Slug</label><input class="form-control" name="slug"
+                value="<?php echo htmlspecialchars($form['slug'], ENT_QUOTES, 'UTF-8'); ?>"
+                placeholder="auto-generated"></div>
+        <div><label>Page Title</label><input class="form-control" name="page_title"
+                value="<?php echo htmlspecialchars($form['page_title'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Hero Image Path (optional - provide a URL or upload a file)</label><input class="form-control" name="hero_image"
+                value="<?php echo htmlspecialchars($form['hero_image'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Upload Hero Image from Local System (max 1MB, .jpg/.png/.webp only)</label><input class="form-control" type="file" name="hero_image_file"
+                accept=".jpg,.jpeg,.png,.webp,.gif,.avif"></div>
+        <div><label>Price</label><input class="form-control" name="price"
+                value="<?php echo htmlspecialchars($form['price'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Price Suffix</label><input class="form-control" name="price_suffix"
+                value="<?php echo htmlspecialchars($form['price_suffix'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Beds</label><input class="form-control" name="beds"
+                value="<?php echo htmlspecialchars($form['beds'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Baths</label><input class="form-control" name="baths"
+                value="<?php echo htmlspecialchars($form['baths'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Sqft</label><input class="form-control" name="sqft"
+                value="<?php echo htmlspecialchars($form['sqft'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Overview ID</label><input class="form-control" name="overview_id"
+                value="<?php echo htmlspecialchars($form['overview_id'], ENT_QUOTES, 'UTF-8'); ?>"></div>
         <div><label>Status</label>
             <select class="form-control" name="status">
                 <option value="active" <?php echo $form['status'] === 'active' ? 'selected' : ''; ?>>Active</option>
@@ -213,25 +266,54 @@ include __DIR__ . '/_layout_top.php';
         </div>
         <div class="admin-checkbox-wrap"><label><input type="checkbox" name="is_featured" <?php echo $form['is_featured'] === '1' ? 'checked' : ''; ?>> Featured</label></div>
 
-        <div class="admin-form-full"><label>Summary</label><textarea class="form-control" name="summary" rows="3"><?php echo htmlspecialchars($form['summary'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
-        <div class="admin-form-full"><label>Description (one paragraph per line)</label><textarea class="form-control" name="description" rows="4"><?php echo htmlspecialchars($form['description'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
-        <div class="admin-form-full"><label>Gallery Images (one image path per line)</label><textarea class="form-control" name="gallery_images" rows="4"><?php echo htmlspecialchars($form['gallery_images'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
-        <div class="admin-form-full"><label>Nearby Intro</label><textarea class="form-control" name="nearby" rows="2"><?php echo htmlspecialchars($form['nearby'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
-        <div class="admin-form-full"><label>Nearby Items (one item per line)</label><textarea class="form-control" name="nearby_items" rows="4"><?php echo htmlspecialchars($form['nearby_items'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
-        <div class="admin-form-full"><label>Details (label|value, one per line)</label><textarea class="form-control" name="details" rows="4"><?php echo htmlspecialchars($form['details'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
-        <div class="admin-form-full"><label>Features (comma separated per row)</label><textarea class="form-control" name="features" rows="4"><?php echo htmlspecialchars($form['features'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
-        <div class="admin-form-full"><label>Card Highlights (one per line)</label><textarea class="form-control" name="card_highlights" rows="3"><?php echo htmlspecialchars($form['card_highlights'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
+        <div class="admin-form-full"><label>Summary</label><textarea class="form-control" name="summary"
+                rows="3"><?php echo htmlspecialchars($form['summary'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
+        <div class="admin-form-full"><label>Description (one paragraph per line)</label><textarea class="form-control"
+                name="description"
+                rows="4"><?php echo htmlspecialchars($form['description'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
+        <div class="admin-form-full"><label>Gallery Images (one image path per line)</label><textarea
+                class="form-control" name="gallery_images"
+                rows="4"><?php echo htmlspecialchars($form['gallery_images'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
+        <div class="admin-form-full"><label>Upload Gallery Images (multiple)</label><input class="form-control"
+                type="file" name="gallery_images_files[]" accept=".jpg,.jpeg,.png,.webp,.gif,.avif" multiple></div>
+        <div class="admin-form-full"><label>Nearby Intro</label><textarea class="form-control" name="nearby"
+                rows="2"><?php echo htmlspecialchars($form['nearby'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
+        <div class="admin-form-full"><label>Nearby Items (one item per line)</label><textarea class="form-control"
+                name="nearby_items"
+                rows="4"><?php echo htmlspecialchars($form['nearby_items'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
+        <div class="admin-form-full"><label>Details (label|value, one per line)</label><textarea class="form-control"
+                name="details"
+                rows="4"><?php echo htmlspecialchars($form['details'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
+        <div class="admin-form-full"><label>Features (comma separated per row)</label><textarea class="form-control"
+                name="features"
+                rows="4"><?php echo htmlspecialchars($form['features'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
+        <div class="admin-form-full"><label>Card Highlights (one per line)</label><textarea class="form-control"
+                name="card_highlights"
+                rows="3"><?php echo htmlspecialchars($form['card_highlights'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
 
-        <div><label>Location</label><input class="form-control" name="location" value="<?php echo htmlspecialchars($form['location'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Map Address</label><input class="form-control" name="map_address" value="<?php echo htmlspecialchars($form['map_address'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Map City</label><input class="form-control" name="map_city" value="<?php echo htmlspecialchars($form['map_city'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Map State</label><input class="form-control" name="map_state" value="<?php echo htmlspecialchars($form['map_state'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Map Postal</label><input class="form-control" name="map_postal" value="<?php echo htmlspecialchars($form['map_postal'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Map Area</label><input class="form-control" name="map_area" value="<?php echo htmlspecialchars($form['map_area'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Map Country</label><input class="form-control" name="map_country" value="<?php echo htmlspecialchars($form['map_country'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div class="admin-form-full"><label>Map Embed URL</label><textarea class="form-control" name="map_embed" rows="2"><?php echo htmlspecialchars($form['map_embed'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
-        <div><label>Website URL</label><input class="form-control" name="website_url" value="<?php echo htmlspecialchars($form['website_url'], ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Website Label</label><input class="form-control" name="website_label" value="<?php echo htmlspecialchars($form['website_label'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Location</label><input class="form-control" name="location"
+                value="<?php echo htmlspecialchars($form['location'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Map Address</label><input class="form-control" name="map_address"
+                value="<?php echo htmlspecialchars($form['map_address'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Map City</label><input class="form-control" name="map_city"
+                value="<?php echo htmlspecialchars($form['map_city'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Map State</label><input class="form-control" name="map_state"
+                value="<?php echo htmlspecialchars($form['map_state'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Map Postal</label><input class="form-control" name="map_postal"
+                value="<?php echo htmlspecialchars($form['map_postal'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Map Area</label><input class="form-control" name="map_area"
+                value="<?php echo htmlspecialchars($form['map_area'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Map Country</label><input class="form-control" name="map_country"
+                value="<?php echo htmlspecialchars($form['map_country'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div class="admin-form-full"><label>Map Embed URL</label><textarea class="form-control" name="map_embed"
+                rows="2"><?php echo htmlspecialchars($form['map_embed'], ENT_QUOTES, 'UTF-8'); ?></textarea></div>
+        <div><label>Website URL</label><input class="form-control" name="website_url"
+                value="<?php echo htmlspecialchars($form['website_url'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>Website Label</label><input class="form-control" name="website_label"
+                value="<?php echo htmlspecialchars($form['website_label'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+        <div><label>WhatsApp Number (Digits)</label><input class="form-control" name="whatsapp_number"
+                value="<?php echo htmlspecialchars($form['whatsapp_number'], ENT_QUOTES, 'UTF-8'); ?>"
+                placeholder="919999999999"></div>
 
         <div class="admin-form-full">
             <button class="btn btn-primary admin-btn" type="submit">Save Property</button>

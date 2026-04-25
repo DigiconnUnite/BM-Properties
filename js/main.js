@@ -67,57 +67,77 @@
 
   /* Contact Form
   ------------------------------------------------------------------------------------- */
-  var ajaxContactForm = function () {
-    $("#contactform").each(function () {
-      $(this).validate({
-        submitHandler: function (form) {
-          var $form = $(form),
-            str = $form.serialize(),
-            loading = $("<div />", { class: "loading" });
+  var bindAjaxForm = function (selector) {
+    $(selector).each(function () {
+      var $form = $(this);
+      if ($form.data("ajax-bound")) return;
+      $form.data("ajax-bound", true);
 
-          $.ajax({
-            type: "POST",
-            url: $form.attr("action"),
-            data: str,
-            beforeSend: function () {
-              $form.find(".send-wrap").append(loading);
-            },
-            success: function (msg) {
-              var result, cls;
-              if (msg === "Success") {
-                result =
-                  "Email Sent Successfully. Thank you, Your application is accepted - we will contact you shortly";
-                cls = "msg-success";
-              } else {
-                result = "Error sending email.";
-                cls = "msg-error";
-              }
-              $form.prepend(
-                $("<div />", {
-                  class: "flat-alert " + cls,
-                  text: result,
-                }).append(
-                  $(
-                    '<a class="close" href="#"><i class="icon icon-close2"></i></a>'
-                  )
-                )
-              );
+      var $submit = $form.find('button[type="submit"], input[type="submit"]').first();
+      var submitText = $submit.data("submit-text") || $submit.text() || "Send Message";
+      var sendingText = $submit.data("sending-text") || "Sending...";
 
-              $form.find(":input").not(".submit").val("");
-            },
-            complete: function (xhr, status, error_thrown) {
-              $form.find(".loading").remove();
-            },
+      var showAlert = function (ok, message) {
+        var cls = ok ? "alert-success" : "alert-danger";
+        var $alert = $(
+          '<div class="alert ' +
+            cls +
+            ' ajax-form-alert" role="alert" style="margin-top:12px;"></div>',
+        ).text(message || (ok ? "Sent successfully." : "Something went wrong."));
+
+        $form.find(".ajax-form-alert").remove();
+        $form.prepend($alert);
+
+        setTimeout(function () {
+          $alert.fadeOut(200, function () {
+            $(this).remove();
           });
-        },
+        }, 5000);
+      };
+
+      $form.on("submit", function (e) {
+        e.preventDefault();
+
+        if ($submit.prop("disabled")) return;
+        $submit.prop("disabled", true);
+        if ($submit.is("button")) $submit.text(sendingText);
+        if ($submit.is("input")) $submit.val(sendingText);
+
+        $.ajax({
+          type: "POST",
+          url: $form.attr("action") || window.location.href,
+          data: $form.serialize(),
+          dataType: "json",
+          success: function (res) {
+            var ok = !!(res && res.ok);
+            var msg = res && res.message ? res.message : "";
+            showAlert(ok, msg);
+            if (ok) {
+              $form.find(":input")
+                .not('[type="hidden"], button, input[type="submit"]')
+                .val("");
+            }
+          },
+          error: function () {
+            showAlert(false, "Error sending message. Please try again.");
+          },
+          complete: function () {
+            $submit.prop("disabled", false);
+            if ($submit.is("button")) $submit.text(submitText);
+            if ($submit.is("input")) $submit.val(submitText);
+          },
+        });
       });
-    }); // each contactform
+    });
+  };
+
+  var ajaxContactForm = function () {
+    bindAjaxForm("#contactform-main");
   };
   /* Header Fixed
   ------------------------------------------------------------------------------------- */
   var headerFixed = function () {
     if ($("header").hasClass("header-fixed")) {
-
       var nav = $("#header");
       if (nav.length) {
         var offsetTop = nav.offset().top,
@@ -143,7 +163,7 @@
   };
 
   $("#showlogo").prepend(
-    '<a href="index.html"><img id="theImg" src="assets/images/logo/logo2.png" /></a>'
+    '<a href="index.html"><img id="theImg" src="assets/images/logo/logo2.png" /></a>',
   );
 
   // =========NICE SELECT=========
@@ -167,14 +187,14 @@
 
     //Disable dropdown parent link
     $(
-      ".main-header .navigation li.dropdown2 > a,.hidden-bar .side-menu li.dropdown2 > a"
+      ".main-header .navigation li.dropdown2 > a,.hidden-bar .side-menu li.dropdown2 > a",
     ).on("click", function (e) {
       e.preventDefault();
     });
 
     $(".price-block .features .arrow").on("click", function (e) {
       $(e.target.offsetParent.offsetParent.offsetParent).toggleClass(
-        "active-show-hidden"
+        "active-show-hidden",
       );
     });
   }
@@ -219,12 +239,12 @@
           $(this).parent("li").toggleClass("open");
           $(this).parent("li").children("ul").slideToggle(args);
         }
-      }
+      },
     );
 
     //3rd Level Nav
     $(
-      ".mobile-menu .navigation > li.dropdown2 > ul  > li.dropdown2 > .dropdown2-btn"
+      ".mobile-menu .navigation > li.dropdown2 > ul  > li.dropdown2 > .dropdown2-btn",
     ).on("click", function (e) {
       e.preventDefault();
       var targetInner = $(this).parent("li").children("ul");
@@ -330,40 +350,40 @@
                 messageDiv.html(
                   objUse.noticeError.replace(
                     "{msg}",
-                    "Error! <strong>Email is required.</strong>"
-                  )
+                    "Error! <strong>Email is required.</strong>",
+                  ),
                 );
                 break;
               case "email-err":
                 messageDiv.html(
                   objUse.noticeError.replace(
                     "{msg}",
-                    "Error! <strong>Email invalid.</strong>"
-                  )
+                    "Error! <strong>Email invalid.</strong>",
+                  ),
                 );
                 break;
               case "duplicate":
                 messageDiv.html(
                   objUse.noticeError.replace(
                     "{msg}",
-                    "Error! <strong>Email is duplicate.</strong>"
-                  )
+                    "Error! <strong>Email is duplicate.</strong>",
+                  ),
                 );
                 break;
               case "filewrite":
                 messageDiv.html(
                   objUse.noticeInfo.replace(
                     "{msg}",
-                    "Error! <strong>Mail list file is open.</strong>"
-                  )
+                    "Error! <strong>Mail list file is open.</strong>",
+                  ),
                 );
                 break;
               case "undefined":
                 messageDiv.html(
                   objUse.noticeInfo.replace(
                     "{msg}",
-                    "Error! <strong>undefined error.</strong>"
-                  )
+                    "Error! <strong>undefined error.</strong>",
+                  ),
                 );
                 break;
               case "api-error":
@@ -393,7 +413,7 @@
     });
   };
 
-    /* footer accordion
+  /* footer accordion
   -------------------------------------------------------------------------*/
   var handleFooter = function () {
     var footerAccordion = function () {
@@ -411,19 +431,21 @@
       if (matchMedia("only screen and (max-width: 767px)").matches) {
         if (!$(".footer-heading-mobile").data("accordion-initialized")) {
           footerAccordion();
-          $(".footer-heading-mobile").data("accordion-initialized", true); 
+          $(".footer-heading-mobile").data("accordion-initialized", true);
         }
       } else {
         $(".footer-heading-mobile").off("click");
-        $(".footer-heading-mobile").parent(".footer-col-block").removeClass("open");
+        $(".footer-heading-mobile")
+          .parent(".footer-col-block")
+          .removeClass("open");
         $(".footer-heading-mobile").next().removeAttr("style");
-        $(".footer-heading-mobile").data("accordion-initialized", false); 
+        $(".footer-heading-mobile").data("accordion-initialized", false);
       }
     }
     handleAccordion();
     window.addEventListener("resize", function () {
       handleAccordion();
-    });  
+    });
   };
 
   var configureFancybox = function () {
@@ -440,6 +462,51 @@
     });
   };
 
+  var enquiryModal = function () {
+    var $modal = $("#enquiryModal");
+    if (!$modal.length) {
+      return;
+    }
+
+    var openModal = function () {
+      $modal.addClass("is-visible").attr("aria-hidden", "false");
+      $("body").addClass("enquiry-open");
+    };
+
+    var closeModal = function () {
+      $modal.removeClass("is-visible").attr("aria-hidden", "true");
+      $("body").removeClass("enquiry-open");
+    };
+
+    $(document).on("click", "[data-enquiry-open]", function () {
+      openModal();
+    });
+
+    $(document).on("click", "[data-enquiry-close]", function () {
+      closeModal();
+    });
+
+    $(document).on("keydown", function (e) {
+      if (e.key === "Escape") {
+        closeModal();
+      }
+    });
+  };
+
+  var globalNoticePopup = function () {
+    var $notice = $(".global-popup-notice");
+    if (!$notice.length) {
+      return;
+    }
+
+    setTimeout(function () {
+      $notice.addClass("is-visible");
+    }, 120);
+
+    setTimeout(function () {
+      $notice.removeClass("is-visible");
+    }, 4500);
+  };
 
   // Dom Ready
   $(function () {
@@ -448,8 +515,11 @@
     });
     headerFixed();
     ajaxContactForm();
+    bindAjaxForm("#enquiryModal form.enquiry-form-grid");
     ajaxSubscribe.eventLoad();
     alertBox();
     configureFancybox();
+    enquiryModal();
+    globalNoticePopup();
   });
 })(jQuery);

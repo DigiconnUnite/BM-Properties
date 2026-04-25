@@ -17,43 +17,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($name === '' || $email === '' || $phone === '' || $messageText === '') {
         $contactError = 'Please fill all required fields.';
+    } elseif (strlen($name) < 2 || strlen($name) > 120) {
+        $contactError = 'Please enter a valid full name.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $contactError = 'Please enter a valid email address.';
+    } elseif (!is_valid_phone($phone, 10)) {
+        $contactError = 'Phone number must be at least 10 digits.';
+    } elseif (strlen($messageText) < 10) {
+        $contactError = 'Message should be at least 10 characters.';
     } else {
         save_contact_message([
             'name' => $name,
             'email' => $email,
-            'phone' => $phone,
+            'phone' => normalize_phone($phone),
             'subject' => $subject,
             'message' => $messageText,
         ]);
+
+        $mailSubject = 'Thank you for contacting BM Properties';
+        $mailHtml = '<p>Hello ' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . ',</p>'
+            . '<p>Thank you for filling the form, we have received your request and we will contact you shortly.</p>'
+            . '<p>Regards,<br>BM Properties Team</p>';
+        $mailText = 'Thank you for filling the form, we have received your request and we will contact you shortly.';
+        send_mail_message($email, $name, $mailSubject, $mailHtml, $mailText);
+
         $contactMessage = 'Thank you. Your message has been received.';
+    }
+
+    $wantsJson = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower((string) $_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+        || (isset($_SERVER['HTTP_ACCEPT']) && str_contains((string) $_SERVER['HTTP_ACCEPT'], 'application/json'))
+        || (isset($_POST['ajax']) && (string) $_POST['ajax'] === '1');
+    if ($wantsJson) {
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode([
+            'ok' => $contactError === '',
+            'message' => $contactError !== '' ? $contactError : $contactMessage,
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        exit;
     }
 }
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+
 <head>
     <meta charset="utf-8">
     <title>Contact BM Properties – Get in Touch</title>
     <meta name="keywords" content="HTML, CSS, JavaScript, Bootstrap">
-    <meta name="description" content="Contact BM Properties for property inquiries, site visits, or expert guidance. We’re here to help you find the perfect property.">
+    <meta name="description"
+        content="Contact BM Properties for property inquiries, site visits, or expert guidance. We’re here to help you find the perfect property.">
 
     <meta name="author" content="BM Properties">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <?php include 'components/links.php';?>
+    <?php include 'components/links.php'; ?>
 
 </head>
 
 <body class="body">
 
 
-    <?php include 'components/loader.php';?>
+    <?php include 'components/loader.php'; ?>
     <div id="wrapper">
         <div id="pagee" class="clearfix">
 
-        <?php include 'components/header.php';?>
+            <?php include 'components/header.php'; ?>
             <!-- Page Title -->
             <section class="flat-title-page page-title-default-bg">
                 <div class="container">
@@ -77,46 +105,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <p class="body-2 text-variant-1">Feel free to connect with us through our online
                                     channels for updates, news, and more.</p>
                                 <?php if ($contactMessage !== ''): ?>
-                                    <div class="alert alert-success"><?php echo htmlspecialchars($contactMessage, ENT_QUOTES, 'UTF-8'); ?></div>
+                                    <div class="alert alert-success">
+                                        <?php echo htmlspecialchars($contactMessage, ENT_QUOTES, 'UTF-8'); ?></div>
                                 <?php endif; ?>
                                 <?php if ($contactError !== ''): ?>
-                                    <div class="alert alert-danger"><?php echo htmlspecialchars($contactError, ENT_QUOTES, 'UTF-8'); ?></div>
+                                    <div class="alert alert-danger">
+                                        <?php echo htmlspecialchars($contactError, ENT_QUOTES, 'UTF-8'); ?></div>
                                 <?php endif; ?>
 
-                                <form id="contactform" method="post" action=""
-                                    class="form-contact">
-                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <form id="contactform-main" method="post" action="" class="form-contact" novalidate>
+                                    <input type="hidden" name="csrf_token"
+                                        value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="ajax" value="1">
                                     <div class="box grid-2">
                                         <fieldset>
                                             <label for="name">Full Name:</label>
                                             <input type="text" class="form-control" placeholder="Your name" name="name"
-                                                id="name" required>
+                                                id="name" required minlength="2" maxlength="120">
                                         </fieldset>
                                         <fieldset>
                                             <label for="email">Email Address:</label>
-                                            <input type="text" class="form-control" placeholder="Email" name="email"
+                                            <input type="email" class="form-control" placeholder="Email" name="email"
                                                 id="email" required>
                                         </fieldset>
                                     </div>
                                     <div class="box grid-2">
                                         <fieldset>
                                             <label for="phone">Phone Numbers:</label>
-                                            <input type="text" class="form-control style-1" placeholder="ex 012345678"
-                                                name="phone" id="phone" required>
+                                            <input type="tel" class="form-control style-1" placeholder="ex 9876543210"
+                                                name="phone" id="phone" required pattern="[0-9]{10,15}" minlength="10"
+                                                maxlength="15">
                                         </fieldset>
                                         <fieldset>
                                             <label for="subject">Subject:</label>
-                                            <input type="text" class="form-control style-1" placeholder="Enter Keyword"
-                                                name="subject" id="subject">
+                                            <input type="text" class="form-control style-1" placeholder="Enter Subject"
+                                                name="subject" id="subject" maxlength="180">
                                         </fieldset>
                                     </div>
                                     <fieldset>
                                         <label for="message">Your Message:</label>
                                         <textarea name="message" class="form-control" cols="30" rows="10"
-                                            placeholder="Message" id="message" required></textarea>
+                                            placeholder="Message" id="message" required minlength="10"
+                                            maxlength="2000"></textarea>
                                     </fieldset>
                                     <div class="send-wrap">
-                                        <button class="tf-btn primary size-1" type="submit">Send Message</button>
+                                        <button class="tf-btn primary size-1" type="submit" data-submit-text="Send Message"
+                                            data-sending-text="Sending...">Send Message</button>
                                     </div>
                                 </form>
                             </div>
@@ -127,21 +161,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <ul>
                                     <li class="box">
                                         <h6 class="title">Address:</h6>
-                                        <p class="text-variant-1"><?php echo htmlspecialchars((string) ($settings['office_address'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></p>
+                                        <p class="text-variant-1">
+                                            <?php echo htmlspecialchars((string) ($settings['office_address'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+                                        </p>
                                     </li>
                                     <li class="box">
                                         <h6 class="title">Infomation:</h6>
-                                        <p class="text-variant-1"><?php echo htmlspecialchars((string) ($settings['phone'] ?? ''), ENT_QUOTES, 'UTF-8'); ?> <br> <?php echo htmlspecialchars((string) ($settings['email'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></p>
+                                        <p class="text-variant-1">
+                                            <?php echo htmlspecialchars((string) ($settings['phone'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+                                            <br>
+                                            <?php echo htmlspecialchars((string) ($settings['email'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+                                        </p>
                                     </li>
                                     <li class="box">
                                         <div class="title">Opentime:</div>
-                                        <p class="text-variant-1"><?php echo htmlspecialchars((string) ($settings['open_time'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></p>
+                                        <p class="text-variant-1">
+                                            <?php echo htmlspecialchars((string) ($settings['open_time'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+                                        </p>
 
                                     </li>
                                     <li class="box">
                                         <div class="title">Follow Us:</div>
                                         <ul class="box-social">
-                                            <li><a href="<?php echo htmlspecialchars((string) ($settings['facebook_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>" class="item" target="_blank" rel="noopener noreferrer">
+                                            <li><a href="<?php echo htmlspecialchars((string) ($settings['facebook_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>"
+                                                    class="item" target="_blank" rel="noopener noreferrer">
                                                     <svg width="10" height="18" viewBox="0 0 10 18" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -149,7 +192,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             fill="#161E2D" />
                                                     </svg>
                                                 </a></li>
-                                            <li><a href="<?php echo htmlspecialchars((string) ($settings['instagram_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>" class="item" target="_blank" rel="noopener noreferrer">
+                                            <li><a href="<?php echo htmlspecialchars((string) ($settings['instagram_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>"
+                                                    class="item" target="_blank" rel="noopener noreferrer">
                                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -158,7 +202,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     </svg>
 
                                                 </a></li>
-                                            <li><a href="<?php echo htmlspecialchars((string) ($settings['youtube_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>" class="item" target="_blank" rel="noopener noreferrer">
+                                            <li><a href="<?php echo htmlspecialchars((string) ($settings['youtube_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>"
+                                                    class="item" target="_blank" rel="noopener noreferrer">
                                                     <svg width="20" height="14" viewBox="0 0 20 14" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -212,7 +257,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </a>
                                 <div id="accordion-faq-one" class="collapse" data-bs-parent="#wrapper-faq">
                                     <p class="faq-body">
-                                        BM Real Estate specializes in offering a wide range of property solutions, including under-construction residential projects, plotted developments, and investment opportunities. We aim to help clients find properties that match their needs, budget, and long-term goals.
+                                        BM Real Estate specializes in offering a wide range of property solutions,
+                                        including under-construction residential projects, plotted developments, and
+                                        investment opportunities. We aim to help clients find properties that match
+                                        their needs, budget, and long-term goals.
                                     </p>
                                 </div>
                             </li>
@@ -223,7 +271,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </a>
                                 <div id="accordion-faq-two" class="collapse show" data-bs-parent="#wrapper-faq">
                                     <p class="faq-body">
-                                        Yes, we focus on showcasing projects that are carefully reviewed based on location, development potential, and builder credibility. While we guide you with verified information, we also encourage buyers to visit the site and review documents before making a final decision.
+                                        Yes, we focus on showcasing projects that are carefully reviewed based on
+                                        location, development potential, and builder credibility. While we guide you
+                                        with verified information, we also encourage buyers to visit the site and review
+                                        documents before making a final decision.
                                     </p>
                                 </div>
                             </li>
@@ -234,7 +285,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </a>
                                 <div id="accordion-faq-three" class="collapse" data-bs-parent="#wrapper-faq">
                                     <p class="faq-body">
-                                        Our primary focus is on under-construction and upcoming projects with high future potential. However, we also assist clients in exploring ready-to-move and investment-friendly options depending on availability and requirements.
+                                        Our primary focus is on under-construction and upcoming projects with high
+                                        future potential. However, we also assist clients in exploring ready-to-move and
+                                        investment-friendly options depending on availability and requirements.
                                     </p>
                                 </div>
                             </li>
@@ -245,7 +298,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </a>
                                 <div id="accordion-faq-four" class="collapse" data-bs-parent="#wrapper-faq">
                                     <p class="faq-body">
-                                        You can easily connect with us through the contact form, call, or WhatsApp provided on the website. Our team will guide you with complete details, site visits, pricing, and booking procedures step by step.
+                                        You can easily connect with us through the contact form, call, or WhatsApp
+                                        provided on the website. Our team will guide you with complete details, site
+                                        visits, pricing, and booking procedures step by step.
                                     </p>
                                 </div>
                             </li>
@@ -256,7 +311,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </a>
                                 <div id="accordion-faq-five" class="collapse" data-bs-parent="#wrapper-faq">
                                     <p class="faq-body">
-                                        Yes, we provide complete assistance for site visits. Our team helps you schedule visits at your convenience and ensures you get a clear understanding of the project, location, and future prospects before making any decision.
+                                        Yes, we provide complete assistance for site visits. Our team helps you schedule
+                                        visits at your convenience and ensures you get a clear understanding of the
+                                        project, location, and future prospects before making any decision.
                                     </p>
                                 </div>
                             </li>
@@ -287,7 +344,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </section> -->
             <!-- end banner -->
 
-        <?php include 'components/footer.php'; ?>
+            <?php include 'components/footer.php'; ?>
 
 
         </div>
@@ -305,8 +362,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </svg>
     </div>
 
-    
-<?php include 'components/script.php'; ?>
+
+    <?php include 'components/script.php'; ?>
 
 </body>
+
 </html>

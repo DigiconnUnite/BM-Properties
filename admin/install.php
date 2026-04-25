@@ -13,8 +13,9 @@ if (is_file($localConfigPath)) {
 }
 
 $setupKey = getenv('APP_SETUP_KEY') ?: 'bm-setup-2026';
-$providedKey = isset($_GET['key']) ? (string) $_GET['key'] : '';
+$providedKey = (string) ($_GET['key'] ?? $_POST['key'] ?? '');
 $authorized = hash_equals($setupKey, $providedKey);
+$defaultKeyInUse = getenv('APP_SETUP_KEY') === false;
 
 $status = '';
 $error = '';
@@ -35,12 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
     $dbPass = (string) ($_POST['db_pass'] ?? $dbPass);
 
     $adminUsername = trim((string) ($_POST['admin_username'] ?? 'admin'));
+    $adminEmail = strtolower(trim((string) ($_POST['admin_email'] ?? '')));
+    $adminFullName = trim((string) ($_POST['admin_full_name'] ?? 'Administrator'));
     $adminPassword = (string) ($_POST['admin_password'] ?? '');
 
     if ($dbHost === '' || $dbUser === '' || $dbName === '' || $dbPort <= 0) {
         $error = 'Please provide valid database host, port, name, and username.';
     } elseif ($adminUsername === '' || strlen($adminUsername) < 4) {
         $error = 'Admin username must be at least 4 characters.';
+    } elseif (!filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Please provide a valid admin email.';
     } elseif (strlen($adminPassword) < 8) {
         $error = 'Admin password must be at least 8 characters.';
     } else {
@@ -91,8 +96,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
                     $settingsStmt->execute();
 
                     $passwordHash = password_hash($adminPassword, PASSWORD_DEFAULT);
-                    $adminStmt = $server->prepare('INSERT INTO admin_users (username, password_hash, is_active) VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash), is_active = 1');
-                    $adminStmt->bind_param('ss', $adminUsername, $passwordHash);
+                    $adminStmt = $server->prepare('INSERT INTO admin_users (username, email, full_name, password_hash, is_active) VALUES (?, ?, ?, ?, 1) ON DUPLICATE KEY UPDATE email = VALUES(email), full_name = VALUES(full_name), password_hash = VALUES(password_hash), is_active = 1');
+                    $adminStmt->bind_param('ssss', $adminUsername, $adminEmail, $adminFullName, $passwordHash);
                     $adminStmt->execute();
 
                     $properties = include __DIR__ . '/../components/properties-data.php';
@@ -222,6 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -229,11 +235,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/admin.css">
 </head>
+
 <body class="admin-body admin-auth-body">
     <div class="admin-auth-card setup-card">
         <h1>Database Installer</h1>
         <?php if (!$authorized): ?>
-            <div class="alert alert-danger">Unauthorized setup request. Use a valid setup key in URL.</div>
+            <div class="alert alert-danger">Unauthorized: add the setup key to the URL query string, for example
+                <code>install.php?key=…</code>
+                <?php if ($defaultKeyInUse): ?>
+                    <br><br>Default key ( development only, change in production with <code>APP_SETUP_KEY</code>):
+                    <br><a href="install.php?key=bm-setup-2026"><code>install.php?key=bm-setup-2026</code></a>
+                <?php else: ?>
+                    <br><br>Your key must match the <code>APP_SETUP_KEY</code> environment variable.
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
         <?php if ($error !== ''): ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div>
@@ -246,34 +261,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
         <?php if ($status === '' && $authorized): ?>
             <p>This will create tables, seed categories/properties/gallery data, and create the admin account.</p>
             <form method="post" action="">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token"
+                    value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="key" value="<?php echo htmlspecialchars($providedKey, ENT_QUOTES, 'UTF-8'); ?>">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="db_host" class="form-label">DB Host</label>
-                        <input type="text" class="form-control" id="db_host" name="db_host" value="<?php echo htmlspecialchars($dbHost, ENT_QUOTES, 'UTF-8'); ?>" required>
+                        <input type="text" class="form-control" id="db_host" name="db_host"
+                            value="<?php echo htmlspecialchars($dbHost, ENT_QUOTES, 'UTF-8'); ?>" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="db_port" class="form-label">DB Port</label>
-                        <input type="number" class="form-control" id="db_port" name="db_port" value="<?php echo (int) $dbPort; ?>" required>
+                        <input type="number" class="form-control" id="db_port" name="db_port"
+                            value="<?php echo (int) $dbPort; ?>" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="db_name" class="form-label">DB Name</label>
-                        <input type="text" class="form-control" id="db_name" name="db_name" value="<?php echo htmlspecialchars($dbName, ENT_QUOTES, 'UTF-8'); ?>" required>
+                        <input type="text" class="form-control" id="db_name" name="db_name"
+                            value="<?php echo htmlspecialchars($dbName, ENT_QUOTES, 'UTF-8'); ?>" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="db_user" class="form-label">DB Username</label>
-                        <input type="text" class="form-control" id="db_user" name="db_user" value="<?php echo htmlspecialchars($dbUser, ENT_QUOTES, 'UTF-8'); ?>" required>
+                        <input type="text" class="form-control" id="db_user" name="db_user"
+                            value="<?php echo htmlspecialchars($dbUser, ENT_QUOTES, 'UTF-8'); ?>" required>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="db_pass" class="form-label">DB Password</label>
-                    <input type="password" class="form-control" id="db_pass" name="db_pass" value="<?php echo htmlspecialchars($dbPass, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="password" class="form-control" id="db_pass" name="db_pass"
+                        value="<?php echo htmlspecialchars($dbPass, ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
                 <div class="mb-3">
                     <label for="admin_username" class="form-label">Admin Username</label>
-                    <input type="text" class="form-control" id="admin_username" name="admin_username" value="admin" required>
+                    <input type="text" class="form-control" id="admin_username" name="admin_username" value="admin"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="admin_full_name" class="form-label">Admin Name</label>
+                    <input type="text" class="form-control" id="admin_full_name" name="admin_full_name"
+                        value="Administrator" required>
+                </div>
+                <div class="mb-3">
+                    <label for="admin_email" class="form-label">Admin Email</label>
+                    <input type="email" class="form-control" id="admin_email" name="admin_email" required>
                 </div>
                 <div class="mb-3">
                     <label for="admin_password" class="form-label">Admin Password</label>
@@ -284,4 +316,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
         <?php endif; ?>
     </div>
 </body>
+
 </html>
