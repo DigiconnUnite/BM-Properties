@@ -1023,6 +1023,7 @@ label {
 
 .text-line-clamp-1 {
   -webkit-line-clamp: 4;
+  line-clamp: 4;
   -webkit-box-orient: vertical;
   display: -webkit-box;
   overflow: hidden;
@@ -1030,6 +1031,7 @@ label {
 
 .text-line-clamp-2 {
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   display: -webkit-box;
   overflow: hidden;
