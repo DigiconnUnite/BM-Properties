@@ -13,8 +13,9 @@ if (is_file($localConfigPath)) {
 }
 
 $setupKey = getenv('APP_SETUP_KEY') ?: 'bm-setup-2026';
-$providedKey = isset($_GET['key']) ? (string) $_GET['key'] : '';
+$providedKey = (string) ($_GET['key'] ?? $_POST['key'] ?? '');
 $authorized = hash_equals($setupKey, $providedKey);
+$defaultKeyInUse = getenv('APP_SETUP_KEY') === false;
 
 $status = '';
 $error = '';
@@ -239,7 +240,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
     <div class="admin-auth-card setup-card">
         <h1>Database Installer</h1>
         <?php if (!$authorized): ?>
-            <div class="alert alert-danger">Unauthorized setup request. Use a valid setup key in URL.</div>
+            <div class="alert alert-danger">Unauthorized: add the setup key to the URL query string, for example
+                <code>install.php?key=…</code>
+                <?php if ($defaultKeyInUse): ?>
+                    <br><br>Default key ( development only, change in production with <code>APP_SETUP_KEY</code>):
+                    <br><a href="install.php?key=bm-setup-2026"><code>install.php?key=bm-setup-2026</code></a>
+                <?php else: ?>
+                    <br><br>Your key must match the <code>APP_SETUP_KEY</code> environment variable.
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
         <?php if ($error !== ''): ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div>
@@ -254,6 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
             <form method="post" action="">
                 <input type="hidden" name="csrf_token"
                     value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="key" value="<?php echo htmlspecialchars($providedKey, ENT_QUOTES, 'UTF-8'); ?>">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="db_host" class="form-label">DB Host</label>

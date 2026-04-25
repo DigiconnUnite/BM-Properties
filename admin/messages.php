@@ -44,8 +44,15 @@ include __DIR__ . '/_layout_top.php';
                         </td>
                         <td><?php echo htmlspecialchars((string) $message['subject'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td class="message-cell">
-                            <?php echo nl2br(htmlspecialchars((string) $message['message'], ENT_QUOTES, 'UTF-8')); ?></td>
+                            <?php
+                            $msg = (string) $message['message'];
+                            $preview = mb_strlen($msg) > 80 ? (mb_substr($msg, 0, 80) . '...') : $msg;
+                            echo nl2br(htmlspecialchars($preview, ENT_QUOTES, 'UTF-8'));
+                            ?>
+                        </td>
                         <td>
+                            <a class="btn btn-sm btn-outline-primary me-2"
+                                href="message-view.php?id=<?php echo (int) $message['id']; ?>">View</a>
                             <form method="post" class="inline-form" action="modules/messages/delete.php"
                                 onsubmit="return confirm('Delete this message?');">
                                 <input type="hidden" name="csrf_token"

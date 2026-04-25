@@ -145,10 +145,9 @@ $globalWhatsappLink = $globalWhatsappNumber !== '' ? ('https://wa.me/' . $global
     <div class="bottom-footer">
         <div class="container">
             <div class="content-footer-bottom">
-                <div class="copyright">© <?php echo date('Y'); ?> <a href="index.php">BM Properties</a>. All Rights
-                    Reserved.</div>
-                <div class="developed-by">Developed by <a href="https://digiconnunite.com/" target="_blank">Digiconn
-                        Unit Pvt Ltd</a></div>
+                <div class="copyright">All Rights Reserved 2026 <a href="index.php">BM Properties</a>.</div>
+                <div class="developed-by">Designed by <a href="https://digiconnunite.com/" target="_blank"
+                        rel="noopener noreferrer">Digiconn Unite Pvt Ltd</a></div>
 
                 <ul class="menu-bottom">
                     <li><a href="terms.php">Terms Of Services</a> </li>

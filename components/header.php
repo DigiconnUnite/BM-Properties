@@ -142,6 +142,7 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
             class="enquiry-form-grid">
             <input type="hidden" name="csrf_token"
                 value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="ajax" value="1">
             <input type="hidden" name="source" value="header-modal">
             <input type="hidden" name="return_url"
                 value="<?php echo htmlspecialchars(basename((string) ($_SERVER['PHP_SELF'] ?? 'index.php')), ENT_QUOTES, 'UTF-8'); ?>">
@@ -197,7 +198,8 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
             </div>
 
             <div class="enquiry-form-full">
-                <button class="tf-btn primary enquiry-submit-btn" type="submit">Start now</button>
+                <button class="tf-btn primary enquiry-submit-btn" type="submit" data-submit-text="Send Message"
+                    data-sending-text="Sending...">Send Message</button>
             </div>
         </form>
     </div>

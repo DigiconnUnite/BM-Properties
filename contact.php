@@ -43,6 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $contactMessage = 'Thank you. Your message has been received.';
     }
+
+    $wantsJson = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower((string) $_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+        || (isset($_SERVER['HTTP_ACCEPT']) && str_contains((string) $_SERVER['HTTP_ACCEPT'], 'application/json'))
+        || (isset($_POST['ajax']) && (string) $_POST['ajax'] === '1');
+    if ($wantsJson) {
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode([
+            'ok' => $contactError === '',
+            'message' => $contactError !== '' ? $contactError : $contactMessage,
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        exit;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -101,9 +113,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <?php echo htmlspecialchars($contactError, ENT_QUOTES, 'UTF-8'); ?></div>
                                 <?php endif; ?>
 
-                                <form id="contactform-main" method="post" action="" class="form-contact">
+                                <form id="contactform-main" method="post" action="" class="form-contact" novalidate>
                                     <input type="hidden" name="csrf_token"
                                         value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="ajax" value="1">
                                     <div class="box grid-2">
                                         <fieldset>
                                             <label for="name">Full Name:</label>
@@ -136,7 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             maxlength="2000"></textarea>
                                     </fieldset>
                                     <div class="send-wrap">
-                                        <button class="tf-btn primary size-1" type="submit">Send Message</button>
+                                        <button class="tf-btn primary size-1" type="submit" data-submit-text="Send Message"
+                                            data-sending-text="Sending...">Send Message</button>
                                     </div>
                                 </form>
                             </div>

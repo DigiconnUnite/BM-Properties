@@ -67,51 +67,72 @@
 
   /* Contact Form
   ------------------------------------------------------------------------------------- */
-  var ajaxContactForm = function () {
-    $("#contactform").each(function () {
-      $(this).validate({
-        submitHandler: function (form) {
-          var $form = $(form),
-            str = $form.serialize(),
-            loading = $("<div />", { class: "loading" });
+  var bindAjaxForm = function (selector) {
+    $(selector).each(function () {
+      var $form = $(this);
+      if ($form.data("ajax-bound")) return;
+      $form.data("ajax-bound", true);
 
-          $.ajax({
-            type: "POST",
-            url: $form.attr("action"),
-            data: str,
-            beforeSend: function () {
-              $form.find(".send-wrap").append(loading);
-            },
-            success: function (msg) {
-              var result, cls;
-              if (msg === "Success") {
-                result =
-                  "Email Sent Successfully. Thank you, Your application is accepted - we will contact you shortly";
-                cls = "msg-success";
-              } else {
-                result = "Error sending email.";
-                cls = "msg-error";
-              }
-              $form.prepend(
-                $("<div />", {
-                  class: "flat-alert " + cls,
-                  text: result,
-                }).append(
-                  $(
-                    '<a class="close" href="#"><i class="icon icon-close2"></i></a>',
-                  ),
-                ),
-              );
+      var $submit = $form.find('button[type="submit"], input[type="submit"]').first();
+      var submitText = $submit.data("submit-text") || $submit.text() || "Send Message";
+      var sendingText = $submit.data("sending-text") || "Sending...";
 
-              $form.find(":input").not(".submit").val("");
-            },
-            complete: function (xhr, status, error_thrown) {
-              $form.find(".loading").remove();
-            },
+      var showAlert = function (ok, message) {
+        var cls = ok ? "alert-success" : "alert-danger";
+        var $alert = $(
+          '<div class="alert ' +
+            cls +
+            ' ajax-form-alert" role="alert" style="margin-top:12px;"></div>',
+        ).text(message || (ok ? "Sent successfully." : "Something went wrong."));
+
+        $form.find(".ajax-form-alert").remove();
+        $form.prepend($alert);
+
+        setTimeout(function () {
+          $alert.fadeOut(200, function () {
+            $(this).remove();
           });
-        },
+        }, 5000);
+      };
+
+      $form.on("submit", function (e) {
+        e.preventDefault();
+
+        if ($submit.prop("disabled")) return;
+        $submit.prop("disabled", true);
+        if ($submit.is("button")) $submit.text(sendingText);
+        if ($submit.is("input")) $submit.val(sendingText);
+
+        $.ajax({
+          type: "POST",
+          url: $form.attr("action") || window.location.href,
+          data: $form.serialize(),
+          dataType: "json",
+          success: function (res) {
+            var ok = !!(res && res.ok);
+            var msg = res && res.message ? res.message : "";
+            showAlert(ok, msg);
+            if (ok) {
+              $form.find(":input")
+                .not('[type="hidden"], button, input[type="submit"]')
+                .val("");
+            }
+          },
+          error: function () {
+            showAlert(false, "Error sending message. Please try again.");
+          },
+          complete: function () {
+            $submit.prop("disabled", false);
+            if ($submit.is("button")) $submit.text(submitText);
+            if ($submit.is("input")) $submit.val(submitText);
+          },
+        });
       });
-    }); // each contactform
+    });
+  };
+
+  var ajaxContactForm = function () {
+    bindAjaxForm("#contactform-main");
   };
   /* Header Fixed
   ------------------------------------------------------------------------------------- */
@@ -494,6 +515,7 @@
     });
     headerFixed();
     ajaxContactForm();
+    bindAjaxForm("#enquiryModal form.enquiry-form-grid");
     ajaxSubscribe.eventLoad();
     alertBox();
     configureFancybox();

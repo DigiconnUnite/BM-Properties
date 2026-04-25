@@ -18,7 +18,11 @@ $activePage = $activePage ?? '';
 <body class="admin-body">
     <div class="admin-shell">
         <aside class="admin-sidebar">
-            <a class="admin-brand" href="index.php">BM Admin</a>
+            <a class="admin-brand d-flex align-items-center gap-2" href="index.php">
+                <img src="../images/logo/logo-new.png" alt="BM Properties" width="28" height="28"
+                    style="object-fit:contain;">
+                <span>BM Admin</span>
+            </a>
             <nav class="admin-menu">
                 <a class="<?php echo $activePage === 'dashboard' ? 'active' : ''; ?>" href="index.php">Dashboard</a>
                 <a class="<?php echo $activePage === 'content' ? 'active' : ''; ?>" href="content.php">Content

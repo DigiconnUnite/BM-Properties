@@ -36,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $uploadRoot = realpath(__DIR__ . '/..');
         if (is_string($uploadRoot) && $uploadRoot !== '') {
-            $galleryUploadDir = $uploadRoot . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'gallery';
-            $uploadedImage = upload_image_file($_FILES['image_file'] ?? [], $galleryUploadDir, 'images/uploads/gallery');
+            $galleryUploadDir = $uploadRoot . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'gallery';
+            $uploadedImage = upload_image_file($_FILES['image_file'] ?? [], $galleryUploadDir, 'uploads/gallery');
             if ($uploadedImage !== null) {
                 $imagePath = $uploadedImage;
             }
@@ -81,8 +81,8 @@ include __DIR__ . '/_layout_top.php';
         <div><label>Image Path</label><input class="form-control" name="image_path"
                 value="<?php echo htmlspecialchars((string) ($editing['image_path'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                 required></div>
-        <div><label>Upload Image</label><input class="form-control" type="file" name="image_file"
-                accept=".jpg,.jpeg,.png,.webp,.gif,.avif"></div>
+        <div><label>Upload Image (max 1MB, .jpg/.png/.webp only)</label><input class="form-control" type="file"
+                name="image_file" accept=".jpg,.jpeg,.png,.webp"></div>
         <div><label>Sort Order</label><input class="form-control" type="number" name="sort_order"
                 value="<?php echo (int) ($editing['sort_order'] ?? 0); ?>"></div>
         <div class="admin-checkbox-wrap"><label><input type="checkbox" name="is_active" <?php echo isset($editing) ? ((int) ($editing['is_active'] ?? 1) === 1 ? 'checked' : '') : 'checked'; ?>> Active</label></div>

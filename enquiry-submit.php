@@ -9,6 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   exit;
 }
 
+$wantsJson = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower((string) $_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+  || (isset($_SERVER['HTTP_ACCEPT']) && str_contains((string) $_SERVER['HTTP_ACCEPT'], 'application/json'))
+  || (isset($_POST['ajax']) && (string) $_POST['ajax'] === '1');
+
 $fullName = clean_text((string) ($_POST['full_name'] ?? ''));
 $email = strtolower(clean_text((string) ($_POST['email'] ?? '')));
 $phone = clean_text((string) ($_POST['phone'] ?? ''));
@@ -55,13 +59,28 @@ if ($isValid) {
     'page_url' => $returnUrl,
   ]);
 
-  set_flash('global_notice', 'Thank you for your enquiry. Our team will contact you shortly.');
+  $notice = 'Thank you for your enquiry. Our team will contact you shortly.';
+  if (!$wantsJson) {
+    set_flash('global_notice', $notice);
+  }
 } else {
-  set_flash('global_notice', 'Please fill valid enquiry details and try again.');
+  $notice = 'Please fill valid enquiry details and try again.';
+  if (!$wantsJson) {
+    set_flash('global_notice', $notice);
+  }
 }
 
 if ($returnUrl === '' || str_contains($returnUrl, '://')) {
   $returnUrl = 'index.php';
+}
+
+if ($wantsJson) {
+  header('Content-Type: application/json; charset=UTF-8');
+  echo json_encode([
+    'ok' => $isValid,
+    'message' => $notice,
+  ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+  exit;
 }
 
 header('Location: ' . $returnUrl);

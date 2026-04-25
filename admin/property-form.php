@@ -125,9 +125,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $uploadRoot = realpath(__DIR__ . '/..');
     if (is_string($uploadRoot) && $uploadRoot !== '') {
-        $propertyUploadDir = $uploadRoot . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'properties';
+        $propertyUploadDir = $uploadRoot . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'properties';
 
-        $heroUpload = upload_image_file($_FILES['hero_image_file'] ?? [], $propertyUploadDir, 'images/uploads/properties');
+        $heroUpload = upload_image_file($_FILES['hero_image_file'] ?? [], $propertyUploadDir, 'uploads/properties');
         if ($heroUpload !== null) {
             $form['hero_image'] = $heroUpload;
         }
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'error' => (int) ($_FILES['gallery_images_files']['error'][$i] ?? UPLOAD_ERR_NO_FILE),
                     'size' => (int) ($_FILES['gallery_images_files']['size'][$i] ?? 0),
                 ];
-                $galleryUpload = upload_image_file($singleFile, $propertyUploadDir, 'images/uploads/properties');
+                $galleryUpload = upload_image_file($singleFile, $propertyUploadDir, 'uploads/properties');
                 if ($galleryUpload !== null) {
                     $uploadedGalleryPaths[] = $galleryUpload;
                 }

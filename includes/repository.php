@@ -404,6 +404,17 @@ function get_contact_messages(): array
     return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 }
 
+function get_contact_message_by_id(int $id): ?array
+{
+    $conn = db();
+    $stmt = $conn->prepare('SELECT id, name, email, phone, subject, message, created_at FROM contact_messages WHERE id = ? LIMIT 1');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+
+    return $row ?: null;
+}
+
 function delete_contact_message(int $id): void
 {
     $conn = db();
@@ -599,6 +610,17 @@ function get_enquiries(): array
     $result = $conn->query('SELECT id, full_name, email, phone, subject, message, looking_to, property_group, property_type, source, page_url, created_at FROM enquiries ORDER BY created_at DESC');
 
     return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
+function get_enquiry_by_id(int $id): ?array
+{
+    $conn = db();
+    $stmt = $conn->prepare('SELECT id, full_name, email, phone, subject, message, looking_to, property_group, property_type, source, page_url, created_at FROM enquiries WHERE id = ? LIMIT 1');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+
+    return $row ?: null;
 }
 
 function delete_enquiry(int $id): void

@@ -200,17 +200,15 @@ function upload_image_file(array $file, string $directory, string $baseUrlPath):
         return null;
     }
 
-    $allowedMimeTypes = [
-        'image/jpeg' => 'jpg',
-        'image/png' => 'png',
-        'image/webp' => 'webp',
-        'image/gif' => 'gif',
-        'image/avif' => 'avif',
-    ];
+    $maxBytes = 1024 * 1024; // 1MB
+    $size = (int) ($file['size'] ?? 0);
+    if ($size <= 0 || $size > $maxBytes) {
+        return null;
+    }
 
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $mimeType = (string) $finfo->file($tmpName);
-    if (!isset($allowedMimeTypes[$mimeType])) {
+    if (!in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp'], true)) {
         return null;
     }
 
@@ -218,11 +216,42 @@ function upload_image_file(array $file, string $directory, string $baseUrlPath):
         return null;
     }
 
-    $extension = $allowedMimeTypes[$mimeType];
-    $randomName = bin2hex(random_bytes(16)) . '.' . $extension;
+    $randomName = bin2hex(random_bytes(16)) . '.webp';
     $targetPath = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $randomName;
 
-    if (!move_uploaded_file($tmpName, $targetPath)) {
+    $image = null;
+    if ($mimeType === 'image/webp') {
+        if (function_exists('imagecreatefromwebp')) {
+            $image = @imagecreatefromwebp($tmpName) ?: null;
+        }
+    } elseif ($mimeType === 'image/jpeg') {
+        $image = @imagecreatefromjpeg($tmpName) ?: null;
+    } elseif ($mimeType === 'image/png') {
+        $image = @imagecreatefrompng($tmpName) ?: null;
+        if (is_resource($image) || $image instanceof GdImage) {
+            imagealphablending($image, true);
+            imagesavealpha($image, true);
+        }
+    }
+
+    if ($image === null) {
+        return null;
+    }
+
+    $quality = 82;
+    if (!function_exists('imagewebp') || !@imagewebp($image, $targetPath, $quality)) {
+        if (is_resource($image) || $image instanceof GdImage) {
+            imagedestroy($image);
+        }
+        return null;
+    }
+
+    if (is_resource($image) || $image instanceof GdImage) {
+        imagedestroy($image);
+    }
+
+    if (filesize($targetPath) === false || (int) filesize($targetPath) > $maxBytes) {
+        @unlink($targetPath);
         return null;
     }
 
