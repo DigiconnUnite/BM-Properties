@@ -219,8 +219,8 @@ function upload_image_file(array $file, string $directory, string $baseUrlPath):
             $mimeType = (string) $imageInfo['mime'];
         }
     }
-    
-    if (!in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp'], true)) {
+
+    if (!in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp', 'image/x-webp'], true)) {
         return null;
     }
 
@@ -228,44 +228,58 @@ function upload_image_file(array $file, string $directory, string $baseUrlPath):
         return null;
     }
 
-    $randomName = bin2hex(random_bytes(16)) . '.webp';
-    $targetPath = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $randomName;
+    $extensionByMime = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+        'image/x-webp' => 'webp',
+    ];
+    $targetExtension = (string) ($extensionByMime[$mimeType] ?? 'webp');
 
-    $image = null;
-    if ($mimeType === 'image/webp') {
-        if (function_exists('imagecreatefromwebp')) {
+    $canConvertToWebp = function_exists('imagewebp')
+        && (($mimeType === 'image/jpeg' && function_exists('imagecreatefromjpeg'))
+            || ($mimeType === 'image/png' && function_exists('imagecreatefrompng'))
+            || (($mimeType === 'image/webp' || $mimeType === 'image/x-webp') && function_exists('imagecreatefromwebp')));
+
+    if ($canConvertToWebp) {
+        $webpName = bin2hex(random_bytes(16)) . '.webp';
+        $webpPath = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $webpName;
+        $image = null;
+
+        if ($mimeType === 'image/jpeg') {
+            $image = @imagecreatefromjpeg($tmpName) ?: null;
+        } elseif ($mimeType === 'image/png') {
+            $image = @imagecreatefrompng($tmpName) ?: null;
+            if ($image !== null && function_exists('imagealphablending') && function_exists('imagesavealpha')) {
+                @imagealphablending($image, true);
+                @imagesavealpha($image, true);
+            }
+        } else {
             $image = @imagecreatefromwebp($tmpName) ?: null;
         }
-    } elseif ($mimeType === 'image/jpeg') {
-        $image = @imagecreatefromjpeg($tmpName) ?: null;
-    } elseif ($mimeType === 'image/png') {
-        $image = @imagecreatefrompng($tmpName) ?: null;
-        if (is_resource($image) || $image instanceof GdImage) {
-            imagealphablending($image, true);
-            imagesavealpha($image, true);
+
+        if ($image !== null && @imagewebp($image, $webpPath, 82)) {
+            @imagedestroy($image);
+            if (filesize($webpPath) !== false && (int) filesize($webpPath) <= $maxBytes) {
+                return rtrim($baseUrlPath, '/') . '/' . $webpName;
+            }
+            @unlink($webpPath);
+        } elseif ($image !== null) {
+            @imagedestroy($image);
         }
     }
 
-    if ($image === null) {
+    // Fallback when GD/WebP conversion is unavailable: store original uploaded format.
+    $fallbackName = bin2hex(random_bytes(16)) . '.' . $targetExtension;
+    $fallbackPath = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fallbackName;
+    if (!@move_uploaded_file($tmpName, $fallbackPath)) {
         return null;
     }
 
-    $quality = 82;
-    if (!function_exists('imagewebp') || !@imagewebp($image, $targetPath, $quality)) {
-        if (is_resource($image) || $image instanceof GdImage) {
-            imagedestroy($image);
-        }
+    if (filesize($fallbackPath) === false || (int) filesize($fallbackPath) > $maxBytes) {
+        @unlink($fallbackPath);
         return null;
     }
 
-    if (is_resource($image) || $image instanceof GdImage) {
-        imagedestroy($image);
-    }
-
-    if (filesize($targetPath) === false || (int) filesize($targetPath) > $maxBytes) {
-        @unlink($targetPath);
-        return null;
-    }
-
-    return rtrim($baseUrlPath, '/') . '/' . $randomName;
+    return rtrim($baseUrlPath, '/') . '/' . $fallbackName;
 }

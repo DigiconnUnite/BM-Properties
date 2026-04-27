@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = clean_text((string) ($_POST['title'] ?? ''));
     $subtitle = clean_text((string) ($_POST['subtitle'] ?? ''));
     $rating = max(1, min(5, (int) ($_POST['rating'] ?? 5)));
-    $sortOrder = max(0, (int) ($_POST['sort_order'] ?? 0));
     $body = clean_text((string) ($_POST['message'] ?? ''));
     $isActive = isset($_POST['is_active']) ? 1 : 0;
     $imagePath = (string) ($existing['image_path'] ?? '');
@@ -52,7 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
       }
 
-      if (pathinfo($fileName, PATHINFO_EXTENSION) !== 'webp' || $mimeType !== 'image/webp') {
+      $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+      $isWebpMime = $mimeType === '' || in_array($mimeType, ['image/webp', 'image/x-webp'], true);
+      if ($extension !== 'webp' || !$isWebpMime) {
         $error = 'Please upload only WEBP images for testimonials.';
       }
 
@@ -78,12 +79,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
 
-    if ($title === '') {
-      $error = 'Title is required.';
-    } elseif ($body === '') {
-      $error = 'Message is required.';
-    } elseif ($imagePath === '') {
-      $error = 'Please upload a WEBP image.';
+    if ($error === '') {
+      if ($title === '') {
+        $error = 'Title is required.';
+      } elseif ($body === '') {
+        $error = 'Message is required.';
+      } elseif ($imagePath === '') {
+        $error = 'Please upload a WEBP image.';
+      }
     }
 
     if ($error === '') {
@@ -93,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'message' => $body,
         'image_path' => $imagePath,
         'rating' => $rating,
-        'sort_order' => $sortOrder,
+        'sort_order' => 0,
         'is_active' => $isActive,
       ], $id > 0 ? $id : null);
 
@@ -135,11 +138,6 @@ include __DIR__ . '/_layout_top.php';
       <label>Rating (1 to 5)</label>
       <input class="form-control" type="number" min="1" max="5" name="rating"
         value="<?php echo (int) ($editing['rating'] ?? 5); ?>" required>
-    </div>
-    <div>
-      <label>Sort Order</label>
-      <input class="form-control" type="number" min="0" name="sort_order"
-        value="<?php echo (int) ($editing['sort_order'] ?? 0); ?>">
     </div>
     <div class="admin-form-full">
       <label>Message</label>
@@ -186,7 +184,8 @@ include __DIR__ . '/_layout_top.php';
               <div class="admin-table-main"><?php echo htmlspecialchars((string) $item['title'], ENT_QUOTES, 'UTF-8'); ?>
               </div>
               <div class="admin-table-sub">
-                <?php echo htmlspecialchars((string) $item['subtitle'], ENT_QUOTES, 'UTF-8'); ?></div>
+                <?php echo htmlspecialchars((string) $item['subtitle'], ENT_QUOTES, 'UTF-8'); ?>
+              </div>
             </td>
             <td><?php echo (int) $item['rating']; ?>/5</td>
             <td><?php echo (int) $item['is_active'] === 1 ? 'Active' : 'Inactive'; ?></td>

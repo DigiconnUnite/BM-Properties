@@ -26,8 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         $id = (int) ($_POST['id'] ?? 0);
+        $existing = $id > 0 ? get_gallery_item_by_id($id) : null;
         $title = clean_text((string) ($_POST['title'] ?? ''));
-        $imagePath = clean_text((string) ($_POST['image_path'] ?? ''));
+        $imagePath = (string) ($existing['image_path'] ?? '');
         $isActive = isset($_POST['is_active']) ? 1 : 0;
         $uploadedBy = (string) (admin_user()['username'] ?? 'admin');
         $uploadedImage = null;
@@ -44,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($title === '') {
             $error = 'Title is required.';
         } elseif ($imagePath === '') {
-            $error = 'Please provide an image path or upload an image file.';
+            $error = 'Please upload an image file from your local system.';
         } else {
             save_gallery_item([
                 'title' => $title,
@@ -83,12 +84,9 @@ include __DIR__ . '/_layout_top.php';
         <div><label>Title</label><input class="form-control" name="title"
                 value="<?php echo htmlspecialchars((string) ($editing['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                 required></div>
-        <div><label>Image Path (optional - provide a URL or upload a file)</label><input class="form-control"
-                name="image_path"
-                value="<?php echo htmlspecialchars((string) ($editing['image_path'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
-        </div>
         <div><label>Upload Image from Local System (max 1MB, .jpg/.png/.webp only)</label><input class="form-control"
-                type="file" name="image_file" accept=".jpg,.jpeg,.png,.webp"></div>
+                type="file" name="image_file" accept=".jpg,.jpeg,.png,.webp" <?php echo $editing ? '' : 'required'; ?>>
+        </div>
         <div class="admin-checkbox-wrap"><label><input type="checkbox" name="is_active" <?php echo isset($editing) ? ((int) ($editing['is_active'] ?? 1) === 1 ? 'checked' : '') : 'checked'; ?>> Active</label></div>
         <div class="admin-form-full">
             <button class="btn btn-primary admin-btn" type="submit">Save Gallery Item</button>
@@ -127,9 +125,11 @@ include __DIR__ . '/_layout_top.php';
                         </td>
                         <td>
                             <div class="admin-table-main">
-                                <?php echo htmlspecialchars((string) $item['title'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                <?php echo htmlspecialchars((string) $item['title'], ENT_QUOTES, 'UTF-8'); ?>
+                            </div>
                             <div class="admin-table-sub">
-                                <?php echo htmlspecialchars((string) $item['image_path'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                <?php echo htmlspecialchars((string) $item['image_path'], ENT_QUOTES, 'UTF-8'); ?>
+                            </div>
                         </td>
                         <td>-</td>
                         <td><span class="admin-badge-soft">Gallery</span></td>

@@ -83,7 +83,7 @@ function is_valid_webp_upload(array $file): bool
     }
   }
 
-  if ($mimeType !== 'image/webp') {
+  if ($mimeType !== '' && !in_array($mimeType, ['image/webp', 'image/x-webp'], true)) {
     return false;
   }
 
@@ -201,16 +201,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $nearbyItems = split_non_empty_lines($form['nearby_items']);
   $mapEmbed = normalize_map_embed_input($form['map_embed']);
 
-  if ($form['name'] === '') {
-    $error = 'Property title is required.';
-  } elseif ($form['website_url'] === '') {
-    $error = 'Reference website URL is required.';
-  } elseif (count($galleryImages) === 0) {
-    $error = 'Please add at least one showcase image.';
-  } elseif (count($galleryImages) > 5) {
-    $error = 'You can use only up to 5 showcase images.';
-  } elseif ($mapEmbed === '') {
-    $error = 'Map location is required. Paste map URL or iframe code.';
+  if ($error === '') {
+    if ($form['name'] === '') {
+      $error = 'Property title is required.';
+    } elseif ($form['website_url'] === '') {
+      $error = 'Reference website URL is required.';
+    } elseif (count($galleryImages) === 0) {
+      $error = 'Please add at least one showcase image.';
+    } elseif (count($galleryImages) > 5) {
+      $error = 'You can use only up to 5 showcase images.';
+    } elseif ($mapEmbed === '') {
+      $error = 'Map location is required. Paste map URL or iframe code.';
+    }
   }
 
   if ($error === '') {
@@ -264,9 +266,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'status' => $form['status'] === 'inactive' ? 'inactive' : 'active',
       ];
 
-      $savedId = save_property($payload, $id > 0 ? $id : null);
-      header('Location: property-form.php?id=' . $savedId . '&saved=1');
-      exit;
+      try {
+        $savedId = save_property($payload, $id > 0 ? $id : null);
+        header('Location: property-form.php?id=' . $savedId . '&saved=1');
+        exit;
+      } catch (Throwable $exception) {
+        error_log('Property save failed: ' . $exception->getMessage());
+        $error = 'Unable to save property right now. Please verify database table columns and try again.';
+      }
     }
   }
 }

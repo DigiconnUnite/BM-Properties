@@ -193,7 +193,7 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
 
             <div class="enquiry-form-full">
                 <label for="enquiry-message" class="enquiry-label">Message</label>
-                <textarea id="enquiry-message" class="form-control" name="message" rows="3" minlength="10"
+                <textarea id="enquiry-message" class="form-control" name="message" rows="2" minlength="10"
                     required></textarea>
             </div>
 

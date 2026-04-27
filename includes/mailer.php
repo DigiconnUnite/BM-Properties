@@ -11,16 +11,7 @@ function mail_config(): array
     return $config;
   }
 
-  $baseConfig = require __DIR__ . '/../config/mail.php';
-  $localConfigPath = __DIR__ . '/../config/mail.local.php';
-  if (is_file($localConfigPath)) {
-    $localConfig = require $localConfigPath;
-    if (is_array($localConfig)) {
-      $baseConfig = array_merge($baseConfig, $localConfig);
-    }
-  }
-
-  $config = $baseConfig;
+  $config = require __DIR__ . '/../config/mail.php';
   return $config;
 }
 

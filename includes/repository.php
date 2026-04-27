@@ -2,6 +2,10 @@
 
 function bind_params_dynamic(mysqli_stmt $stmt, string $types, array $values): void
 {
+    if (strlen($types) !== count($values)) {
+        throw new RuntimeException('Bind parameter type count does not match values count.');
+    }
+
     $refs = [];
     foreach ($values as $key => $value) {
         $refs[$key] = &$values[$key];
@@ -187,16 +191,6 @@ function save_property(array $data, ?int $id = null): int
     ];
 
     if ($id === null) {
-        $sql = 'INSERT INTO properties (
-            category_id, name, slug, page_title, hero_image, gallery_images_json, summary,
-            description_json, location, price, price_suffix, beds, baths, sqft, overview_id,
-            nearby, nearby_items_json, details_json, features_json,
-            map_address, map_city, map_state, map_postal, map_area, map_country,
-            map_embed, website_url, website_label, whatsapp_number, card_highlights_json, is_featured, status
-        ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-        )';
-        $stmt = $conn->prepare($sql);
         $values = [
             $sqlData['category_id'],
             $sqlData['name'],
@@ -231,8 +225,22 @@ function save_property(array $data, ?int $id = null): int
             $sqlData['is_featured'],
             $sqlData['status'],
         ];
+        $placeholders = implode(', ', array_fill(0, count($values), '?'));
+        $sql = 'INSERT INTO properties (
+            category_id, name, slug, page_title, hero_image, gallery_images_json, summary,
+            description_json, location, price, price_suffix, beds, baths, sqft, overview_id,
+            nearby, nearby_items_json, details_json, features_json,
+            map_address, map_city, map_state, map_postal, map_area, map_country,
+            map_embed, website_url, website_label, whatsapp_number, card_highlights_json, is_featured, status
+        ) VALUES (' . $placeholders . ')';
+        $stmt = $conn->prepare($sql);
+        if (!$stmt instanceof mysqli_stmt) {
+            throw new RuntimeException('Failed to prepare property insert statement: ' . $conn->error);
+        }
         bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'is', $values);
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            throw new RuntimeException('Failed to save property: ' . $stmt->error);
+        }
 
         return (int) $conn->insert_id;
     }
@@ -245,6 +253,9 @@ function save_property(array $data, ?int $id = null): int
         map_embed = ?, website_url = ?, website_label = ?, whatsapp_number = ?, card_highlights_json = ?, is_featured = ?, status = ?
         WHERE id = ?';
     $stmt = $conn->prepare($sql);
+    if (!$stmt instanceof mysqli_stmt) {
+        throw new RuntimeException('Failed to prepare property update statement: ' . $conn->error);
+    }
     $values = [
         $sqlData['category_id'],
         $sqlData['name'],
@@ -281,7 +292,9 @@ function save_property(array $data, ?int $id = null): int
         $id,
     ];
     bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'isi', $values);
-    $stmt->execute();
+    if (!$stmt->execute()) {
+        throw new RuntimeException('Failed to update property: ' . $stmt->error);
+    }
 
     return $id;
 }
@@ -497,7 +510,7 @@ function get_testimonials(bool $onlyActive = true): array
     $sql = "SELECT id, title, subtitle, message, image_path, rating, sort_order, is_active, created_at
             FROM testimonials
             {$where}
-            ORDER BY sort_order ASC, id DESC";
+        ORDER BY id DESC";
     $result = $conn->query($sql);
 
     return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];

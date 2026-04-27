@@ -8,21 +8,29 @@
     return;
   }
 
-  var transfer = new DataTransfer();
+  var transfer =
+    typeof DataTransfer !== "undefined" ? new DataTransfer() : null;
 
   function existingCount() {
     return list.querySelectorAll('li[data-item-type="existing"]').length;
   }
 
   function totalCount() {
-    return existingCount() + transfer.files.length;
+    var pending = transfer ? transfer.files.length : 0;
+    return existingCount() + pending;
   }
 
   function syncFiles() {
-    filesInput.files = transfer.files;
+    if (transfer) {
+      filesInput.files = transfer.files;
+    }
   }
 
   function removePending(index) {
+    if (!transfer) {
+      return;
+    }
+
     var rebuilt = new DataTransfer();
     for (var i = 0; i < transfer.files.length; i++) {
       if (i !== index) {
@@ -35,6 +43,10 @@
   }
 
   function renderPending() {
+    if (!transfer) {
+      return;
+    }
+
     var pendingNodes = list.querySelectorAll('li[data-item-type="pending"]');
     pendingNodes.forEach(function (node) {
       node.remove();
@@ -69,6 +81,15 @@
 
     if (totalCount() >= 5) {
       window.alert("You can add only up to 5 showcase images.");
+      picker.value = "";
+      return;
+    }
+
+    if (!transfer) {
+      // Fallback for older browsers: use the native multi-file input directly.
+      filesInput.classList.remove("d-none");
+      filesInput.classList.add("form-control");
+      filesInput.focus();
       picker.value = "";
       return;
     }
