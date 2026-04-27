@@ -19,8 +19,8 @@ $activePage = $activePage ?? '';
     <div class="admin-shell">
         <aside class="admin-sidebar">
             <a class="admin-brand d-flex align-items-center gap-2" href="index.php">
-                <img class="admin-brand-logo" src="../images/logo/logo-new.png" alt="BM Properties" width="32"
-                    height="32">
+                <!-- <img class="admin-brand-logo" src="../images/logo/logo-new.png" alt="BM Properties" width="32"
+                    height="32"> -->
                 <span>BM Properties</span>
             </a>
             <nav class="admin-menu">
@@ -31,6 +31,7 @@ $activePage = $activePage ?? '';
                 <a class="<?php echo $activePage === 'properties' ? 'active' : ''; ?>"
                     href="properties.php">Properties</a>
                 <a class="<?php echo $activePage === 'gallery' ? 'active' : ''; ?>" href="gallery.php">Gallery</a>
+                <a class="<?php echo $activePage === 'cities' ? 'active' : ''; ?>" href="cities.php">Explore Cities</a>
                 <a class="<?php echo $activePage === 'testimonials' ? 'active' : ''; ?>"
                     href="testimonials.php">Testimonials</a>
                 <a class="<?php echo $activePage === 'messages' ? 'active' : ''; ?>" href="messages.php">Messages</a>
@@ -40,7 +41,7 @@ $activePage = $activePage ?? '';
             </nav>
             <div class="admin-sidebar-footer">
                 <div>&copy; 2026 All Rights Reserved</div>
-                <div>Designed by <strong>Digiconn Unite Pvt Ltd</strong></div>
+                <div>Designed by <a href="https://digiconnunite.com/" target="_blank"><strong>Digiconn Unite Pvt Ltd</strong></a></div>
             </div>
         </aside>
         <main class="admin-main">

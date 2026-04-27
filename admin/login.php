@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body class="admin-body admin-auth-body">
-    <div class="admin-auth-wrap">
-        <aside class="admin-auth-brand-panel">
+    <div class="">
+        <!-- <aside class="admin-auth-brand-panel">
             <h1>Welcome Back</h1>
             <p>Securely access the BM Properties administration panel.</p>
             <ul>
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <li>Role-specific access for admin operations</li>
                 <li>Fast control over properties, gallery, and enquiries</li>
             </ul>
-        </aside>
+        </aside> -->
         <div class="admin-auth-card">
             <h2>Admin Login</h2>
             <p class="auth-subtitle">Use your credentials to continue</p>

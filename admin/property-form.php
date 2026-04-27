@@ -127,6 +127,9 @@ $form = [
       []
     ))))
     : '',
+  'card_highlights' => isset($property['cardHighlights']) && is_array($property['cardHighlights'])
+    ? implode("\n", array_values(array_filter(array_map(static fn($value) => trim((string) $value), $property['cardHighlights']), static fn($value) => $value !== '')))
+    : '',
   'map_embed' => (string) ($property['mapEmbed'] ?? ''),
   'map_address' => (string) ($property['map']['address'] ?? ''),
   'map_city' => (string) ($property['map']['city'] ?? ''),
@@ -198,6 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $descriptionLines = split_non_empty_lines($form['description']);
   $detailRows = text_to_details($form['details']);
   $featureLines = split_non_empty_lines($form['features']);
+  $cardHighlightLines = split_non_empty_lines($form['card_highlights']);
   $nearbyItems = split_non_empty_lines($form['nearby_items']);
   $mapEmbed = normalize_map_embed_input($form['map_embed']);
 
@@ -231,6 +235,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $location = (string) $form['map_address'];
       }
 
+      if (count($cardHighlightLines) === 0) {
+        $cardHighlightLines = array_slice($featureLines, 0, 4);
+      }
+
       $payload = [
         'category_id' => (int) $form['category_id'],
         'name' => $form['name'],
@@ -261,7 +269,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'website_url' => $form['website_url'],
         'website_label' => 'Visit Website',
         'whatsapp_number' => normalize_phone($form['whatsapp_number']),
-        'card_highlights' => array_slice($featureLines, 0, 4),
+        'card_highlights' => array_slice($cardHighlightLines, 0, 6),
         'is_featured' => 1,
         'status' => $form['status'] === 'inactive' ? 'inactive' : 'active',
       ];
@@ -349,16 +357,49 @@ include __DIR__ . '/_layout_top.php';
         rows="5"><?php echo htmlspecialchars($form['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
     </div>
 
-    <div class="admin-form-full">
-      <label>Property Details (format: Label|Value, one per line)</label>
-      <textarea class="form-control" name="details" rows="5"
-        placeholder="Property Type|Residential Plot&#10;Status|For Sale"><?php echo htmlspecialchars($form['details'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+    <div class="admin-form-full admin-repeater" id="details-repeater">
+      <label>Property Details</label>
+      <div class="admin-repeater-controls">
+        <select class="form-control" id="details-label-select">
+          <option value="ID">ID</option>
+          <option value="Year built">Year built</option>
+          <option value="Type">Type</option>
+          <option value="Price">Price</option>
+          <option value="Size">Size</option>
+          <option value="Status">Status</option>
+          <option value="Facing">Facing</option>
+          <option value="Possession">Possession</option>
+          <option value="RERA No">RERA No</option>
+          <option value="Booking Amount">Booking Amount</option>
+          <option value="Plot Size">Plot Size</option>
+          <option value="__custom__">Custom...</option>
+        </select>
+        <input class="form-control" id="details-custom-label" type="text" placeholder="Custom label" style="display:none;">
+        <input class="form-control" id="details-value-input" type="text" placeholder="Enter value">
+        <button class="btn btn-outline-primary admin-btn" type="button" id="details-add-btn">Add</button>
+      </div>
+      <ul class="admin-upload-list" id="details-list"></ul>
+      <textarea class="form-control d-none" id="details-textarea" name="details" rows="5"><?php echo htmlspecialchars($form['details'], ENT_QUOTES, 'UTF-8'); ?></textarea>
     </div>
 
-    <div class="admin-form-full">
-      <label>Amenities and Features (one per line)</label>
-      <textarea class="form-control" name="features" rows="5"
-        placeholder="Club House&#10;CCTV Camera&#10;Gymnasium"><?php echo htmlspecialchars($form['features'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+    <div class="admin-form-full admin-repeater" id="features-repeater">
+      <label>Amenities and Features</label>
+      <div class="admin-repeater-controls">
+        <input class="form-control" id="features-input" type="text" placeholder="Enter amenity or feature">
+        <button class="btn btn-outline-primary admin-btn" type="button" id="features-add-btn">Add</button>
+      </div>
+      <ul class="admin-upload-list" id="features-list"></ul>
+      <textarea class="form-control d-none" id="features-textarea" name="features" rows="5"><?php echo htmlspecialchars($form['features'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+    </div>
+
+    <div class="admin-form-full admin-repeater" id="highlights-repeater">
+      <label>Featured Highlights</label>
+      <div class="admin-repeater-controls">
+        <input class="form-control" id="highlights-input" type="text" placeholder="Enter featured highlight">
+        <button class="btn btn-outline-primary admin-btn" type="button" id="highlights-add-btn">Add</button>
+      </div>
+      <ul class="admin-upload-list" id="highlights-list"></ul>
+      <textarea class="form-control d-none" id="highlights-textarea" name="card_highlights" rows="3"><?php echo htmlspecialchars($form['card_highlights'], ENT_QUOTES, 'UTF-8'); ?></textarea>
     </div>
 
     <div class="admin-form-full">
@@ -404,9 +445,14 @@ include __DIR__ . '/_layout_top.php';
         rows="2"><?php echo htmlspecialchars($form['nearby'], ENT_QUOTES, 'UTF-8'); ?></textarea>
     </div>
 
-    <div class="admin-form-full">
-      <label>Nearby Items (one item per line)</label>
-      <textarea class="form-control" name="nearby_items"
+    <div class="admin-form-full admin-repeater" id="nearby-repeater">
+      <label>Nearby Items</label>
+      <div class="admin-repeater-controls">
+        <input class="form-control" id="nearby-input" type="text" placeholder="Enter nearby item">
+        <button class="btn btn-outline-primary admin-btn" type="button" id="nearby-add-btn">Add</button>
+      </div>
+      <ul class="admin-upload-list" id="nearby-list"></ul>
+      <textarea class="form-control d-none" id="nearby-textarea" name="nearby_items"
         rows="4"><?php echo htmlspecialchars($form['nearby_items'], ENT_QUOTES, 'UTF-8'); ?></textarea>
     </div>
 

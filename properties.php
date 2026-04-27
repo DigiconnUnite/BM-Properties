@@ -34,9 +34,8 @@
 
             <?php
             $showViewAllButton = false;
-            $propertyListingShowTabs = false;
-            $propertyListingEnablePagination = true;
-            $propertyListingPerPage = 9;
+            $propertyListingShowTabs = true;
+            $propertyListingEnablePagination = false;
             include 'components/property-listing.php';
             ?>
             <section class="flat-section properties-page-section d-none">

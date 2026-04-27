@@ -48,9 +48,15 @@ include __DIR__ . '/_layout_top.php';
           </td>
           <td class="message-cell">
             <strong><?php echo htmlspecialchars((string) $enquiry['subject'], ENT_QUOTES, 'UTF-8'); ?></strong><br>
-            <?php echo nl2br(htmlspecialchars((string) $enquiry['message'], ENT_QUOTES, 'UTF-8')); ?>
+            <?php
+            $enquiryMessage = (string) $enquiry['message'];
+            $enquiryPreview = strlen($enquiryMessage) > 80 ? (substr($enquiryMessage, 0, 80) . '...') : $enquiryMessage;
+            echo nl2br(htmlspecialchars($enquiryPreview, ENT_QUOTES, 'UTF-8'));
+            ?>
           </td>
           <td>
+            <button type="button" class="btn btn-sm btn-outline-primary me-2 js-message-view"
+              data-target="enquiry-row-<?php echo (int) $enquiry['id']; ?>">View</button>
             <form method="post" class="inline-form" action="modules/enquiries/delete.php"
               onsubmit="return confirm('Delete this enquiry?');">
               <input type="hidden" name="csrf_token"
@@ -61,8 +67,27 @@ include __DIR__ . '/_layout_top.php';
             </form>
           </td>
         </tr>
+        <tr id="enquiry-row-<?php echo (int) $enquiry['id']; ?>" class="d-none">
+          <td colspan="6">
+            <div class="admin-detail">
+              <div class="admin-detail-label">Full Enquiry</div>
+              <div class="admin-detail-value">
+                <strong>Subject:</strong> <?php echo htmlspecialchars((string) $enquiry['subject'], ENT_QUOTES, 'UTF-8'); ?><br>
+                <strong>Name:</strong> <?php echo htmlspecialchars((string) $enquiry['full_name'], ENT_QUOTES, 'UTF-8'); ?><br>
+                <strong>Phone:</strong> <?php echo htmlspecialchars((string) $enquiry['phone'], ENT_QUOTES, 'UTF-8'); ?><br>
+                <strong>Email:</strong> <?php echo htmlspecialchars((string) $enquiry['email'], ENT_QUOTES, 'UTF-8'); ?><br>
+                <strong>Looking to:</strong> <?php echo htmlspecialchars(ucfirst((string) $enquiry['looking_to']), ENT_QUOTES, 'UTF-8'); ?><br>
+                <strong>Property Type:</strong> <?php echo htmlspecialchars((string) $enquiry['property_type'], ENT_QUOTES, 'UTF-8'); ?><br>
+                <strong>Property Group:</strong> <?php echo htmlspecialchars(ucfirst((string) $enquiry['property_group']), ENT_QUOTES, 'UTF-8'); ?><br>
+                <strong>Message:</strong><br>
+                <?php echo nl2br(htmlspecialchars((string) $enquiry['message'], ENT_QUOTES, 'UTF-8')); ?>
+              </div>
+            </div>
+          </td>
+        </tr>
       <?php endforeach; ?>
     </tbody>
   </table>
 </section>
+<script src="../js/admin-messages.js"></script>
 <?php include __DIR__ . '/_layout_bottom.php'; ?>

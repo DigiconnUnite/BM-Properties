@@ -234,7 +234,7 @@ $tabDefinitions = [
     ],
 ];
 
-if ($propertyListingShowTabs && !$propertyListingEnablePagination && $propertyListingLimit === 0) {
+if ($propertyListingShowTabs) {
     foreach ($categories as $category) {
         $categorySlugs = [];
         foreach ($properties as $slug => $property) {

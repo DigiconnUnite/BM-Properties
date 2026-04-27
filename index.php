@@ -15,6 +15,7 @@
 
 <body class="body">
 
+    <?php include 'components/loader.php';?>
 
     <div id="wrapper">
         <div id="pagee" class="clearfix">
@@ -239,7 +240,7 @@
             <!-- End Categories -->
             <?php
             $propertyListingLimit = 9;
-            $propertyListingShowTabs = false;
+            $propertyListingShowTabs = true;
             include 'components/property-listing.php';
             ?>
             <!-- Recommended -->
@@ -1578,6 +1579,7 @@
 
             <!-- Location -->
             <section class="px-10 home-explore-cities">
+                <?php $exploreCities = get_explore_cities(true); ?>
                 <div class="container">
                     <div class="box-title text-center wow fadeInUp">
                         <div class="text-subtitle text-primary">Explore Cities</div>
@@ -1588,70 +1590,46 @@
                             data-mobile="1" data-space-lg="12" data-space-md="12" data-space="10" data-pagination="1"
                             data-pagination-sm="2" data-pagination-md="2" data-pagination-lg="4">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="box-location">
-                                        <a class="image img-style">
-                                            <img class="lazyload" data-src="images/locations/fatehabad-road.jpg"
-                                                src="images/locations/fatehabad-road.jpg" alt="image-location">
-                                        </a>
-                                        <div class="content">
-                                            <div class="inner-left">
-                                                <span class="sub-title fw-6">20 Properties</span>
-                                                <h6 class="title text-line-clamp-1 link">Fatehabad Road</h6>
+                                <?php if (count($exploreCities) > 0): ?>
+                                    <?php foreach ($exploreCities as $cityItem): ?>
+                                        <?php
+                                        $cityImage = trim((string) ($cityItem['image_path'] ?? ''));
+                                        if ($cityImage === '') {
+                                            $cityImage = 'images/locations/fatehabad-road.jpg';
+                                        }
+                                        $cityImageSrc = resolve_asset_path($cityImage, '');
+                                        ?>
+                                        <div class="swiper-slide">
+                                            <div class="box-location">
+                                                <a class="image img-style">
+                                                    <img class="lazyload" data-src="<?php echo htmlspecialchars($cityImageSrc, ENT_QUOTES, 'UTF-8'); ?>"
+                                                        src="<?php echo htmlspecialchars($cityImageSrc, ENT_QUOTES, 'UTF-8'); ?>" alt="image-location">
+                                                </a>
+                                                <div class="content">
+                                                    <div class="inner-left">
+                                                        <span class="sub-title fw-6"><?php echo (int) ($cityItem['property_count'] ?? 0); ?> Properties</span>
+                                                        <h6 class="title text-line-clamp-1 link"><?php echo htmlspecialchars((string) ($cityItem['city_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></h6>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
-                                                class="icon icon-arrow-right2"></i></a> -->
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="swiper-slide">
+                                        <div class="box-location">
+                                            <a class="image img-style">
+                                                <img class="lazyload" data-src="images/locations/fatehabad-road.jpg"
+                                                    src="images/locations/fatehabad-road.jpg" alt="image-location">
+                                            </a>
+                                            <div class="content">
+                                                <div class="inner-left">
+                                                    <span class="sub-title fw-6">20 Properties</span>
+                                                    <h6 class="title text-line-clamp-1 link">Fatehabad Road</h6>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="box-location">
-                                        <a class="image img-style">
-                                            <img class="lazyload" data-src="images/locations/corporate-park.png"
-                                                src="images/locations/corporate-park.png" alt="image-location">
-                                        </a>
-                                        <div class="content">
-                                            <div class="inner-left">
-                                                <span class="sub-title fw-6">15 Properties</span>
-                                                <h6 class="title text-line-clamp-1 link">Sanjay Palace</h6>
-                                            </div>
-                                            <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
-                                                class="icon icon-arrow-right2"></i></a> -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="box-location">
-                                        <a class="image img-style">
-                                            <img class="lazyload" data-src="images/locations/firozabad.png"
-                                                src="images/locations/firozabad.png" alt="image-location">
-                                        </a>
-                                        <div class="content">
-                                            <div class="inner-left">
-                                                <span class="sub-title fw-6">10 Properties</span>
-                                                <h6 class="title text-line-clamp-1 link">Firozabad</h6>
-                                            </div>
-                                            <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
-                                                class="icon icon-arrow-right2"></i></a> -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="box-location">
-                                        <a class="image img-style">
-                                            <img class="lazyload" data-src="images/locations/runakta.png"
-                                                src="images/locations/runakta.png" alt="image-location">
-                                        </a>
-                                        <div class="content">
-                                            <div class="inner-left">
-                                                <span class="sub-title fw-6">12 Properties</span>
-                                                <h6 class="title text-line-clamp-1 link">Runakta</h6>
-                                            </div>
-                                            <!-- <a href="topmap-grid.html" class="box-icon line w-44 round"><i
-                                                class="icon icon-arrow-right2"></i></a> -->
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php endif; ?>
 
                             </div>
                             <div class="sw-pagination sw-pagination-location text-center"></div>

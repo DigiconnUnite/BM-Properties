@@ -15,6 +15,25 @@ function bind_params_dynamic(mysqli_stmt $stmt, string $types, array $values): v
     call_user_func_array([$stmt, 'bind_param'], $refs);
 }
 
+function resolve_asset_path(string $path, string $basePath = ''): string
+{
+    $path = trim($path);
+    if ($path === '') {
+        return '';
+    }
+
+    if (preg_match('/^(https?:)?\/\//i', $path) === 1 || str_starts_with($path, 'data:') || str_starts_with($path, '/')) {
+        return $path;
+    }
+
+    $basePath = trim($basePath);
+    if ($basePath !== '') {
+        return rtrim($basePath, '/') . '/' . ltrim($path, '/');
+    }
+
+    return ltrim($path, '/');
+}
+
 function get_categories(bool $onlyActive = true): array
 {
     $conn = db();
@@ -501,6 +520,62 @@ function get_property_count(): int
 function get_gallery_count(): int
 {
     return get_gallery_total_count(true);
+}
+
+function get_explore_cities(bool $onlyActive = true): array
+{
+    $conn = db();
+    $where = $onlyActive ? 'WHERE is_active = 1' : '';
+    $sql = "SELECT id, city_name, image_path, property_count, sort_order, is_active, created_at, updated_at
+            FROM explore_cities
+            {$where}
+            ORDER BY sort_order ASC, id DESC";
+    $result = $conn->query($sql);
+
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
+function get_explore_city_by_id(int $id): ?array
+{
+    $conn = db();
+    $stmt = $conn->prepare('SELECT id, city_name, image_path, property_count, sort_order, is_active, created_at, updated_at FROM explore_cities WHERE id = ? LIMIT 1');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+
+    return $row ?: null;
+}
+
+function save_explore_city(array $data, ?int $id = null): int
+{
+    $conn = db();
+    $cityName = (string) ($data['city_name'] ?? '');
+    $imagePath = (string) ($data['image_path'] ?? '');
+    $propertyCount = max(0, (int) ($data['property_count'] ?? 0));
+    $sortOrder = max(0, (int) ($data['sort_order'] ?? 0));
+    $isActive = !empty($data['is_active']) ? 1 : 0;
+
+    if ($id === null) {
+        $stmt = $conn->prepare('INSERT INTO explore_cities (city_name, image_path, property_count, sort_order, is_active) VALUES (?, ?, ?, ?, ?)');
+        $stmt->bind_param('ssiii', $cityName, $imagePath, $propertyCount, $sortOrder, $isActive);
+        $stmt->execute();
+
+        return (int) $conn->insert_id;
+    }
+
+    $stmt = $conn->prepare('UPDATE explore_cities SET city_name = ?, image_path = ?, property_count = ?, sort_order = ?, is_active = ? WHERE id = ?');
+    $stmt->bind_param('ssiiii', $cityName, $imagePath, $propertyCount, $sortOrder, $isActive, $id);
+    $stmt->execute();
+
+    return $id;
+}
+
+function delete_explore_city(int $id): void
+{
+    $conn = db();
+    $stmt = $conn->prepare('DELETE FROM explore_cities WHERE id = ?');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
 }
 
 function get_testimonials(bool $onlyActive = true): array

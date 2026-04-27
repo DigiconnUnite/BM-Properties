@@ -282,6 +282,42 @@ body.admin-body {
   gap: 10px;
 }
 
+.admin-repeater-controls {
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) minmax(150px, 1fr) minmax(220px, 1.4fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.admin-repeater-controls .admin-btn {
+  white-space: nowrap;
+  width: auto;
+  justify-self: start;
+  padding: 6px 14px;
+  font-size: 14px;
+}
+
+.admin-city-preview {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.admin-city-preview span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #51617e;
+}
+
+.admin-city-preview img {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #d8e0ed;
+  background: #f6f8fc;
+}
+
 .admin-image-uploader .form-control {
   flex: 1 1 auto;
 }
@@ -452,6 +488,10 @@ body.admin-body {
   }
 
   .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-repeater-controls {
     grid-template-columns: 1fr;
   }
 }

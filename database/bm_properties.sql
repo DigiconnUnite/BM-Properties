@@ -72,6 +72,18 @@ CREATE TABLE IF NOT EXISTS testimonials (
     INDEX idx_testimonials_active_sort (is_active, sort_order)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS explore_cities (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    city_name VARCHAR(140) NOT NULL,
+    image_path VARCHAR(255) NOT NULL,
+    property_count INT UNSIGNED NOT NULL DEFAULT 0,
+    sort_order INT NOT NULL DEFAULT 0,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_explore_cities_active_sort (is_active, sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS site_settings (
     id TINYINT UNSIGNED PRIMARY KEY,
     office_address TEXT NOT NULL,

@@ -1314,7 +1314,7 @@ label {
 .main-header .logo-box .logo img {
   display: inline-block;
   /* max-width: 100%; */
-  width: 8rem;
+  width: 6rem;
   -webkit-transition: all 300ms ease;
   -ms-transition: all 300ms ease;
   -o-transition: all 300ms ease;
@@ -1852,7 +1852,7 @@ label {
   padding: 12px 20px;
 }
 .mobile-menu .nav-logo img {
-  max-width: 200px;
+  max-width: 80px;
 }
 .mobile-menu .bottom-canvas {
   padding: 30px 20px 100px;
@@ -2385,7 +2385,7 @@ label {
   background-position: center;
 }
 .footer-logo img{
-  width: 8rem;
+  width: 7rem;
 }
 .footer .top-footer {
   padding: 25px 0px;
@@ -4931,8 +4931,8 @@ label {
 }
 
 .spinner {
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   border: 3px solid transparent;
   border-top: 3px solid #1563df;
   border-radius: 100%;
@@ -4945,7 +4945,7 @@ label {
   animation: spin 1s infinite linear;
 }
 .preload-logo img{
-  width: 120px;
+  width: 100px;
   /* height: 50px; */
 }
 
@@ -11464,6 +11464,12 @@ tr {
   }
 }
 @media only screen and (max-width: 700px) {
+  .main-header .logo-box .logo img{
+    width: 5.5rem;
+  }
+  .footer-logo img {
+    width: 6rem;
+  }
   .single-property-info .inner-box .label {
     width: 40%;
   }
@@ -12219,7 +12225,7 @@ tr {
 
 .enquiry-form-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 

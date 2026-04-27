@@ -29,7 +29,7 @@ $globalWhatsappLink = $globalWhatsappNumber !== '' ? ('https://wa.me/' . $global
                     <div class="footer-cl-1">
                         <div class="footer-logo mb-16"><a
                                 href="<?php echo htmlspecialchars($siteBasePath, ENT_QUOTES, 'UTF-8'); ?>index.php"><img
-                                    src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-footer-new.png"
+                                    src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-footer-new2.png"
                                     alt="logo" width="166" height="48"></a></div>
                         <p class="text-variant-2">BM Real Estate is committed to helping you find the right property
                             with ease and confidence. We specialize in offering trusted real estate solutions, including

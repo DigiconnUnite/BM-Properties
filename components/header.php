@@ -22,7 +22,7 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
                             <div class="logo-box flex">
                                 <div class="logo"><a
                                         href="<?php echo htmlspecialchars($siteBasePath, ENT_QUOTES, 'UTF-8'); ?>index.php"><img
-                                            src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new.png"
+                                            src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new2.png"
                                             alt="logo" width="166" height="48"></a></div>
                             </div>
                             <div class="nav-outer flex align-center">
@@ -95,7 +95,7 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
             <nav class="menu-box">
                 <div class="nav-logo"><a
                         href="<?php echo htmlspecialchars($siteBasePath, ENT_QUOTES, 'UTF-8'); ?>index.php"><img
-                            src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new.png"
+                            src="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new2.png"
                             alt="nav-logo" width="174" height="44"></a></div>
                 <div class="bottom-canvas">
                     <!-- <div class="login-box flex align-center">
