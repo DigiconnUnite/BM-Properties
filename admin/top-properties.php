@@ -176,5 +176,92 @@ include __DIR__ . '/_layout_top.php';
         </table>
     </div>
 </section>
-<script src="../js/admin-property-images.js"></script>
+<script>
+// Custom implementation for top highlights repeater to ensure it works
+document.addEventListener('DOMContentLoaded', function() {
+    const listNode = document.getElementById('top-highlights-list');
+    const addNode = document.getElementById('top-highlights-add-btn');
+    const storeNode = document.getElementById('top-highlights-textarea');
+    const textInput = document.getElementById('top-highlights-input');
+    
+    if (!listNode || !addNode || !storeNode || !textInput) {
+        console.error('Top highlights elements not found');
+        return;
+    }
+    
+    let items = [];
+    
+    // Load existing items from textarea
+    function hydrateFromStore() {
+        const lines = storeNode.value.split('\n').map(line => line.trim()).filter(line => line !== '');
+        items = lines.slice(0, 3); // Max 3 items
+    }
+    
+    // Save items to textarea
+    function syncStore() {
+        storeNode.value = items.join('\n');
+    }
+    
+    // Render items in the list
+    function render() {
+        listNode.innerHTML = '';
+        
+        items.forEach(function(item, index) {
+            const li = document.createElement('li');
+            li.className = 'admin-upload-item';
+            
+            const span = document.createElement('span');
+            span.textContent = item;
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'btn btn-sm btn-outline-danger';
+            removeBtn.textContent = 'Remove';
+            removeBtn.onclick = function() {
+                items.splice(index, 1);
+                render();
+            };
+            
+            li.appendChild(span);
+            li.appendChild(removeBtn);
+            listNode.appendChild(li);
+        });
+        
+        syncStore();
+    }
+    
+    // Add new item
+    function addItem() {
+        const value = textInput.value.trim();
+        if (value === '') {
+            return;
+        }
+        
+        if (items.length >= 3) {
+            alert('You can add only up to 3 highlights.');
+            textInput.value = '';
+            return;
+        }
+        
+        items.push(value);
+        textInput.value = '';
+        render();
+    }
+    
+    // Initialize
+    hydrateFromStore();
+    render();
+    
+    // Event listeners
+    addNode.addEventListener('click', addItem);
+    
+    // Allow Enter key to add item
+    textInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addItem();
+        }
+    });
+});
+</script>
 <?php include __DIR__ . '/_layout_bottom.php'; ?>

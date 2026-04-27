@@ -23,8 +23,8 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
 
     <!-- Favicon and Touch Icons  -->
-    <link rel="shortcut icon" href="images/logo/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="images/logo/favicon.png">
+    <link rel="shortcut icon" href="images/logo/logo-new2.webp">
+    <link rel="apple-touch-icon-precomposed" href="images/logo/logo-new2.webp">
 
 </head>
 

@@ -122,7 +122,7 @@ if (!function_exists('render_property_card')) {
         }
 
         $detailPage = $property['detailPage'] ?? ('property-details/' . $property['slug'] . '.php');
-        $image = $property['heroImage'] ?? 'images/banner/banner-property-1.jpg';
+        $image = $property['heroImage'] ?? 'images/banner/banner-property-1.webp';
         $name = $property['name'] ?? 'Property';
         $summary = $property['summary'] ?? '';
         $whatsappNumber = normalize_phone((string) ($property['whatsappNumber'] ?? ''));

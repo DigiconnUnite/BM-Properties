@@ -490,7 +490,7 @@ function get_site_settings(): array
         'facebook_url' => '#',
         'instagram_url' => '#',
         'youtube_url' => '#',
-        'page_title_bg' => 'images/banner/banner2.jpg',
+        'page_title_bg' => 'images/banner/banner2.webp',
         'trusted_partners_heading' => 'Trusted by over 20+ major companies',
     ];
 }

@@ -19,8 +19,8 @@ $propertyName = $property['name'] ?? 'Property';
 $propertySlug = $property['slug'] ?? '';
 $pageTitle = $property['pageTitle'] ?? ($propertyName . ' - BM Real Estate');
 $category = $property['category'] ?? 'Property';
-$heroImage = $property['heroImage'] ?? 'images/banner/banner-property-1.jpg';
-$galleryImages = $property['galleryImages'] ?? [$heroImage, 'images/banner/banner-property-2.jpg', 'images/banner/banner-property-3.jpg', $heroImage];
+$heroImage = $property['heroImage'] ?? 'images/banner/banner-property-1.webp';
+$galleryImages = $property['galleryImages'] ?? [$heroImage, 'images/banner/banner-property-2.webp', 'images/banner/banner-property-3.webp', $heroImage];
 $galleryImages = array_values(array_filter(array_map(static fn($image) => trim((string) $image), is_array($galleryImages) ? $galleryImages : []), static fn($image) => $image !== ''));
 if (empty($galleryImages)) {
     $galleryImages = [$heroImage];

@@ -22,7 +22,7 @@
         <div id="pagee" class="clearfix">
             <?php include 'components/header.php';?>
             <!-- Page Title -->
-            <section class="flat-title-page" style="background-image: url(images/page-title/page-title-1.jpg);">
+            <section class="flat-title-page" style="background-image: url(images/page-title/page-title-1.webp);">
                 <div class="container">
                     <div class="breadcrumb-content">
                         <ul class="breadcrumb">
@@ -43,7 +43,7 @@
                         <div class="col-lg-4 col-md-6">
                             <a href="blog-detail.html" class="flat-blog-item hover-img">
                                 <div class="img-style">
-                                    <img class="lazyload" data-src="images/blog/blog-1.jpg" src="images/blog/blog-1.jpg"
+                                    <img class="lazyload" data-src="images/blog/blog-1.webp" src="images/blog/blog-1.webp"
                                         alt="img-blog">
                                     <span class="date-post">January 28, 2024</span>
                                 </div>
@@ -63,7 +63,7 @@
                         <div class="col-lg-4 col-md-6">
                             <a href="blog-detail.html" class="flat-blog-item hover-img">
                                 <div class="img-style">
-                                    <img class="lazyload" data-src="images/blog/blog-2.jpg" src="images/blog/blog-2.jpg"
+                                    <img class="lazyload" data-src="images/blog/blog-2.webp" src="images/blog/blog-2.webp"
                                         alt="img-blog">
                                     <span class="date-post">January 31, 2024</span>
                                 </div>
@@ -83,7 +83,7 @@
                         <div class="col-lg-4 col-md-6">
                             <a href="blog-detail.html" class="flat-blog-item hover-img">
                                 <div class="img-style">
-                                    <img class="lazyload" data-src="images/blog/blog-3.jpg" src="images/blog/blog-3.jpg"
+                                    <img class="lazyload" data-src="images/blog/blog-3.webp" src="images/blog/blog-3.webp"
                                         alt="img-blog">
                                     <span class="date-post">January 28, 2024</span>
                                 </div>
@@ -102,7 +102,7 @@
                         <div class="col-lg-4 col-md-6">
                             <a href="blog-detail.html" class="flat-blog-item hover-img">
                                 <div class="img-style">
-                                    <img class="lazyload" data-src="images/blog/blog-4.jpg" src="images/blog/blog-4.jpg"
+                                    <img class="lazyload" data-src="images/blog/blog-4.webp" src="images/blog/blog-4.webp"
                                         alt="img-blog">
                                     <span class="date-post">February 01, 2024</span>
                                 </div>
@@ -121,7 +121,7 @@
                         <div class="col-lg-4 col-md-6">
                             <a href="blog-detail.html" class="flat-blog-item hover-img">
                                 <div class="img-style">
-                                    <img class="lazyload" data-src="images/blog/blog-1.jpg" src="images/blog/blog-5.jpg"
+                                    <img class="lazyload" data-src="images/blog/blog-1.webp" src="images/blog/blog-5.webp"
                                         alt="img-blog">
                                     <span class="date-post">February 06, 2024</span>
                                 </div>
@@ -141,7 +141,7 @@
                         <div class="col-lg-4 col-md-6">
                             <a href="blog-detail.html" class="flat-blog-item hover-img">
                                 <div class="img-style">
-                                    <img class="lazyload" data-src="images/blog/blog-6.jpg" src="images/blog/blog-6.jpg"
+                                    <img class="lazyload" data-src="images/blog/blog-6.webp" src="images/blog/blog-6.webp"
                                         alt="img-blog">
                                     <span class="date-post">February 09, 2024</span>
                                 </div>
@@ -160,7 +160,7 @@
                         <div class="col-lg-4 col-md-6">
                             <a href="blog-detail.html" class="flat-blog-item hover-img">
                                 <div class="img-style">
-                                    <img class="lazyload" data-src="images/blog/blog-7.jpg" src="images/blog/blog-7.jpg"
+                                    <img class="lazyload" data-src="images/blog/blog-7.webp" src="images/blog/blog-7.webp"
                                         alt="img-blog">
                                     <span class="date-post">February 16, 2024</span>
                                 </div>
@@ -180,7 +180,7 @@
                         <div class="col-lg-4 col-md-6">
                             <a href="blog-detail.html" class="flat-blog-item hover-img">
                                 <div class="img-style">
-                                    <img class="lazyload" data-src="images/blog/blog-8.jpg" src="images/blog/blog-8.jpg"
+                                    <img class="lazyload" data-src="images/blog/blog-8.webp" src="images/blog/blog-8.webp"
                                         alt="img-blog">
                                     <span class="date-post">February 18, 2024</span>
                                 </div>
@@ -199,7 +199,7 @@
                         <div class="col-lg-4 col-md-6">
                             <a href="blog-detail.html" class="flat-blog-item hover-img">
                                 <div class="img-style">
-                                    <img class="lazyload" data-src="images/blog/blog-9.jpg" src="images/blog/blog-9.jpg"
+                                    <img class="lazyload" data-src="images/blog/blog-9.webp" src="images/blog/blog-9.webp"
                                         alt="img-blog">
                                     <span class="date-post">February 22, 2024</span>
                                 </div>

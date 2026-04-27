@@ -161,34 +161,34 @@ body {
   background-color: #ffffff;
 }
 .page-title-gallery {
-  background-image: url("../images/breadcrumb/gallery.jpg");
+  background-image: url("../images/breadcrumb/gallery.webp");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 .page-title-properties {
-  background-image: url("../images/breadcrumb/properties.jpg");
+  background-image: url("../images/breadcrumb/properties.webp");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .page-title-contact {
-  background-image: url("../images/breadcrumb/contact.jpg");
+  background-image: url("../images/breadcrumb/contact.webp");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .page-title-terms {
-  background-image: url("../images/banner/banner2.jpg");
+  background-image: url("../images/banner/banner2.webp");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .page-title-privacy {
-  background-image: url("../images/banner/banner2.jpg");
+  background-image: url("../images/banner/banner2.webp");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -2407,7 +2407,7 @@ label {
 ------------------------------------------ */
 .footer {
   /* background-color: #161e2d; */
-  background-image: linear-gradient(to bottom, rgba(12, 23, 36, 0.92), rgba(11, 23, 37, 0.85)), url(../images/slider/sli-3.jpg);
+  background-image: linear-gradient(to bottom, rgba(12, 23, 36, 0.92), rgba(11, 23, 37, 0.85)), url(../images/slider/sli-3.webp);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -2852,7 +2852,7 @@ label {
   z-index: 123;
 }
 .flat-slider.home-1 {
-  background-image: url(../images/slider/slider-1.jpg);
+  background-image: url(../images/slider/slider-1.webp);
 }
 .flat-slider.home-1 .slider-content {
   position: relative;
@@ -2929,7 +2929,7 @@ label {
   object-fit: cover;
 }
 .flat-slider.home-3 {
-  background-image: url(../images/slider/slider-3.jpg);
+  background-image: url(../images/slider/slider-3.webp);
   padding: 168px 0px;
 }
 .flat-slider.home-3 .slider-content {
@@ -5311,7 +5311,7 @@ label {
 }
 
 .page-title-default-bg {
-  background-image: url("../images/banner/banner2.jpg");
+  background-image: url("../images/banner/banner2.webp");
 }
 
 .progress-path-style {
@@ -5823,7 +5823,7 @@ label {
 }
 
 .homelengo-box .archive-bottom .content-bottom .text-line-clamp-2 {
-  min-height: calc(22.4px * 2);
+  /* min-height: calc(22.4px * 2); */
 }
 .homelengo-box:hover:not(.list-style-1, .list-style-2) .images-style img {
   transform: scale(1.05);
@@ -7303,7 +7303,7 @@ label {
   justify-content: space-between;
   align-items: center;
   border-radius: 20px;
-  background-image: linear-gradient( rgba(11, 23, 37, 0.35)), url(../images/home2/banner.jpg);
+  background-image: linear-gradient( rgba(11, 23, 37, 0.35)), url(../images/home2/banner.webp);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -8709,7 +8709,7 @@ label {
   background-repeat: no-repeat;
   background-size: cover;
   z-index: 123;
-  background-image: url(../images/slider/slider-contact.jpg);
+  background-image: url(../images/slider/slider-contact.webp);
   background-attachment: fixed;
 }
 .flat-slider-contact .overlay {
@@ -12184,7 +12184,7 @@ tr {
 
 .flat-recommended{
   
-  /* background: rgba(0, 0, 0, 0.5) url(../images/background.jpg); */
+  /* background: rgba(0, 0, 0, 0.5) url(../images/background.webp); */
 
 }
 

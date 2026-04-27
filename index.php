@@ -29,23 +29,23 @@
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
                                 <div class="box-img">
-                                    <img src="images/slider/sli-1.jpg" alt="images">
+                                    <img src="images/slider/sli-1.webp" alt="images" fetchpriority="high">
                                 </div>
                             </div>
                             <div class="swiper-slide">
                                 <div class="box-img">
-                                    <img src="images/slider/sli-2.jpg" alt="images">
+                                    <img src="images/slider/sli-2.webp" alt="images" fetchpriority="high">
                                 </div>
                             </div>
                             <div class="swiper-slide">
                                 <div class="box-img">
-                                    <img src="images/slider/sli-3.jpg" alt="images">
+                                    <img src="images/slider/sli-3.webp" alt="images" fetchpriority="high">
                                 </div>
                             </div>
 
                             <div class="swiper-slide">
                                 <div class="box-img">
-                                    <img src="images/slider/sli-4.jpg" alt="images">
+                                    <img src="images/slider/sli-4.webp" alt="images" fetchpriority="high">
                                 </div>
                             </div>
 
@@ -90,22 +90,22 @@
                                         <div class="swiper-wrapper">
                                             <div class="swiper-slide">
                                                 <div class="image-detail">
-                                                    <img src="images/slider/sli-1.jpg" alt="images">
+                                                    <img src="images/slider/sli-1.webp" alt="images">
                                                 </div>
                                             </div>
                                             <div class="swiper-slide">
                                                 <div class="image-detail">
-                                                    <img src="images/slider/sli-2.jpg" alt="images">
+                                                    <img src="images/slider/sli-2.webp" alt="images">
                                                 </div>
                                             </div>
                                             <div class="swiper-slide">
                                                 <div class="image-detail">
-                                                    <img src="images/slider/sli-3.jpg" alt="images">
+                                                    <img src="images/slider/sli-3.webp" alt="images">
                                                 </div>
                                             </div>
                                             <div class="swiper-slide">
                                                 <div class="image-detail">
-                                                    <img src="images/slider/sli-4.jpg" alt="images">
+                                                    <img src="images/slider/sli-4.webp" alt="images">
                                                 </div>
                                             </div>
 
@@ -280,8 +280,8 @@
                                                 <a href="property-details.php" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/grand-green-valley.jpg"
-                                                            src="images/featured-properties/grand-green-valley.jpg"
+                                                            data-src="images/featured-properties/grand-green-valley.webp"
+                                                            src="images/featured-properties/grand-green-valley.webp"
                                                             alt="img">
                                                     </div>
                                                     <div class="top">
@@ -356,8 +356,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/vrindavan-global.jpg"
-                                                            src="images/featured-properties/vrindavan-global.jpg"
+                                                            data-src="images/featured-properties/vrindavan-global.webp"
+                                                            src="images/featured-properties/vrindavan-global.webp"
                                                             alt="img">
                                                     </div>
                                                     <div class="top">
@@ -431,8 +431,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/green-valley-empire.jpg"
-                                                            src="images/featured-properties/green-valley-empire.jpg"
+                                                            data-src="images/featured-properties/green-valley-empire.webp"
+                                                            src="images/featured-properties/green-valley-empire.webp"
                                                             alt="img">
                                                     </div>
                                                     <div class="top">
@@ -505,8 +505,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/upsic.jpg"
-                                                            src="images/featured-properties/upsic.jpg" alt="img">
+                                                            data-src="images/featured-properties/upsic.webp"
+                                                            src="images/featured-properties/upsic.webp" alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -578,8 +578,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/landmark-city.jpg"
-                                                            src="images/featured-properties/landmark-city.jpg"
+                                                            data-src="images/featured-properties/landmark-city.webp"
+                                                            src="images/featured-properties/landmark-city.webp"
                                                             alt="img">
                                                     </div>
                                                     <div class="top">
@@ -653,8 +653,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/dream-avenue.jpg"
-                                                            src="images/featured-properties/dream-avenue.jpg" alt="img">
+                                                            data-src="images/featured-properties/dream-avenue.webp"
+                                                            src="images/featured-properties/dream-avenue.webp" alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -874,8 +874,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/dream-avenue.jpg"
-                                                            src="images/featured-properties/dream-avenue.jpg" alt="img">
+                                                            data-src="images/featured-properties/dream-avenue.webp"
+                                                            src="images/featured-properties/dream-avenue.webp" alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -955,8 +955,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/grand-green-valley.jpg"
-                                                            src="images/featured-properties/grand-green-valley.jpg"
+                                                            data-src="images/featured-properties/grand-green-valley.webp"
+                                                            src="images/featured-properties/grand-green-valley.webp"
                                                             alt="img">
                                                     </div>
                                                     <div class="top">
@@ -1031,8 +1031,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/green-valley-empire.jpg"
-                                                            src="images/featured-properties/green-valley-empire.jpg"
+                                                            data-src="images/featured-properties/green-valley-empire.webp"
+                                                            src="images/featured-properties/green-valley-empire.webp"
                                                             alt="img">
                                                     </div>
                                                     <div class="top">
@@ -1105,8 +1105,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/dream-avenue.jpg"
-                                                            src="images/featured-properties/dream-avenue.jpg" alt="img">
+                                                            data-src="images/featured-properties/dream-avenue.webp"
+                                                            src="images/featured-properties/dream-avenue.webp" alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -1188,8 +1188,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/grand-green-valley.jpg"
-                                                            src="images/featured-properties/grand-green-valley.jpg"
+                                                            data-src="images/featured-properties/grand-green-valley.webp"
+                                                            src="images/featured-properties/grand-green-valley.webp"
                                                             alt="img">
                                                     </div>
                                                     <div class="top">
@@ -1274,8 +1274,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/dream-avenue.jpg"
-                                                            src="images/featured-properties/dream-avenue.jpg" alt="img">
+                                                            data-src="images/featured-properties/dream-avenue.webp"
+                                                            src="images/featured-properties/dream-avenue.webp" alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -1420,8 +1420,8 @@
                                                 <a href="property-details-v1.html" class="images-group">
                                                     <div class="images-style">
                                                         <img class="lazyload"
-                                                            data-src="images/featured-properties/dream-avenue.jpg"
-                                                            src="images/featured-properties/dream-avenue.jpg" alt="img">
+                                                            data-src="images/featured-properties/dream-avenue.webp"
+                                                            src="images/featured-properties/dream-avenue.webp" alt="img">
                                                     </div>
                                                     <div class="top">
                                                         <ul class="d-flex gap-6">
@@ -1502,81 +1502,6 @@
             </section>
             <!-- End Recommended -->
 
-
-            <!-- Location -->
-            <!-- <section class="flat-section flat-location-v2">
-                <div class="container">
-                    <div class="box-title text-center wow fadeInUp">
-                        <div class="text-subtitle text-primary">Explore Cities</div>
-                        <h3 class="title mt-4">Our Location For You</h3>
-                    </div>
-                    <div class="grid-location wow fadeInUp" data-wow-delay=".2s">
-                        <a class="item-1 box-location-v2 hover-img">
-                            <div class="box-img img-style">
-                                <img class="lazyload" data-src="images/locations/fatehabad-road.jpg"
-                                    src="images/locations/fatehabad-road.jpg" alt="image-location">
-                            </div>
-                            <div class="content">
-                                <h6 class="link">Fatehabad Road</h6>
-                                <p class="mt-4 text-variant-1">20 Property</p>
-                            </div>
-
-                        </a>
-                        <a class="item-2 box-location-v2 hover-img">
-                            <div class="box-img img-style">
-                                <img class="lazyload" data-src="images/locations/corporate-park.png"
-                                    src="images/locations/corporate-park.png" alt="image-location">
-                            </div>
-                            <div class="content">
-                                <h6 class="link">Sanjay Palace</h6>
-                                <p class="mt-4 text-variant-1">10 Property</p>
-                            </div>
-                        </a>
-                        <a class="item-3 box-location-v2 hover-img">
-                            <div class="box-img img-style">
-                                <img class="lazyload" data-src="images/locations/firozabad.png"
-                                    src="images/locations/firozabad.png" alt="image-location">
-                            </div>
-                            <div class="content">
-                                <h6 class="link">Firozabad</h6>
-                                <p class="mt-4 text-variant-1">12 Property</p>
-                            </div>
-                        </a>
-                        <a class="item-4 box-location-v2 hover-img">
-                            <div class="box-img img-style">
-                                <img class="lazyload" data-src="images/locations/runakta.png"
-                                    src="images/locations/runakta.png" alt="image-location">
-                            </div>
-                            <div class="content">
-                                <h6 class="link">Runakta</h6>
-                                <p class="mt-4 text-variant-1">15 Property</p>
-                            </div>
-                        </a>
-                        <a href="topmap-grid.html" class="item-5 box-location-v2 hover-img">
-                            <div class="box-img img-style">
-                                <img class="lazyload" data-src="images/locations/agra.jpg"
-                                    src="images/locations/agra.jpg" alt="image-location">
-                            </div>
-                            <div class="content">
-                                <h6 class="link">Agra</h6>
-                                <p class="mt-4 text-variant-1">30 Property</p>
-                            </div>
-                        </a>
-                        <a href="topmap-grid.html" class="item-6 box-location-v2 hover-img">
-                            <div class="box-img img-style">
-                                <img class="lazyload" data-src="images/locations/mathura.jpg"
-                                    src="images/locations/mathura.jpg" alt="image-location">
-                            </div>
-                            <div class="content">
-                                <h6 class="link">Mathura</h6>
-                                <p class="mt-4 text-variant-1">14 Property</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </section> -->
-            <!-- End Location -->
-
             <!-- Location -->
             <section class="px-10 home-explore-cities">
                 <?php $exploreCities = get_explore_cities(true); ?>
@@ -1595,7 +1520,7 @@
                                         <?php
                                         $cityImage = trim((string) ($cityItem['image_path'] ?? ''));
                                         if ($cityImage === '') {
-                                            $cityImage = 'images/locations/fatehabad-road.jpg';
+                                            $cityImage = 'images/locations/fatehabad-road.webp';
                                         }
                                         $cityImageSrc = resolve_asset_path($cityImage, '');
                                         ?>
@@ -1618,8 +1543,8 @@
                                     <div class="swiper-slide">
                                         <div class="box-location">
                                             <a class="image img-style">
-                                                <img class="lazyload" data-src="images/locations/fatehabad-road.jpg"
-                                                    src="images/locations/fatehabad-road.jpg" alt="image-location">
+                                                <img class="lazyload" data-src="images/locations/fatehabad-road.webp"
+                                                    src="images/locations/fatehabad-road.webp" alt="image-location">
                                             </a>
                                             <div class="content">
                                                 <div class="inner-left">
@@ -1638,90 +1563,6 @@
                 </div>
             </section>
             <!-- End Location -->
-            <!-- Property  -->
-            <!-- <section class="flat-section">
-                <div class="container">
-                    <div class="flat-img-with-text style-3 bg-primary-new">
-                        <div class="content-left img-animation wow">
-                            <img class="lazyload" data-src="images/banner/img-w-text6.jpg"
-                                src="images/banner/img-w-text6.jpg" alt="">
-                        </div>
-                        <div class="content-right">
-                            <div class="box-title wow fadeInUp">
-                                <div class="text-subtitle text-primary">Top Properties</div>
-                                <h3 class="title mt-4">Recommended For You</h3>
-                            </div>
-                            <div class="flat-property-box wow fadeInUp" data-wow-delay=".2s">
-                                <div class="archive-top">
-                                    <ul class="d-flex gap-6">
-                                        <li class="flag-tag primary">Featured</li>
-                                        <li class="flag-tag style-1">For Sale</li>
-                                    </ul>
-                                    <h4 class="title"><a href="property-details-v1.html" class="link">Rancho Vista
-                                            Verde, Santa Barbara</a></h4>
-                                    <ul class="meta-list">
-                                        <li class="item">
-                                            <i class="icon icon-bed"></i>
-                                            <span class="text-variant-1">Beds:</span>
-                                            <span class="fw-6">3</span>
-                                        </li>
-                                        <li class="item">
-                                            <i class="icon icon-bath"></i>
-                                            <span class="text-variant-1">Baths:</span>
-                                            <span class="fw-6">2</span>
-                                        </li>
-                                        <li class="item">
-                                            <i class="icon icon-sqft"></i>
-                                            <span class="text-variant-1">Sqft:</span>
-                                            <span class="fw-6">1150</span>
-                                        </li>
-                                    </ul>
-                                    <div class="meta-location d-flex gap-4 align-items-center mt-16">
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
-                                                stroke="#A3ABB0" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path
-                                                d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
-                                                stroke="#A3ABB0" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                        <p class="text-variant-1">145 Brooklyn Ave, Califonia, New York</p>
-                                    </div>
-                                    <div class="box-avt">
-                                        <div class="avatar avt-60">
-                                            <img src="images/avatar/avt-png2.png" alt="avt">
-                                        </div>
-                                        <div class="content">
-                                            <p class="caption-1 ">Agent</p>
-                                            <h6>Cameron Williamson</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="archive-bottom">
-                                    <div>
-                                        <h4 class="d-inline-block">$250,00</h4>
-                                        <span class="body-2 text-variant-1">/month</span>
-                                    </div>
-                                    <div class="g-icon">
-                                        <div class="item-icon">
-                                            <span class="icon icon-heart"></span>
-                                        </div>
-                                        <div class="item-icon">
-                                            <span class="icon icon-arrLeftRight"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section> -->
-            <!-- End Property  -->
-
             <?php include 'components/top-properties-section.php'; ?>
             <?php if (false): ?>
             <!-- Property  -->
@@ -1739,8 +1580,8 @@
                                     <div class="archive-top">
                                         <a class="images-group">
                                             <div class="images-style">
-                                                <img class="lazyload" data-src="images/top-properties/dream-avenues.jpg"
-                                                    src="images/top-properties/dream-avenues.jpg" alt="img-property">
+                                                <img class="lazyload" data-src="images/top-properties/dream-avenues.webp"
+                                                    src="images/top-properties/dream-avenues.webp" alt="img-property">
                                             </div>
                                             <div class="top">
                                                 <ul class="d-flex gap-6 flex-wrap">
@@ -1812,8 +1653,8 @@
                                     <div class="archive-top">
                                         <a class="images-group">
                                             <div class="images-style">
-                                                <img class="lazyload" data-src="images/top-properties/green-valley.jpg"
-                                                    src="images/top-properties/green-valley.jpg" alt="img-property">
+                                                <img class="lazyload" data-src="images/top-properties/green-valley.webp"
+                                                    src="images/top-properties/green-valley.webp" alt="img-property">
                                             </div>
                                             <div class="top">
                                                 <ul class="d-flex gap-6 flex-wrap">
@@ -1887,8 +1728,8 @@
                                         <a class="images-group">
                                             <div class="images-style">
                                                 <img class="lazyload"
-                                                    data-src="images/top-properties/vrindavan-global.jpg"
-                                                    src="images/top-properties/vrindavan-global.jpg" alt="img-property">
+                                                    data-src="images/top-properties/vrindavan-global.webp"
+                                                    src="images/top-properties/vrindavan-global.webp" alt="img-property">
                                             </div>
                                             <div class="top">
                                                 <ul class="d-flex gap-6 flex-wrap">
@@ -1961,8 +1802,8 @@
                                     <div class="archive-top">
                                         <a class="images-group">
                                             <div class="images-style">
-                                                <img class="lazyload" data-src="images/top-properties/grand-valley.jpg"
-                                                    src="images/top-properties/grand-valley.jpg" alt="img-property">
+                                                <img class="lazyload" data-src="images/top-properties/grand-valley.webp"
+                                                    src="images/top-properties/grand-valley.webp" alt="img-property">
                                             </div>
                                             <div class="top">
                                                 <ul class="d-flex gap-6 flex-wrap">
@@ -2054,7 +1895,7 @@
                             <?php foreach ($testimonials as $item): ?>
                                 <?php
                                 $stars = max(1, min(5, (int) ($item['rating'] ?? 5)));
-                                $imagePath = (string) ($item['image_path'] ?? 'images/testimonial/testi-1.jpg');
+                                $imagePath = (string) ($item['image_path'] ?? 'images/testimonial/testi-1.webp');
                                 ?>
                                 <div class="swiper-slide">
                                     <div class="box-tes-item style-2">
@@ -2181,98 +2022,18 @@
             <!-- End partner -->
             <?php endif; ?>
             <!-- Benefit -->
-            <!-- <section class="mx-5 bg-primary-new radius-30">
-                <div class="flat-img-with-text">
-                    <div class="content-left img-animation wow">
-                        <img class="lazyload" data-src="images/banner/img-w-text5.jpg"
-                            src="images/banner/img-w-text5.jpg" alt="">
-                    </div>
-                    <div class="content-right">
-                        <div class="box-title wow fadeInUp">
-                            <div class="text-subtitle text-primary">Our Benifit</div>
-                            <h3 class="title mt-4">Why Choose HomeLengo</h3>
-                            <p class="desc text-variant-1">Our seasoned team excels in real estate with years of
-                                successful market navigation, offering informed decisions and optimal results.</p>
-                        </div>
-                        <div class="flat-service wow fadeInUp" data-wow-delay=".2s">
-                            <a href="#" class="box-benefit hover-btn-view">
-                                <div class="icon-box">
-                                    <span class="icon icon-proven"></span>
-                                </div>
-                                <div class="content">
-                                    <h5 class="title">Proven Expertise</h5>
-                                    <p class="description">Our seasoned team excels in real estate with years of
-                                        successful market navigation, offering informed decisions and optimal results.
-                                    </p>
-                                </div>
-                            </a>
-                            <a href="#" class="box-benefit hover-btn-view">
-                                <div class="icon-box">
-                                    <span class="icon icon-customize"></span>
-                                </div>
-                                <div class="content">
-                                    <h5 class="title">Customized Solutions</h5>
-                                    <p class="description">We pride ourselves on crafting personalized strategies to
-                                        match your unique goals, ensuring a seamless real estate journey.</p>
-                                </div>
-                            </a>
-                            <a href="#" class="box-benefit hover-btn-view">
-                                <div class="icon-box">
-                                    <span class="icon icon-partnership"></span>
-                                </div>
-                                <div class="content">
-                                    <h5 class="title">Transparent Partnerships</h5>
-                                    <p class="description">Transparency is key in our client relationships. We
-                                        prioritize clear communication and ethical practices, fostering trust and
-                                        reliability throughout.</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section> -->
-            <!-- End Benefit -->
-
             <!-- img with text -->
             <section class="flat-section bg-primary-new">
                 <div class="container3">
                     <div class="flat-img-with-text-v2">
                         <div class="content-left tf-image-box">
                             <div class="grid-img-group">
-                                <!-- <div class="tf-image-wrap item-1">
-                                    <div class="img-style hover-img-wrap">
-                                        <img class="lazyload" data-src="images/banner/img-w-text-sm1.jpg"
-                                            src="images/banner/img-w-text-sm1.jpg" alt="">
-                                    </div>
-                                    <div class="tag-item ani5">
-                                        <i class="icon icon-check-circle"></i>
-                                        <span>Proven Expertise</span>
-                                    </div>
-                                </div> -->
                                 <div class="tf-image-wrap item-2">
                                     <div class="img-style hover-img-wrap">
-                                        <img class="lazyload" data-src="images/home2/why-choose4.jpg"
-                                            src="images/home2/why-choose4.jpg" alt="">
+                                        <img class="lazyload" data-src="images/home2/why-choose4.webp"
+                                            src="images/home2/why-choose4.webp" alt="">
                                     </div>
-                                    <!-- <div class="tag-item tag-item-1 ani4">
-                                        <i class="icon icon-check-circle"></i>
-                                        <span>Customized Solutions</span>
-                                    </div> -->
-                                    <!-- <div class="tag-item tag-item-2 ani5">
-                                        <i class="icon icon-check-circle"></i>
-                                        <span>Transparent Partnerships</span>
-                                    </div> -->
                                 </div>
-                                <!-- <div class="tf-image-wrap item-3">
-                                    <div class="img-style hover-img-wrap">
-                                        <img class="lazyload" data-src="images/banner/img-w-text-sm2.jpg"
-                                            src="images/banner/img-w-text-sm2.jpg" alt="">
-                                    </div>
-                                    <div class="tag-item ani4">
-                                        <i class="icon icon-check-circle"></i>
-                                        <span>Local Area Knowledge</span>
-                                    </div>
-                                </div> -->
                             </div>
                         </div>
                         <div class="content-right">
@@ -2455,21 +2216,21 @@
                         <?php if (count($topGalleryItems) === 0): ?>
                             <!-- Fallback to static images if no gallery items exist -->
                             <div class="swiper-slide">
-                                <a href="images/gallery/dream-avenues.jpg" data-fancybox="gallery"
+                                <a href="images/gallery/dream-avenues.webp" data-fancybox="gallery"
                                     class="box-img-detail d-block">
-                                    <img src="images/gallery/dream-avenues.jpg" alt="img-property">
+                                    <img src="images/gallery/dream-avenues.webp" alt="img-property">
                                 </a>
                             </div>
                             <div class="swiper-slide">
-                                <a href="images/gallery/landmark-city.jpg" data-fancybox="gallery"
+                                <a href="images/gallery/landmark-city.webp" data-fancybox="gallery"
                                     class="box-img-detail d-block">
-                                    <img src="images/gallery/landmark-city.jpg" alt="img-property">
+                                    <img src="images/gallery/landmark-city.webp" alt="img-property">
                                 </a>
                             </div>
                             <div class="swiper-slide">
-                                <a href="images/gallery/the-grand-valley.jpg" data-fancybox="gallery"
+                                <a href="images/gallery/the-grand-valley.webp" data-fancybox="gallery"
                                     class="box-img-detail d-block">
-                                    <img src="images/gallery/the-grand-valley.jpg" alt="img-property">
+                                    <img src="images/gallery/the-grand-valley.webp" alt="img-property">
                                 </a>
                             </div>
                         <?php endif; ?>

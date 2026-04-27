@@ -152,6 +152,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ? array_values(array_filter(array_map(static fn($value) => clean_text((string) $value), $_POST['existing_gallery_images']), static fn($value) => $value !== ''))
     : [];
   $uploadedGallery = [];
+  
+  // Handle hero image upload
+  $heroImagePath = (string) ($property['hero_image'] ?? '');
+  $removeHeroImage = isset($_POST['remove_hero_image']) ? (bool) $_POST['remove_hero_image'] : false;
+  
+  if ($removeHeroImage) {
+    if ($heroImagePath !== '') {
+      delete_uploaded_file($heroImagePath);
+    }
+    $heroImagePath = '';
+  }
+  
+  if (isset($_FILES['hero_image']) && $_FILES['hero_image']['error'] === UPLOAD_ERR_OK) {
+    $heroImageFile = $_FILES['hero_image'];
+    if ($heroImageFile['size'] > (1024 * 1024)) {
+      $error = 'Hero image must be 1MB or less.';
+    } elseif (!is_valid_webp_upload($heroImageFile)) {
+      $error = 'Hero image must be a valid WEBP file.';
+    } else {
+      $uploadRoot = realpath(__DIR__ . '/..');
+      $propertyUploadDir = is_string($uploadRoot) && $uploadRoot !== ''
+        ? $uploadRoot . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'properties'
+        : '';
+      
+      if ($propertyUploadDir === '') {
+        $error = 'Unable to locate upload directory.';
+      } else {
+        $uploadError = null;
+        $savedHeroPath = upload_image_file($heroImageFile, $propertyUploadDir, 'uploads/properties', $uploadError);
+        if ($savedHeroPath !== null) {
+          // Delete old hero image if exists
+          if ($heroImagePath !== '') {
+            delete_uploaded_file($heroImagePath);
+          }
+          $heroImagePath = $savedHeroPath;
+        } else {
+          $error = $uploadError ?? 'Unable to upload hero image.';
+        }
+      }
+    }
+  }
 
   if (isset($_FILES['showcase_images']) && is_array($_FILES['showcase_images']['name'] ?? null)) {
     $fileCount = min(5, count((array) $_FILES['showcase_images']['name']));
@@ -251,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'name' => $form['name'],
         'slug' => $slug,
         'page_title' => $form['name'] . ' - BM Real Estate',
-        'hero_image' => (string) ($galleryImages[0] ?? ''),
+        'hero_image' => $heroImagePath,
         'gallery_images' => $galleryImages,
         'summary' => $summary,
         'description' => $descriptionLines,
@@ -339,6 +380,20 @@ include __DIR__ . '/_layout_top.php';
       <input class="form-control" name="website_url"
         value="<?php echo htmlspecialchars($form['website_url'], ENT_QUOTES, 'UTF-8'); ?>"
         placeholder="https://example.com" required>
+    </div>
+
+    <div class="admin-form-full">
+      <label>Hero Image for Card Display (WEBP only, max 1MB)</label>
+      <input class="form-control" type="file" name="hero_image" accept=".webp,image/webp">
+      <?php if (isset($property['hero_image']) && $property['hero_image'] !== ''): ?>
+        <div class="mt-2">
+          <img src="../<?php echo htmlspecialchars($property['hero_image'], ENT_QUOTES, 'UTF-8'); ?>" alt="Current hero image" style="max-width: 200px; height: auto;">
+          <div class="form-check mt-2">
+            <input class="form-check-input" type="checkbox" name="remove_hero_image" id="remove_hero_image" value="1">
+            <label class="form-check-label" for="remove_hero_image">Remove current hero image</label>
+          </div>
+        </div>
+      <?php endif; ?>
     </div>
 
     <div class="admin-form-full">

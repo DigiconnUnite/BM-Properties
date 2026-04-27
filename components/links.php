@@ -13,5 +13,5 @@ $assetBasePath = isset($assetBasePath) ? rtrim($assetBasePath, '/') . '/' : '';
     <link rel="stylesheet" type="text/css" href="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>css/styles.css" />
 
     <!-- Favicon and Touch Icons  -->
-    <link rel="shortcut icon" href="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new.png">
-    <link rel="apple-touch-icon-precomposed" href="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new.png">
+    <link rel="shortcut icon" href="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new2.webp">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo htmlspecialchars($assetBasePath, ENT_QUOTES, 'UTF-8'); ?>images/logo/logo-new2.webp">

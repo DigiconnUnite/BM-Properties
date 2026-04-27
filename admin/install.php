@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
                     $facebookUrl = '#';
                     $instagramUrl = '#';
                     $youtubeUrl = '#';
-                    $pageTitleBg = 'images/banner/banner2.jpg';
+                    $pageTitleBg = 'images/banner/banner2.webp';
                     $settingsStmt->bind_param('ssssssss', $officeAddress, $phone, $email, $openTime, $facebookUrl, $instagramUrl, $youtubeUrl, $pageTitleBg);
                     $settingsStmt->execute();
 
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
                         $name = (string) ($property['name'] ?? '');
                         $slug = (string) ($property['slug'] ?? normalize_slug($name));
                         $pageTitle = (string) ($property['pageTitle'] ?? ($name . ' - BM Real Estate'));
-                        $heroImage = (string) ($property['heroImage'] ?? 'images/banner/banner-property-1.jpg');
+                        $heroImage = (string) ($property['heroImage'] ?? 'images/banner/banner-property-1.webp');
                         $galleryJson = to_json($property['galleryImages'] ?? []);
                         $summary = (string) ($property['summary'] ?? '');
                         $descriptionJson = to_json($property['description'] ?? []);
@@ -189,12 +189,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
 
                     $galleryStmt = $server->prepare('INSERT INTO gallery_items (title, image_path, sort_order, uploaded_by, is_active) VALUES (?, ?, ?, ?, 1)');
                     $galleryDefaults = [
-                        ['Dream Avenues', 'images/gallery/dream-avenues.jpg', 1],
-                        ['Landmark City', 'images/gallery/landmark-city.jpg', 2],
-                        ['The Grand Valley', 'images/gallery/the-grand-valley.jpg', 3],
-                        ['UPSIC', 'images/gallery/upsic.jpg', 4],
-                        ['Vrindavan Global', 'images/gallery/vrindavan-global.jpg', 5],
-                        ['Corporate Park', 'images/gallery/corporate-park.png', 6],
+                        ['Dream Avenues', 'images/gallery/dream-avenues.webp', 1],
+                        ['Landmark City', 'images/gallery/landmark-city.webp', 2],
+                        ['The Grand Valley', 'images/gallery/the-grand-valley.webp', 3],
+                        ['UPSIC', 'images/gallery/upsic.webp', 4],
+                        ['Vrindavan Global', 'images/gallery/vrindavan-global.webp', 5],
+                        ['Corporate Park', 'images/gallery/corporate-park.webp', 6],
                     ];
                     foreach ($galleryDefaults as $item) {
                         $uploadedBy = 'admin';
@@ -204,9 +204,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
 
                     $testimonialStmt = $server->prepare('INSERT INTO testimonials (title, subtitle, message, image_path, rating, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, 1)');
                     $testimonialDefaults = [
-                        ['Rahul Sharma', 'Home Buyer', 'BM Properties made my home-buying experience smooth and stress-free. They guided me at every step and helped me find a property that perfectly fits my needs and budget.', 'images/testimonial/testi-1.jpg', 5, 1],
-                        ['Amit Singh', 'Investor', 'I was looking for a good investment option, and BM Properties suggested promising projects. Their knowledge of locations and future growth is impressive.', 'images/testimonial/testi-2.jpg', 5, 2],
-                        ['Neha Gupta', 'Rental Client', 'Finding a rental property was never this easy. BM Properties provided multiple options and handled everything quickly and efficiently.', 'images/testimonial/testi-4.png', 5, 3],
+                        ['Rahul Sharma', 'Home Buyer', 'BM Properties made my home-buying experience smooth and stress-free. They guided me at every step and helped me find a property that perfectly fits my needs and budget.', 'images/testimonial/testi-1.webp', 5, 1],
+                        ['Amit Singh', 'Investor', 'I was looking for a good investment option, and BM Properties suggested promising projects. Their knowledge of locations and future growth is impressive.', 'images/testimonial/testi-2.webp', 5, 2],
+                        ['Neha Gupta', 'Rental Client', 'Finding a rental property was never this easy. BM Properties provided multiple options and handled everything quickly and efficiently.', 'images/testimonial/testi-4.webp', 5, 3],
                     ];
                     foreach ($testimonialDefaults as $item) {
                         $testimonialStmt->bind_param('ssssii', $item[0], $item[1], $item[2], $item[3], $item[4], $item[5]);

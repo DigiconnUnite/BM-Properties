@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'facebook_url' => clean_text((string) ($_POST['facebook_url'] ?? '#')),
         'instagram_url' => clean_text((string) ($_POST['instagram_url'] ?? '#')),
         'youtube_url' => clean_text((string) ($_POST['youtube_url'] ?? '#')),
-        'page_title_bg' => (string) ($settings['page_title_bg'] ?? 'images/banner/banner2.jpg'),
+        'page_title_bg' => (string) ($settings['page_title_bg'] ?? 'images/banner/banner2.webp'),
       ]);
       $settings = get_site_settings();
       $message = 'Contact settings updated successfully.';

@@ -19,8 +19,6 @@ $activePage = $activePage ?? '';
     <div class="admin-shell">
         <aside class="admin-sidebar">
             <a class="admin-brand d-flex align-items-center gap-2" href="index.php">
-                <!-- <img class="admin-brand-logo" src="../images/logo/logo-new.png" alt="BM Properties" width="32"
-                    height="32"> -->
                 <span>BM Properties</span>
             </a>
             <nav class="admin-menu">

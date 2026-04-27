@@ -53,8 +53,8 @@
                                     <a href="property-details.php" class="images-group">
                                         <div class="images-style">
                                             <img class="lazyload"
-                                                data-src="images/featured-properties/grand-green-valley.jpg"
-                                                src="images/featured-properties/grand-green-valley.jpg"
+                                                data-src="images/featured-properties/grand-green-valley.webp"
+                                                src="images/featured-properties/grand-green-valley.webp"
                                                 alt="Grand Green Valley">
                                         </div>
                                         <div class="top">
@@ -94,8 +94,8 @@
                                 <div class="archive-top">
                                     <a href="property-details.php" class="images-group">
                                         <div class="images-style">
-                                            <img class="lazyload" data-src="images/featured-properties/upsic.jpg"
-                                                src="images/featured-properties/upsic.jpg" alt="UPSIC Govt Project">
+                                            <img class="lazyload" data-src="images/featured-properties/upsic.webp"
+                                                src="images/featured-properties/upsic.webp" alt="UPSIC Govt Project">
                                         </div>
                                         <div class="top">
                                             <ul class="d-flex gap-6">
@@ -135,8 +135,8 @@
                                     <a href="property-details.php" class="images-group">
                                         <div class="images-style">
                                             <img class="lazyload"
-                                                data-src="images/featured-properties/green-valley-empire.jpg"
-                                                src="images/featured-properties/green-valley-empire.jpg"
+                                                data-src="images/featured-properties/green-valley-empirewebp"
+                                                src="images/featured-properties/green-valley-empire.webp"
                                                 alt="Green Valley Empire">
                                         </div>
                                         <div class="top">
@@ -176,8 +176,8 @@
                                 <div class="archive-top">
                                     <a href="property-details.php" class="images-group">
                                         <div class="images-style">
-                                            <img class="lazyload" data-src="images/featured-properties/dream-avenue.jpg"
-                                                src="images/featured-properties/dream-avenue.jpg" alt="Dream Avenue">
+                                            <img class="lazyload" data-src="images/featured-properties/dream-avenue.webp"
+                                                src="images/featured-properties/dream-avenue.webp" alt="Dream Avenue">
                                         </div>
                                         <div class="top">
                                             <ul class="d-flex gap-6">
@@ -217,8 +217,8 @@
                                     <a href="property-details.php" class="images-group">
                                         <div class="images-style">
                                             <img class="lazyload"
-                                                data-src="images/featured-properties/landmark-city.jpg"
-                                                src="images/featured-properties/landmark-city.jpg" alt="Landmark City">
+                                                data-src="images/featured-properties/landmark-city.webp"
+                                                src="images/featured-properties/landmark-city.webp" alt="Landmark City">
                                         </div>
                                         <div class="top">
                                             <ul class="d-flex gap-6">
@@ -258,8 +258,8 @@
                                     <a href="property-details.php" class="images-group">
                                         <div class="images-style">
                                             <img class="lazyload"
-                                                data-src="images/featured-properties/vrindavan-global.jpg"
-                                                src="images/featured-properties/vrindavan-global.jpg"
+                                                data-src="images/featured-properties/vrindavan-global.webp"
+                                                src="images/featured-properties/vrindavan-global.webp"
                                                 alt="Vrindavan Global">
                                         </div>
                                         <div class="top">

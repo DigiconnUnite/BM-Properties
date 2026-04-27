@@ -135,7 +135,7 @@
       });
   }
 
-  function initTextRepeater(config) {
+  window.initTextRepeater = function initTextRepeater(config) {
     var listNode = document.getElementById(config.listId);
     var addNode = document.getElementById(config.addButtonId);
     var storeNode = document.getElementById(config.storeId);

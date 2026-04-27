@@ -23,8 +23,8 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
 
     <!-- Favicon and Touch Icons  -->
-    <link rel="shortcut icon" href="images/logo/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="images/logo/favicon.png">
+    <link rel="shortcut icon" href="images/logo/logo-new2.webp">
+    <link rel="apple-touch-icon-precomposed" href="images/logo/logo-new2.webp">
 
 </head>
 
@@ -55,7 +55,7 @@
                             <div class="inner-header">
                                 <div class="inner-header-left">
                                     <div class="logo-box flex">
-                                        <div class="logo"><a href="index-2.html"><img src="images/logo/logo%402x.png"
+                                        <div class="logo"><a href="index-2.html"><img src="images/logo/logo%402x.webp"
                                                     alt="logo" width="166" height="48"></a></div>
                                     </div>
                                     <div class="nav-outer flex align-center">
@@ -174,7 +174,7 @@
                 <div class="mobile-menu">
                     <div class="menu-backdrop"></div>
                     <nav class="menu-box">
-                        <div class="nav-logo"><a href="index-2.html"><img src="images/logo/logo%402x.png" alt="nav-logo"
+                        <div class="nav-logo"><a href="index-2.html"><img src="images/logo/logo%402x.webp" alt="nav-logo"
                                     width="174" height="44"></a></div>
                         <div class="bottom-canvas">
                             <div class="login-box flex align-center">
@@ -204,7 +204,7 @@
             <!-- End Main Header -->
 
             <!-- Page Title -->
-            <section class="flat-title-page" style="background-image: url(images/page-title/page-title-3.jpg);">
+            <section class="flat-title-page" style="background-image: url(images/page-title/page-title-3.webp);">
                 <div class="container">
                     <div class="breadcrumb-content">
                         <ul class="breadcrumb">
@@ -489,7 +489,7 @@
                 <div class="top-footer">
                     <div class="container">
                         <div class="content-footer-top">
-                            <div class="footer-logo"><a href="index-2.html"><img src="images/logo/logo-footer%402x.png"
+                            <div class="footer-logo"><a href="index-2.html"><img src="images/logo/logo-footer%402x.webp"
                                         alt="logo" width="166" height="48"></a></div>
                             <div class="wd-social">
                                 <span>Follow Us:</span>
@@ -687,7 +687,7 @@
             <div class="modal-content">
                 <div class="flat-account">
                     <div class="banner-account">
-                        <img src="images/banner/banner-account1.jpg" alt="banner">
+                        <img src="images/banner/banner-account1.webp" alt="banner">
                     </div>
                     <form class="form-account">
                         <div class="title-box">
@@ -730,11 +730,11 @@
                         <p class="box text-center caption-2">or login with</p>
                         <div class="group-btn">
                             <a href="#" class="btn-social">
-                                <img src="images/logo/google.jpg" alt="img">
+                                <img src="images/logo/google.webp" alt="img">
                                 Google
                             </a>
                             <a href="#" class="btn-social">
-                                <img src="images/logo/fb.jpg" alt="img">
+                                <img src="images/logo/fb.webp" alt="img">
                                 Facebook
                             </a>
 
@@ -752,7 +752,7 @@
             <div class="modal-content">
                 <div class="flat-account">
                     <div class="banner-account">
-                        <img src="images/banner/banner-account2.jpg" alt="banner">
+                        <img src="images/banner/banner-account2.webp" alt="banner">
                     </div>
                     <form class="form-account">
                         <div class="title-box">
@@ -819,11 +819,11 @@
                         <p class="box text-center caption-2">or login with</p>
                         <div class="group-btn">
                             <a href="#" class="btn-social">
-                                <img src="images/logo/google.jpg" alt="img">
+                                <img src="images/logo/google.webp" alt="img">
                                 Google
                             </a>
                             <a href="#" class="btn-social">
-                                <img src="images/logo/fb.jpg" alt="img">
+                                <img src="images/logo/fb.webp" alt="img">
                                 Facebook
                             </a>
 

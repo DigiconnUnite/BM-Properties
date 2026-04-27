@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS site_settings (
     facebook_url VARCHAR(255) NOT NULL DEFAULT '#',
     instagram_url VARCHAR(255) NOT NULL DEFAULT '#',
     youtube_url VARCHAR(255) NOT NULL DEFAULT '#',
-    page_title_bg VARCHAR(255) NOT NULL DEFAULT 'images/banner/banner2.jpg',
+    page_title_bg VARCHAR(255) NOT NULL DEFAULT 'images/banner/banner2.webp',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

@@ -13,7 +13,7 @@ $topProperties = get_top_properties(true, 4);
                 <?php foreach ($topProperties as $index => $property): ?>
                     <?php
                     $imagePath = (string) ($property['image_path'] ?? '');
-                    $imagePath = $imagePath !== '' ? $imagePath : 'images/top-properties/dream-avenues.jpg';
+                    $imagePath = $imagePath !== '' ? $imagePath : 'images/top-properties/dream-avenues.webp';
                     $detailUrl = trim((string) ($property['detail_url'] ?? ''));
                     $detailUrl = $detailUrl !== '' ? $detailUrl : '#';
                     $title = (string) ($property['title'] ?? '');

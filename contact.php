@@ -334,26 +334,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </section>
             <!-- /faq -->
-            <!-- banner -->
-            <!-- <section class="flat-section pt-0 flat-banner wow fadeInUpSmall" data-wow-delay=".2s"
-                data-wow-duration="2000ms">
-                <div class="container">
-                    <div class="wrap-banner bg-primary-new">
-                        <div class="box-left">
-                            <div class="box-title">
-                                <div class="text-subtitle text-primary">Become Partners</div>
-                                <h3 class="mt-4 fw-8">List your Properties on Homelengo, join Us Now!</h3>
-                            </div>
-                            <a href="contact.html" class="tf-btn btn-view primary size-1 hover-btn-view">Become A
-                                Hosting <span class="icon icon-arrow-right2"></span></a>
-                        </div>
-                        <div class="box-right">
-                            <img src="images/banner/banner.png" alt="image">
-                        </div>
-                    </div>
-                </div>
-            </section> -->
-            <!-- end banner -->
 
             <?php include 'components/footer.php'; ?>
 
