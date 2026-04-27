@@ -3,6 +3,9 @@
 if (!function_exists('property_asset_url')) {
     function property_asset_url(string $basePath, string $path): string
     {
+        if (preg_match('/^(https?:)?\/\//i', $path) === 1 || str_starts_with($path, 'data:')) {
+            return $path;
+        }
         return rtrim($basePath, '/') . '/' . ltrim($path, '/');
     }
 }
@@ -78,6 +81,14 @@ $map = $property['map'] ?? [
     'country' => 'India',
 ];
 $mapEmbed = $property['mapEmbed'] ?? 'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d135905.11693909427!2d-73.95165795400088!3d41.17584829642291!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sNew%20York!5e0!3m2!1sen!2s!4v1727094281524!5m2!1sen!2s';
+$mapEmbed = trim((string) $mapEmbed);
+if ($mapEmbed !== '' && stripos($mapEmbed, '<iframe') !== false) {
+    if (preg_match('/src=["\']([^"\']+)["\']/i', $mapEmbed, $matches) === 1 && isset($matches[1])) {
+        $mapEmbed = trim((string) $matches[1]);
+    } else {
+        $mapEmbed = '';
+    }
+}
 if (trim($mapEmbed) === '') {
     $mapQuery = trim(implode(', ', array_filter([$map['address'] ?? '', $map['city'] ?? '', $map['state'] ?? '', $map['country'] ?? ''])));
     if ($mapQuery === '') {

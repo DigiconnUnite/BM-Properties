@@ -19,6 +19,7 @@
     <div id="wrapper">
         <div id="pagee" class="clearfix">
             <?php include 'components/header.php'; ?>
+            <?php $testimonials = get_testimonials(true); ?>
 
             <!-- Slider -->
             <section class="flat-slider home-5">
@@ -236,7 +237,11 @@
                 </div>
             </section>
             <!-- End Categories -->
-            <?php include 'components/property-listing.php'; ?>
+            <?php
+            $propertyListingLimit = 9;
+            $propertyListingShowTabs = false;
+            include 'components/property-listing.php';
+            ?>
             <!-- Recommended -->
             <section class="flat-section flat-recommended d-none">
                 <div class="container">
@@ -2065,110 +2070,52 @@
                         data-mobile="1" data-space="15" data-space-md="30" data-space-lg="30" data-centered="false"
                         data-loop="true" data-autoplay="true" data-delay="3000">
                         <div class="swiper-wrapper wow fadeInUp" data-wow-delay=".2s">
-                            <div class="swiper-slide">
-                                <div class="box-tes-item style-2">
-                                    <span class="icon icon-quote"></span>
-                                    <p class="note body-2">
-                                        "BM Properties made my home-buying experience smooth and stress-free. They
-                                        guided me at every step and helped me find a property that perfectly fits my
-                                        needs and budget."
-                                    </p>
-                                    <div class="box-avt d-flex align-items-center gap-12">
-                                        <div class="avatar avt-60 round">
-                                            <img src="images/testimonial/testi-1.jpg" alt="avatar">
-                                        </div>
-                                        <div class="info">
-                                            <h6>Rahul Sharma</h6>
-                                            <p class="caption-2 text-variant-1 mt-4">Home Buyer</p>
-                                            <ul class="list-star">
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="box-tes-item style-2">
-                                    <span class="icon icon-quote"></span>
-                                    <p class="note body-2">
-                                        "I was looking for a good investment option, and BM Properties suggested some
-                                        really promising projects. Their knowledge of locations and future growth is
-                                        impressive. Iâ€™m very satisfied with my decision."
-                                    </p>
-                                    <div class="box-avt d-flex align-items-center gap-12">
-                                        <div class="avatar avt-60 round">
-                                            <img src="images/testimonial/testi-2.jpg" alt="avatar">
-                                        </div>
-                                        <div class="info">
-                                            <h6>Amit Singh</h6>
-                                            <p class="caption-2 text-variant-1 mt-4">Investor</p>
-                                            <ul class="list-star">
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                            </ul>
+                            <?php foreach ($testimonials as $item): ?>
+                                <?php
+                                $stars = max(1, min(5, (int) ($item['rating'] ?? 5)));
+                                $imagePath = (string) ($item['image_path'] ?? 'images/testimonial/testi-1.jpg');
+                                ?>
+                                <div class="swiper-slide">
+                                    <div class="box-tes-item style-2">
+                                        <span class="icon icon-quote"></span>
+                                        <p class="note body-2">
+                                            "<?php echo htmlspecialchars((string) ($item['message'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                        </p>
+                                        <div class="box-avt d-flex align-items-center gap-12">
+                                            <div class="avatar avt-60 round">
+                                                <img src="<?php echo htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8'); ?>"
+                                                    alt="avatar">
+                                            </div>
+                                            <div class="info">
+                                                <h6><?php echo htmlspecialchars((string) ($item['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+                                                </h6>
+                                                <p class="caption-2 text-variant-1 mt-4">
+                                                    <?php echo htmlspecialchars((string) ($item['subtitle'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+                                                </p>
+                                                <ul class="list-star">
+                                                    <?php for ($i = 0; $i < $stars; $i++): ?>
+                                                        <li class="icon icon-star"></li>
+                                                    <?php endfor; ?>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="box-tes-item style-2">
-                                    <span class="icon icon-quote"></span>
-                                    <p class="note body-2">
-                                        "Finding a rental property was never this easy. BM Properties provided multiple
-                                        options and handled everything quickly and efficiently. The entire process was
-                                        smooth and hassle-free."
-                                    </p>
-                                    <div class="box-avt d-flex align-items-center gap-12">
-                                        <div class="avatar avt-60 round">
-                                            <img src="images/testimonial/testi-4.png" alt="avatar">
-                                        </div>
-                                        <div class="info">
-                                            <h6>Neha Gupta</h6>
-                                            <p class="caption-2 text-variant-1 mt-4">Rental Client</p>
-                                            <ul class="list-star">
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                            </ul>
+                            <?php endforeach; ?>
+                            <?php if (count($testimonials) === 0): ?>
+                                <div class="swiper-slide">
+                                    <div class="box-tes-item style-2">
+                                        <span class="icon icon-quote"></span>
+                                        <p class="note body-2">"No testimonials available right now."</p>
+                                        <div class="box-avt d-flex align-items-center gap-12">
+                                            <div class="info">
+                                                <h6>BM Properties</h6>
+                                                <p class="caption-2 text-variant-1 mt-4">Team</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="box-tes-item style-2">
-                                    <span class="icon icon-quote"></span>
-                                    <p class="note body-2">
-                                        "What I liked most about BM Properties is their transparency and honest
-                                        guidance. They donâ€™t just sell properties â€” they actually help you make the
-                                        right decision. Truly reliable team."
-                                    </p>
-                                    <div class="box-avt d-flex align-items-center gap-12">
-                                        <div class="avatar avt-60 round">
-                                            <img src="images/testimonial/testi-3.jpg" alt="avatar">
-                                        </div>
-                                        <div class="info">
-                                            <h6>Sandeep Singh</h6>
-                                            <p class="caption-2 text-variant-1 mt-4">Business Owner</p>
-                                            <ul class="list-star">
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                                <li class="icon icon-star"></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php endif; ?>
 
                         </div>
                         <div class="sw-pagination sw-pagination-testimonial text-center"></div>

@@ -8,6 +8,7 @@ $propertyCount = get_property_count();
 $galleryCount = get_gallery_count();
 $messageCount = get_message_count();
 $enquiryCount = get_enquiry_count();
+$testimonialCount = get_testimonial_count();
 
 include __DIR__ . '/_layout_top.php';
 ?>
@@ -28,6 +29,10 @@ include __DIR__ . '/_layout_top.php';
         <h2>Total Enquiries</h2>
         <p class="admin-stat"><?php echo (int) $enquiryCount; ?></p>
     </article>
+    <article class="admin-card">
+        <h2>Testimonials</h2>
+        <p class="admin-stat"><?php echo (int) $testimonialCount; ?></p>
+    </article>
 </section>
 
 <section class="admin-card">
@@ -37,6 +42,7 @@ include __DIR__ . '/_layout_top.php';
         <a class="btn btn-outline-primary admin-btn" href="gallery.php">Manage Gallery</a>
         <a class="btn btn-outline-primary admin-btn" href="messages.php">View Messages</a>
         <a class="btn btn-outline-primary admin-btn" href="enquiries.php">View Enquiries</a>
+        <a class="btn btn-outline-primary admin-btn" href="testimonials.php">Manage Testimonials</a>
         <a class="btn btn-outline-primary admin-btn" href="profile.php">Manage Profile</a>
     </div>
 </section>

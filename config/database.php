@@ -3,8 +3,8 @@
 return [
     'host' => getenv('DB_HOST') ?: '127.0.0.1',
     'port' => (int) (getenv('DB_PORT') ?: 3306),
-    'database' => getenv('DB_NAME') ?: 'bm_properties',
+    'database' => getenv('DB_NAME') ?: 'bmproperties',
     'username' => getenv('DB_USER') ?: 'root',
-    'password' => getenv('DB_PASS') ?: '',
+    'password' => getenv('DB_PASS') ?: 'root',
     'charset' => 'utf8mb4',
 ];

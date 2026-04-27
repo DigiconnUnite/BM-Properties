@@ -17,41 +17,70 @@ body.admin-body {
 .admin-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 300px 1fr;
 }
 
 .admin-sidebar {
   background: #0f1f3d;
   color: #fff;
-  padding: 24px 16px;
+  padding: 22px 14px 16px;
   position: sticky;
   top: 0;
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .admin-brand {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: #fff;
-  font-size: 24px;
+  font-size: 28px;
   text-decoration: none;
   font-weight: 700;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
+  padding: 8px 6px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-brand-logo {
+  object-fit: contain;
 }
 
 .admin-menu a {
   display: block;
   color: #ced7eb;
   text-decoration: none;
-  padding: 10px 12px;
+  padding: 11px 12px;
   border-radius: 8px;
   margin-bottom: 6px;
+  font-size: 16px;
 }
 
 .admin-menu a.active,
 .admin-menu a:hover {
-  background: rgba(21, 99, 223, 0.35);
+  background: rgba(21, 99, 223, 0.5);
   color: #fff;
+}
+
+.admin-menu-title {
+  margin: 16px 6px 10px;
+  font-size: 14px;
+  color: #e3ecff;
+  letter-spacing: 0.02em;
+}
+
+.admin-sidebar-footer {
+  margin-top: auto;
+  padding: 14px 10px 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+  display: grid;
+  gap: 8px;
+  text-align: center;
 }
 
 .admin-main {
@@ -70,12 +99,38 @@ body.admin-body {
   margin: 0;
 }
 
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .admin-user {
   background: #fff;
   border: 1px solid var(--admin-border);
   border-radius: 999px;
   padding: 8px 14px;
   font-size: 14px;
+}
+
+.admin-profile-icon {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-decoration: none;
+  font-weight: 700;
+  color: #fff;
+  background: var(--admin-primary);
+  border: 2px solid rgba(21, 99, 223, 0.2);
+}
+
+.admin-profile-icon:hover,
+.admin-profile-icon.active {
+  background: var(--admin-primary-dark);
+  color: #fff;
 }
 
 .admin-grid-cards {
@@ -157,6 +212,103 @@ body.admin-body {
 .admin-table td {
   vertical-align: top;
   font-size: 14px;
+}
+
+.admin-table-thumb {
+  width: 76px;
+  height: 76px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #d8e0ed;
+}
+
+.admin-table-main {
+  font-weight: 700;
+  font-size: 16px;
+  color: #101a2f;
+}
+
+.admin-table-sub {
+  color: #56647f;
+  margin-top: 4px;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+.admin-badge-soft,
+.admin-badge-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.admin-badge-soft {
+  background: #6f7b88;
+  color: #fff;
+}
+
+.admin-badge-status.active {
+  background: #0f8a49;
+  color: #fff;
+}
+
+.admin-badge-status.inactive {
+  background: #7d8797;
+  color: #fff;
+}
+
+.admin-pagination {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-pagination-info {
+  color: #51617e;
+  font-size: 13px;
+}
+
+.admin-gallery-actions {
+  white-space: nowrap;
+}
+
+.admin-image-uploader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-image-uploader .form-control {
+  flex: 1 1 auto;
+}
+
+.admin-upload-list {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.admin-upload-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid #d8e0ed;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #fff;
+}
+
+.admin-upload-item span {
+  color: #101a2f;
+  font-size: 14px;
+  word-break: break-all;
 }
 
 .message-cell {
@@ -281,6 +433,18 @@ body.admin-body {
     position: static;
     height: auto;
     z-index: 10;
+  }
+
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .admin-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
   .admin-auth-wrap {

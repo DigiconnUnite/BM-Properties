@@ -76,4 +76,24 @@ function run_app_migrations(): void
             INDEX idx_enquiry_created (created_at)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
   }
+
+  if (!has_column('gallery_items', 'uploaded_by')) {
+    $conn->query("ALTER TABLE gallery_items ADD COLUMN uploaded_by VARCHAR(80) NOT NULL DEFAULT 'admin' AFTER sort_order");
+  }
+
+  if (!table_exists('testimonials')) {
+    $conn->query("CREATE TABLE testimonials (
+            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(140) NOT NULL,
+            subtitle VARCHAR(180) NOT NULL DEFAULT '',
+            message TEXT NOT NULL,
+            image_path VARCHAR(255) NOT NULL,
+            rating TINYINT UNSIGNED NOT NULL DEFAULT 5,
+            sort_order INT NOT NULL DEFAULT 0,
+            is_active TINYINT(1) NOT NULL DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX idx_testimonials_active_sort (is_active, sort_order)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+  }
 }

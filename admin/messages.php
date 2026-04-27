@@ -51,8 +51,8 @@ include __DIR__ . '/_layout_top.php';
                             ?>
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-outline-primary me-2"
-                                href="message-view.php?id=<?php echo (int) $message['id']; ?>">View</a>
+                            <button type="button" class="btn btn-sm btn-outline-primary me-2 js-message-view"
+                                data-target="message-row-<?php echo (int) $message['id']; ?>">View</button>
                             <form method="post" class="inline-form" action="modules/messages/delete.php"
                                 onsubmit="return confirm('Delete this message?');">
                                 <input type="hidden" name="csrf_token"
@@ -63,9 +63,20 @@ include __DIR__ . '/_layout_top.php';
                             </form>
                         </td>
                     </tr>
+                    <tr id="message-row-<?php echo (int) $message['id']; ?>" class="d-none">
+                        <td colspan="6">
+                            <div class="admin-detail">
+                                <div class="admin-detail-label">Full Message</div>
+                                <div class="admin-detail-value">
+                                    <?php echo nl2br(htmlspecialchars((string) $message['message'], ENT_QUOTES, 'UTF-8')); ?>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 </section>
+<script src="../js/admin-messages.js"></script>
 <?php include __DIR__ . '/_layout_bottom.php'; ?>

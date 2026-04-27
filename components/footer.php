@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../includes/app.php';
 $assetBasePath = isset($assetBasePath) ? rtrim($assetBasePath, '/') . '/' : '';
 $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
-$footerProperties = array_slice(array_values(get_all_properties()), 0, 6);
+$footerProperties = array_slice(array_values(get_all_properties()), 0, 5);
 $settings = get_site_settings();
 $globalNotice = get_flash('global_notice');
 $globalWhatsappNumber = normalize_phone((string) ($settings['phone'] ?? ''));
@@ -17,9 +17,6 @@ $globalWhatsappLink = $globalWhatsappNumber !== '' ? ('https://wa.me/' . $global
         </svg>
     </a>
 <?php endif; ?>
-<button type="button" class="enquiry-float-btn" data-enquiry-open="1" aria-label="Open enquiry form">
-    Enquiry
-</button>
 <?php if ($globalNotice !== ''): ?>
     <div class="global-popup-notice" role="alert"><?php echo htmlspecialchars($globalNotice, ENT_QUOTES, 'UTF-8'); ?></div>
 <?php endif; ?>

@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $name = clean_text((string) ($_POST['name'] ?? ''));
         $slugInput = clean_text((string) ($_POST['slug'] ?? ''));
         $slug = $slugInput !== '' ? normalize_slug($slugInput) : normalize_slug($name);
-        $sortOrder = (int) ($_POST['sort_order'] ?? 0);
+        $sortOrder = isset($editing['sort_order']) ? (int) $editing['sort_order'] : 0;
         $isActive = isset($_POST['is_active']) ? 1 : 0;
 
         if ($name === '' || $slug === '') {
@@ -58,31 +58,35 @@ include __DIR__ . '/_layout_top.php';
 ?>
 <section class="admin-card">
     <h2><?php echo $editing ? 'Edit Category' : 'Add Category'; ?></h2>
-    <?php if ($message !== ''): ?><div class="alert alert-success"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
-    <?php if ($error !== ''): ?><div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
+    <?php if ($message !== ''): ?>
+        <div class="alert alert-success"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
+    <?php if ($error !== ''): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
 
     <form method="post" class="admin-form-grid">
-        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+        <input type="hidden" name="csrf_token"
+            value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
         <input type="hidden" name="id" value="<?php echo (int) ($editing['id'] ?? 0); ?>">
         <input type="hidden" name="action" value="save">
         <div>
             <label>Name</label>
-            <input class="form-control" type="text" name="name" value="<?php echo htmlspecialchars((string) ($editing['name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
+            <input class="form-control" type="text" name="name"
+                value="<?php echo htmlspecialchars((string) ($editing['name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                required>
         </div>
         <div>
             <label>Slug</label>
-            <input class="form-control" type="text" name="slug" value="<?php echo htmlspecialchars((string) ($editing['slug'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" placeholder="auto from name">
-        </div>
-        <div>
-            <label>Sort Order</label>
-            <input class="form-control" type="number" name="sort_order" value="<?php echo (int) ($editing['sort_order'] ?? 0); ?>">
+            <input class="form-control" type="text" name="slug"
+                value="<?php echo htmlspecialchars((string) ($editing['slug'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                placeholder="auto from name">
         </div>
         <div class="admin-checkbox-wrap">
             <label><input type="checkbox" name="is_active" <?php echo isset($editing) ? ((int) ($editing['is_active'] ?? 1) === 1 ? 'checked' : '') : 'checked'; ?>> Active</label>
         </div>
         <div class="admin-form-full">
             <button class="btn btn-primary admin-btn" type="submit">Save Category</button>
-            <?php if ($editing): ?><a class="btn btn-outline-secondary admin-btn" href="categories.php">Cancel</a><?php endif; ?>
+            <?php if ($editing): ?><a class="btn btn-outline-secondary admin-btn"
+                    href="categories.php">Cancel</a><?php endif; ?>
         </div>
     </form>
 </section>
@@ -91,25 +95,33 @@ include __DIR__ . '/_layout_top.php';
     <h2>Category List</h2>
     <div class="table-responsive">
         <table class="table admin-table">
-            <thead><tr><th>Name</th><th>Slug</th><th>Order</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody>
-            <?php foreach ($categories as $category): ?>
+            <thead>
                 <tr>
-                    <td><?php echo htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td><?php echo htmlspecialchars($category['slug'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td><?php echo (int) $category['sort_order']; ?></td>
-                    <td><?php echo (int) $category['is_active'] === 1 ? 'Active' : 'Inactive'; ?></td>
-                    <td>
-                        <a class="btn btn-sm btn-outline-primary" href="categories.php?edit=<?php echo (int) $category['id']; ?>">Edit</a>
-                        <form method="post" class="inline-form" onsubmit="return confirm('Delete this category?');">
-                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="id" value="<?php echo (int) $category['id']; ?>">
-                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
-                        </form>
-                    </td>
+                    <th>Name</th>
+                    <th>Slug</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
-            <?php endforeach; ?>
+            </thead>
+            <tbody>
+                <?php foreach ($categories as $category): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?php echo htmlspecialchars($category['slug'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?php echo (int) $category['is_active'] === 1 ? 'Active' : 'Inactive'; ?></td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary"
+                                href="categories.php?edit=<?php echo (int) $category['id']; ?>">Edit</a>
+                            <form method="post" class="inline-form" onsubmit="return confirm('Delete this category?');">
+                                <input type="hidden" name="csrf_token"
+                                    value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="id" value="<?php echo (int) $category['id']; ?>">
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>

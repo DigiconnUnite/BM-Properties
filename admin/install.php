@@ -4,13 +4,6 @@ require_once __DIR__ . '/../includes/security.php';
 init_secure_session();
 
 $config = require __DIR__ . '/../config/database.php';
-$localConfigPath = __DIR__ . '/../config/database.local.php';
-if (is_file($localConfigPath)) {
-    $localConfig = require $localConfigPath;
-    if (is_array($localConfig)) {
-        $config = array_merge($config, $localConfig);
-    }
-}
 
 $setupKey = getenv('APP_SETUP_KEY') ?: 'bm-setup-2026';
 $providedKey = (string) ($_GET['key'] ?? $_POST['key'] ?? '');
@@ -194,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
                         $propStmt->execute();
                     }
 
-                    $galleryStmt = $server->prepare('INSERT INTO gallery_items (title, image_path, sort_order, is_active) VALUES (?, ?, ?, 1)');
+                    $galleryStmt = $server->prepare('INSERT INTO gallery_items (title, image_path, sort_order, uploaded_by, is_active) VALUES (?, ?, ?, ?, 1)');
                     $galleryDefaults = [
                         ['Dream Avenues', 'images/gallery/dream-avenues.jpg', 1],
                         ['Landmark City', 'images/gallery/landmark-city.jpg', 2],
@@ -204,19 +197,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $authorized) {
                         ['Corporate Park', 'images/gallery/corporate-park.png', 6],
                     ];
                     foreach ($galleryDefaults as $item) {
-                        $galleryStmt->bind_param('ssi', $item[0], $item[1], $item[2]);
+                        $uploadedBy = 'admin';
+                        $galleryStmt->bind_param('ssis', $item[0], $item[1], $item[2], $uploadedBy);
                         $galleryStmt->execute();
                     }
 
-                    $localConfigPhp = "<?php\n\nreturn " . var_export([
-                        'host' => $dbHost,
-                        'port' => $dbPort,
-                        'database' => $dbName,
-                        'username' => $dbUser,
-                        'password' => $dbPass,
-                        'charset' => $charset,
-                    ], true) . ";\n";
-                    file_put_contents($localConfigPath, $localConfigPhp);
+                    $testimonialStmt = $server->prepare('INSERT INTO testimonials (title, subtitle, message, image_path, rating, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, 1)');
+                    $testimonialDefaults = [
+                        ['Rahul Sharma', 'Home Buyer', 'BM Properties made my home-buying experience smooth and stress-free. They guided me at every step and helped me find a property that perfectly fits my needs and budget.', 'images/testimonial/testi-1.jpg', 5, 1],
+                        ['Amit Singh', 'Investor', 'I was looking for a good investment option, and BM Properties suggested promising projects. Their knowledge of locations and future growth is impressive.', 'images/testimonial/testi-2.jpg', 5, 2],
+                        ['Neha Gupta', 'Rental Client', 'Finding a rental property was never this easy. BM Properties provided multiple options and handled everything quickly and efficiently.', 'images/testimonial/testi-4.png', 5, 3],
+                    ];
+                    foreach ($testimonialDefaults as $item) {
+                        $testimonialStmt->bind_param('ssssii', $item[0], $item[1], $item[2], $item[3], $item[4], $item[5]);
+                        $testimonialStmt->execute();
+                    }
 
                     $status = 'Database imported successfully. You can now login to the admin panel.';
                 }

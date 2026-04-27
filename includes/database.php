@@ -9,13 +9,6 @@ function db(): mysqli
     }
 
     $config = require __DIR__ . '/../config/database.php';
-    $localConfigPath = __DIR__ . '/../config/database.local.php';
-    if (is_file($localConfigPath)) {
-        $localConfig = require $localConfigPath;
-        if (is_array($localConfig)) {
-            $config = array_merge($config, $localConfig);
-        }
-    }
 
     $connection = new mysqli(
         $config['host'],

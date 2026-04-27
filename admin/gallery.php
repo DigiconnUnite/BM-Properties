@@ -7,15 +7,12 @@ require_csrf_post();
 $message = '';
 $error = '';
 $editing = null;
+$perPage = 10;
+$currentPage = max(1, (int) ($_GET['page'] ?? 1));
 
 if (isset($_GET['edit'])) {
     $editId = (int) $_GET['edit'];
-    foreach (get_gallery_items(false) as $item) {
-        if ((int) $item['id'] === $editId) {
-            $editing = $item;
-            break;
-        }
-    }
+    $editing = $editId > 0 ? get_gallery_item_by_id($editId) : null;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,8 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = (int) ($_POST['id'] ?? 0);
         $title = clean_text((string) ($_POST['title'] ?? ''));
         $imagePath = clean_text((string) ($_POST['image_path'] ?? ''));
-        $sortOrder = (int) ($_POST['sort_order'] ?? 0);
         $isActive = isset($_POST['is_active']) ? 1 : 0;
+        $uploadedBy = (string) (admin_user()['username'] ?? 'admin');
+        $uploadedImage = null;
 
         $uploadRoot = realpath(__DIR__ . '/..');
         if (is_string($uploadRoot) && $uploadRoot !== '') {
@@ -45,14 +43,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($title === '') {
             $error = 'Title is required.';
-        } elseif ($imagePath === '' && $uploadedImage === null) {
+        } elseif ($imagePath === '') {
             $error = 'Please provide an image path or upload an image file.';
         } else {
             save_gallery_item([
                 'title' => $title,
                 'image_path' => $imagePath,
-                'sort_order' => $sortOrder,
+                'sort_order' => 0,
                 'is_active' => $isActive,
+                'uploaded_by' => $uploadedBy,
             ], $id > 0 ? $id : null);
             $message = $id > 0 ? 'Gallery item updated.' : 'Gallery item added.';
             $editing = null;
@@ -62,7 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $pageTitle = 'Gallery Management';
 $activePage = 'gallery';
-$items = get_gallery_items(false);
+$totalItems = get_gallery_total_count(false);
+$totalPages = max(1, (int) ceil($totalItems / $perPage));
+$currentPage = min($currentPage, $totalPages);
+$offset = ($currentPage - 1) * $perPage;
+$items = get_gallery_items_paginated($offset, $perPage, false);
 
 include __DIR__ . '/_layout_top.php';
 ?>
@@ -80,12 +83,12 @@ include __DIR__ . '/_layout_top.php';
         <div><label>Title</label><input class="form-control" name="title"
                 value="<?php echo htmlspecialchars((string) ($editing['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                 required></div>
-        <div><label>Image Path (optional - provide a URL or upload a file)</label><input class="form-control" name="image_path"
-                value="<?php echo htmlspecialchars((string) ($editing['image_path'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"></div>
-        <div><label>Upload Image from Local System (max 1MB, .jpg/.png/.webp only)</label><input class="form-control" type="file"
-                name="image_file" accept=".jpg,.jpeg,.png,.webp"></div>
-        <div><label>Sort Order</label><input class="form-control" type="number" name="sort_order"
-                value="<?php echo (int) ($editing['sort_order'] ?? 0); ?>"></div>
+        <div><label>Image Path (optional - provide a URL or upload a file)</label><input class="form-control"
+                name="image_path"
+                value="<?php echo htmlspecialchars((string) ($editing['image_path'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+        </div>
+        <div><label>Upload Image from Local System (max 1MB, .jpg/.png/.webp only)</label><input class="form-control"
+                type="file" name="image_file" accept=".jpg,.jpeg,.png,.webp"></div>
         <div class="admin-checkbox-wrap"><label><input type="checkbox" name="is_active" <?php echo isset($editing) ? ((int) ($editing['is_active'] ?? 1) === 1 ? 'checked' : '') : 'checked'; ?>> Active</label></div>
         <div class="admin-form-full">
             <button class="btn btn-primary admin-btn" type="submit">Save Gallery Item</button>
@@ -100,25 +103,50 @@ include __DIR__ . '/_layout_top.php';
         <table class="table admin-table">
             <thead>
                 <tr>
-                    <th>Title</th>
                     <th>Image</th>
-                    <th>Order</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Section</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th>Uploaded By</th>
+                    <th>Created</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($items as $item): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8'); ?></td>
-                        <td><?php echo htmlspecialchars($item['image_path'], ENT_QUOTES, 'UTF-8'); ?></td>
-                        <td><?php echo (int) $item['sort_order']; ?></td>
-                        <td><?php echo (int) $item['is_active'] === 1 ? 'Active' : 'Inactive'; ?></td>
                         <td>
+                            <?php
+                            $thumbnailPath = (string) ($item['image_path'] ?? '');
+                            $thumbnailSrc = preg_match('/^https?:\/\//i', $thumbnailPath) ? $thumbnailPath : ('../' . ltrim($thumbnailPath, '/'));
+                            ?>
+                            <img class="admin-table-thumb"
+                                src="<?php echo htmlspecialchars($thumbnailSrc, ENT_QUOTES, 'UTF-8'); ?>"
+                                alt="<?php echo htmlspecialchars((string) $item['title'], ENT_QUOTES, 'UTF-8'); ?>">
+                        </td>
+                        <td>
+                            <div class="admin-table-main">
+                                <?php echo htmlspecialchars((string) $item['title'], ENT_QUOTES, 'UTF-8'); ?></div>
+                            <div class="admin-table-sub">
+                                <?php echo htmlspecialchars((string) $item['image_path'], ENT_QUOTES, 'UTF-8'); ?></div>
+                        </td>
+                        <td>-</td>
+                        <td><span class="admin-badge-soft">Gallery</span></td>
+                        <td>
+                            <span
+                                class="admin-badge-status <?php echo (int) $item['is_active'] === 1 ? 'active' : 'inactive'; ?>">
+                                <?php echo (int) $item['is_active'] === 1 ? 'Active' : 'Inactive'; ?>
+                            </span>
+                        </td>
+                        <td><?php echo htmlspecialchars((string) ($item['uploaded_by'] ?? 'admin'), ENT_QUOTES, 'UTF-8'); ?>
+                        </td>
+                        <td><?php echo htmlspecialchars(date('M d, Y', strtotime((string) ($item['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?>
+                        </td>
+                        <td class="admin-gallery-actions">
                             <a class="btn btn-sm btn-outline-primary"
-                                href="modules/gallery/edit.php?id=<?php echo (int) $item['id']; ?>">Edit</a>
-                            <form method="post" class="inline-form" action="modules/gallery/delete.php"
-                                onsubmit="return confirm('Delete this gallery item?');">
+                                href="gallery.php?edit=<?php echo (int) $item['id']; ?>&page=<?php echo (int) $currentPage; ?>">Edit</a>
+                            <form method="post" class="inline-form" onsubmit="return confirm('Delete this gallery item?');">
                                 <input type="hidden" name="csrf_token"
                                     value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
                                 <input type="hidden" name="action" value="delete">
@@ -128,8 +156,26 @@ include __DIR__ . '/_layout_top.php';
                         </td>
                     </tr>
                 <?php endforeach; ?>
+                <?php if (count($items) === 0): ?>
+                    <tr>
+                        <td colspan="8">No gallery items found.</td>
+                    </tr>
+                <?php endif; ?>
             </tbody>
         </table>
+    </div>
+
+    <div class="admin-pagination">
+        <span class="admin-pagination-info">Page <?php echo (int) $currentPage; ?> of
+            <?php echo (int) $totalPages; ?></span>
+        <?php if ($currentPage > 1): ?>
+            <a class="btn btn-sm btn-outline-secondary"
+                href="gallery.php?page=<?php echo (int) ($currentPage - 1); ?>">Back</a>
+        <?php endif; ?>
+        <?php if ($currentPage < $totalPages): ?>
+            <a class="btn btn-sm btn-outline-secondary"
+                href="gallery.php?page=<?php echo (int) ($currentPage + 1); ?>">Next</a>
+        <?php endif; ?>
     </div>
 </section>
 <?php include __DIR__ . '/_layout_bottom.php'; ?>

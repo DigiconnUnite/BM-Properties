@@ -7,6 +7,46 @@ $categories = get_categories(true);
 $settings = get_site_settings();
 $defaultWhatsappNumber = normalize_phone((string) ($settings['phone'] ?? ''));
 
+$propertyListingLimit = isset($propertyListingLimit) ? max(0, (int) $propertyListingLimit) : 0;
+$propertyListingEnablePagination = isset($propertyListingEnablePagination) ? (bool) $propertyListingEnablePagination : false;
+$propertyListingPerPage = isset($propertyListingPerPage) ? max(1, (int) $propertyListingPerPage) : 9;
+$propertyListingShowTabs = isset($propertyListingShowTabs) ? (bool) $propertyListingShowTabs : true;
+$propertyListingPageParam = 'page';
+
+$orderedProperties = array_values($properties);
+if ($propertyListingLimit > 0) {
+    $orderedProperties = array_slice($orderedProperties, 0, $propertyListingLimit);
+}
+
+$propertyPagination = [
+    'enabled' => false,
+    'currentPage' => 1,
+    'totalPages' => 1,
+];
+
+if ($propertyListingEnablePagination) {
+    $totalItems = count($orderedProperties);
+    $totalPages = max(1, (int) ceil($totalItems / $propertyListingPerPage));
+    $currentPage = max(1, (int) ($_GET[$propertyListingPageParam] ?? 1));
+    $currentPage = min($currentPage, $totalPages);
+    $offset = ($currentPage - 1) * $propertyListingPerPage;
+    $orderedProperties = array_slice($orderedProperties, $offset, $propertyListingPerPage);
+
+    $propertyPagination = [
+        'enabled' => true,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages,
+    ];
+}
+
+$properties = [];
+foreach ($orderedProperties as $propertyRow) {
+    $slug = (string) ($propertyRow['slug'] ?? '');
+    if ($slug !== '') {
+        $properties[$slug] = $propertyRow;
+    }
+}
+
 if (!function_exists('render_property_card')) {
     function render_property_card(array $property): void
     {
@@ -146,6 +186,15 @@ if (!function_exists('render_property_card')) {
                                 <li class="flag-tag style-1">For Sale</li>
                             </ul>
                         </div>
+                    </a>
+                </div>
+                <div class="archive-bottom">
+                    <div class="content-top">
+                        <div class="property-card-title-row">
+                            <h6 class="text-capitalize property-card-title"><a
+                                    href="<?php echo htmlspecialchars($detailPage, ENT_QUOTES, 'UTF-8'); ?>"
+                                    class="link text-line-clamp-1"><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></a>
+                            </h6>
                             <?php if ($whatsappNumber !== ''): ?>
                                 <a class="property-whatsapp-icon"
                                     href="https://wa.me/<?php echo htmlspecialchars($whatsappNumber, ENT_QUOTES, 'UTF-8'); ?>?text=<?php echo $whatsappMessage; ?>"
@@ -153,12 +202,7 @@ if (!function_exists('render_property_card')) {
                                     <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
                                 </a>
                             <?php endif; ?>
-                    </a>
-                </div>
-                <div class="archive-bottom">
-                    <div class="content-top">
-                        <h6 class="text-capitalize"><a href="<?php echo htmlspecialchars($detailPage, ENT_QUOTES, 'UTF-8'); ?>"
-                                class="link"><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></a></h6>
+                        </div>
                         <ul class="meta-list feature-meta-list">
                             <?php foreach ($cardHighlights as $highlight): ?>
                                 <li class="item">
@@ -190,19 +234,21 @@ $tabDefinitions = [
     ],
 ];
 
-foreach ($categories as $category) {
-    $categorySlugs = [];
-    foreach ($properties as $slug => $property) {
-        if (($property['category_slug'] ?? '') === $category['slug']) {
-            $categorySlugs[] = $slug;
+if ($propertyListingShowTabs && !$propertyListingEnablePagination && $propertyListingLimit === 0) {
+    foreach ($categories as $category) {
+        $categorySlugs = [];
+        foreach ($properties as $slug => $property) {
+            if (($property['category_slug'] ?? '') === $category['slug']) {
+                $categorySlugs[] = $slug;
+            }
         }
-    }
 
-    if (!empty($categorySlugs)) {
-        $tabDefinitions[$category['slug']] = [
-            'label' => $category['name'],
-            'slugs' => $categorySlugs,
-        ];
+        if (!empty($categorySlugs)) {
+            $tabDefinitions[$category['slug']] = [
+                'label' => $category['name'],
+                'slugs' => $categorySlugs,
+            ];
+        }
     }
 }
 
@@ -214,21 +260,24 @@ $showViewAllButton = $showViewAllButton ?? true;
     <div class="container">
         <div class="box-title text-center wow fadeInUp">
             <div class="text-subtitle text-primary">
-                <?php echo htmlspecialchars($sectionSubtitle, ENT_QUOTES, 'UTF-8'); ?></div>
+                <?php echo htmlspecialchars($sectionSubtitle, ENT_QUOTES, 'UTF-8'); ?>
+            </div>
             <h3 class="title mt-4"><?php echo htmlspecialchars($sectionTitle, ENT_QUOTES, 'UTF-8'); ?></h3>
         </div>
         <div class="flat-tab-recommended flat-animate-tab wow fadeInUp" data-wow-delay=".2s">
-            <ul class="nav-tab-recommended justify-content-md-center" role="tablist">
-                <?php $firstTab = true; ?>
-                <?php foreach ($tabDefinitions as $tabId => $tabDefinition): ?>
-                    <li class="nav-tab-item" role="presentation">
-                        <a href="#<?php echo htmlspecialchars($tabId, ENT_QUOTES, 'UTF-8'); ?>"
-                            class="nav-link-item<?php echo $firstTab ? ' active' : ''; ?>"
-                            data-bs-toggle="tab"><?php echo htmlspecialchars($tabDefinition['label'], ENT_QUOTES, 'UTF-8'); ?></a>
-                    </li>
-                    <?php $firstTab = false; ?>
-                <?php endforeach; ?>
-            </ul>
+            <?php if ($propertyListingShowTabs && count($tabDefinitions) > 1): ?>
+                <ul class="nav-tab-recommended justify-content-md-center" role="tablist">
+                    <?php $firstTab = true; ?>
+                    <?php foreach ($tabDefinitions as $tabId => $tabDefinition): ?>
+                        <li class="nav-tab-item" role="presentation">
+                            <a href="#<?php echo htmlspecialchars($tabId, ENT_QUOTES, 'UTF-8'); ?>"
+                                class="nav-link-item<?php echo $firstTab ? ' active' : ''; ?>"
+                                data-bs-toggle="tab"><?php echo htmlspecialchars($tabDefinition['label'], ENT_QUOTES, 'UTF-8'); ?></a>
+                        </li>
+                        <?php $firstTab = false; ?>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
             <div class="tab-content">
                 <?php $firstPane = true; ?>
                 <?php foreach ($tabDefinitions as $tabId => $tabDefinition): ?>
@@ -251,6 +300,24 @@ $showViewAllButton = $showViewAllButton ?? true;
                     <?php $firstPane = false; ?>
                 <?php endforeach; ?>
             </div>
+            <?php if ($propertyPagination['enabled'] && $propertyPagination['totalPages'] > 1): ?>
+                <div class="text-center property-list-pagination">
+                    <?php if ($propertyPagination['currentPage'] > 1): ?>
+                        <a class="tf-btn btn-view primary size-1 hover-btn-view"
+                            href="?<?php echo htmlspecialchars($propertyListingPageParam, ENT_QUOTES, 'UTF-8'); ?>=<?php echo (int) ($propertyPagination['currentPage'] - 1); ?>">
+                            Previous
+                        </a>
+                    <?php endif; ?>
+                    <span class="property-page-indicator">Page <?php echo (int) $propertyPagination['currentPage']; ?> of
+                        <?php echo (int) $propertyPagination['totalPages']; ?></span>
+                    <?php if ($propertyPagination['currentPage'] < $propertyPagination['totalPages']): ?>
+                        <a class="tf-btn btn-view primary size-1 hover-btn-view"
+                            href="?<?php echo htmlspecialchars($propertyListingPageParam, ENT_QUOTES, 'UTF-8'); ?>=<?php echo (int) ($propertyPagination['currentPage'] + 1); ?>">
+                            Next
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>

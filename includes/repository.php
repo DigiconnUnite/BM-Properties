@@ -298,10 +298,45 @@ function get_gallery_items(bool $onlyActive = true): array
 {
     $conn = db();
     $where = $onlyActive ? 'WHERE is_active = 1' : '';
-    $sql = "SELECT id, title, image_path, sort_order, is_active FROM gallery_items {$where} ORDER BY sort_order ASC, id DESC";
+    $sql = "SELECT id, title, image_path, sort_order, is_active, uploaded_by, created_at FROM gallery_items {$where} ORDER BY id DESC";
     $result = $conn->query($sql);
 
     return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
+function get_gallery_total_count(bool $onlyActive = false): int
+{
+    $conn = db();
+    $where = $onlyActive ? 'WHERE is_active = 1' : '';
+    $row = $conn->query("SELECT COUNT(*) AS total FROM gallery_items {$where}")->fetch_assoc();
+
+    return (int) ($row['total'] ?? 0);
+}
+
+function get_gallery_items_paginated(int $offset, int $limit, bool $onlyActive = false): array
+{
+    $conn = db();
+    $safeOffset = max(0, $offset);
+    $safeLimit = max(1, $limit);
+    $where = $onlyActive ? 'WHERE is_active = 1' : '';
+    $sql = "SELECT id, title, image_path, sort_order, is_active, uploaded_by, created_at FROM gallery_items {$where} ORDER BY id DESC LIMIT ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ii', $safeOffset, $safeLimit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
+function get_gallery_item_by_id(int $id): ?array
+{
+    $conn = db();
+    $stmt = $conn->prepare('SELECT id, title, image_path, sort_order, is_active, uploaded_by, created_at FROM gallery_items WHERE id = ? LIMIT 1');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+
+    return $row ?: null;
 }
 
 function save_gallery_item(array $data, ?int $id = null): int
@@ -311,17 +346,18 @@ function save_gallery_item(array $data, ?int $id = null): int
     $imagePath = $data['image_path'];
     $sortOrder = (int) $data['sort_order'];
     $isActive = !empty($data['is_active']) ? 1 : 0;
+    $uploadedBy = (string) ($data['uploaded_by'] ?? 'admin');
 
     if ($id === null) {
-        $stmt = $conn->prepare('INSERT INTO gallery_items (title, image_path, sort_order, is_active) VALUES (?, ?, ?, ?)');
-        $stmt->bind_param('ssii', $title, $imagePath, $sortOrder, $isActive);
+        $stmt = $conn->prepare('INSERT INTO gallery_items (title, image_path, sort_order, is_active, uploaded_by) VALUES (?, ?, ?, ?, ?)');
+        $stmt->bind_param('ssiis', $title, $imagePath, $sortOrder, $isActive, $uploadedBy);
         $stmt->execute();
 
         return (int) $conn->insert_id;
     }
 
-    $stmt = $conn->prepare('UPDATE gallery_items SET title = ?, image_path = ?, sort_order = ?, is_active = ? WHERE id = ?');
-    $stmt->bind_param('ssiii', $title, $imagePath, $sortOrder, $isActive, $id);
+    $stmt = $conn->prepare('UPDATE gallery_items SET title = ?, image_path = ?, sort_order = ?, is_active = ?, uploaded_by = ? WHERE id = ?');
+    $stmt->bind_param('ssiisi', $title, $imagePath, $sortOrder, $isActive, $uploadedBy, $id);
     $stmt->execute();
 
     return $id;
@@ -451,8 +487,73 @@ function get_property_count(): int
 
 function get_gallery_count(): int
 {
+    return get_gallery_total_count(true);
+}
+
+function get_testimonials(bool $onlyActive = true): array
+{
     $conn = db();
-    $row = $conn->query("SELECT COUNT(*) AS total FROM gallery_items WHERE is_active = 1")->fetch_assoc();
+    $where = $onlyActive ? 'WHERE is_active = 1' : '';
+    $sql = "SELECT id, title, subtitle, message, image_path, rating, sort_order, is_active, created_at
+            FROM testimonials
+            {$where}
+            ORDER BY sort_order ASC, id DESC";
+    $result = $conn->query($sql);
+
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
+function get_testimonial_by_id(int $id): ?array
+{
+    $conn = db();
+    $stmt = $conn->prepare('SELECT id, title, subtitle, message, image_path, rating, sort_order, is_active, created_at FROM testimonials WHERE id = ? LIMIT 1');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+
+    return $row ?: null;
+}
+
+function save_testimonial(array $data, ?int $id = null): int
+{
+    $conn = db();
+    $title = (string) ($data['title'] ?? '');
+    $subtitle = (string) ($data['subtitle'] ?? '');
+    $message = (string) ($data['message'] ?? '');
+    $imagePath = (string) ($data['image_path'] ?? '');
+    $rating = max(1, min(5, (int) ($data['rating'] ?? 5)));
+    $sortOrder = max(0, (int) ($data['sort_order'] ?? 0));
+    $isActive = !empty($data['is_active']) ? 1 : 0;
+
+    if ($id === null) {
+        $stmt = $conn->prepare('INSERT INTO testimonials (title, subtitle, message, image_path, rating, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)');
+        $stmt->bind_param('ssssiii', $title, $subtitle, $message, $imagePath, $rating, $sortOrder, $isActive);
+        $stmt->execute();
+
+        return (int) $conn->insert_id;
+    }
+
+    $stmt = $conn->prepare('UPDATE testimonials SET title = ?, subtitle = ?, message = ?, image_path = ?, rating = ?, sort_order = ?, is_active = ? WHERE id = ?');
+    $stmt->bind_param('ssssiiii', $title, $subtitle, $message, $imagePath, $rating, $sortOrder, $isActive, $id);
+    $stmt->execute();
+
+    return $id;
+}
+
+function delete_testimonial(int $id): void
+{
+    $conn = db();
+    $stmt = $conn->prepare('DELETE FROM testimonials WHERE id = ?');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+}
+
+function get_testimonial_count(bool $onlyActive = true): int
+{
+    $conn = db();
+    $where = $onlyActive ? 'WHERE is_active = 1' : '';
+    $row = $conn->query("SELECT COUNT(*) AS total FROM testimonials {$where}")->fetch_assoc();
+
     return (int) ($row['total'] ?? 0);
 }
 
