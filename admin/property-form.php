@@ -173,8 +173,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         continue;
       }
 
+      if (($singleFile['size'] ?? 0) > (1024 * 1024)) {
+        $error = 'Each showcase image must be 1MB or less.';
+        break;
+      }
+
       if (!is_valid_webp_upload($singleFile)) {
-        $error = 'Showcase images must be WEBP format and max 1MB each.';
+        $error = 'Showcase images must be valid WEBP files.';
         break;
       }
 
@@ -183,9 +188,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         break;
       }
 
-      $savedPath = upload_image_file($singleFile, $propertyUploadDir, 'uploads/properties');
+      $uploadError = null;
+      $savedPath = upload_image_file($singleFile, $propertyUploadDir, 'uploads/properties', $uploadError);
       if ($savedPath === null) {
-        $error = 'Unable to upload one or more showcase images.';
+        $error = $uploadError ?? 'Unable to upload one or more showcase images.';
         break;
       }
 
@@ -276,6 +282,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       try {
         $savedId = save_property($payload, $id > 0 ? $id : null);
+        if ($id > 0) {
+          delete_uploaded_files(array_diff($existingGalleryImages, $galleryImages));
+        }
         header('Location: property-form.php?id=' . $savedId . '&saved=1');
         exit;
       } catch (Throwable $exception) {

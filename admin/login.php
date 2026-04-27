@@ -50,14 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body class="admin-body admin-auth-body">
-    <div class="">
+    <div class="admin-auth-wrap">
         <!-- <aside class="admin-auth-brand-panel">
-            <h1>Welcome Back</h1>
-            <p>Securely access the BM Properties administration panel.</p>
+            <h1>BM Properties</h1>
+            <p>Secure administration for properties, gallery, enquiries, and website content.</p>
             <ul>
-                <li>Protected login attempts and session security</li>
-                <li>Role-specific access for admin operations</li>
-                <li>Fast control over properties, gallery, and enquiries</li>
+                <li>Manage live property listings</li>
+                <li>Review messages and enquiries</li>
+                <li>Keep website images and content fresh</li>
             </ul>
         </aside> -->
         <div class="admin-auth-card">

@@ -388,12 +388,12 @@ body.admin-body {
   color: #102a54;
 }
 
-.admin-auth-wrap {
+/* .admin-auth-wrap {
   width: min(100%, 980px);
   display: grid;
   grid-template-columns: minmax(260px, 1fr) minmax(360px, 460px);
   gap: 18px;
-}
+} */
 
 .admin-auth-brand-panel {
   background: linear-gradient(145deg, #0f1f3d 0%, #1563df 100%);

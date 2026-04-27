@@ -35,11 +35,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         $mailSubject = 'Thank you for contacting BM Properties';
-        $mailHtml = '<p>Hello ' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . ',</p>'
-            . '<p>Thank you for filling the form, we have received your request and we will contact you shortly.</p>'
-            . '<p>Regards,<br>BM Properties Team</p>';
-        $mailText = 'Thank you for filling the form, we have received your request and we will contact you shortly.';
-        send_mail_message($email, $name, $mailSubject, $mailHtml, $mailText);
+        $mailHtml = email_template(
+            'Thank you for contacting BM Properties',
+            'We have received your contact request and our team will contact you shortly.',
+            [
+                'Name' => $name,
+                'Email' => $email,
+                'Phone' => normalize_phone($phone),
+                'Subject' => $subject,
+            ],
+            $messageText,
+            'This message was generated automatically from the contact form.'
+        );
+        $mailText = "Hello {$name},\n\nThank you for contacting BM Properties. We have received your request and will contact you shortly.\n\nSubject: {$subject}\nMessage: {$messageText}";
+        if (!send_mail_message($email, $name, $mailSubject, $mailHtml, $mailText)) {
+            error_log('Contact auto-reply failed for ' . $email . ': ' . last_mail_error());
+        }
 
         $contactMessage = 'Thank you. Your message has been received.';
     }

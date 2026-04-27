@@ -60,20 +60,27 @@ if ($isValid) {
   ]);
 
   $mailSubject = 'Thank you for your enquiry - BM Properties';
-  $mailHtml = '<p>Hello ' . htmlspecialchars($fullName, ENT_QUOTES, 'UTF-8') . ',</p>'
-    . '<p>Thank you for your interest in our properties. We have received your enquiry and our team will contact you shortly to assist you further.</p>'
-    . '<p><strong>Your Enquiry Details:</strong></p>'
-    . '<ul>'
-    . '<li><strong>Looking to:</strong> ' . htmlspecialchars(ucfirst($lookingTo), ENT_QUOTES, 'UTF-8') . '</li>'
-    . '<li><strong>Property Type:</strong> ' . htmlspecialchars($propertyType, ENT_QUOTES, 'UTF-8') . '</li>'
-    . '<li><strong>Property Category:</strong> ' . htmlspecialchars(ucfirst($propertyGroup), ENT_QUOTES, 'UTF-8') . '</li>'
-    . '</ul>'
-    . '<p>We appreciate your interest and will get back to you soon.</p>'
-    . '<p>Best regards,<br>BM Properties Team</p>';
-  $mailText = 'Thank you for your interest in our properties. We have received your enquiry and our team will contact you shortly to assist you further.';
-  
+  $mailHtml = email_template(
+    'Thank you for your enquiry',
+    'We have received your enquiry and our team will contact you shortly to assist you further.',
+    [
+      'Name' => $fullName,
+      'Email' => $email,
+      'Phone' => normalize_phone($phone),
+      'Looking to' => ucfirst($lookingTo),
+      'Property Type' => $propertyType,
+      'Property Category' => ucfirst($propertyGroup),
+      'Subject' => $subject,
+    ],
+    $message,
+    'This message was generated automatically from the enquiry form.'
+  );
+  $mailText = "Hello {$fullName},\n\nThank you for your enquiry. We have received your details and our team will contact you shortly.\n\nLooking to: " . ucfirst($lookingTo) . "\nProperty Type: {$propertyType}\nProperty Category: " . ucfirst($propertyGroup) . "\nMessage: {$message}";
+
   try {
-    send_mail_message($email, $fullName, $mailSubject, $mailHtml, $mailText);
+    if (!send_mail_message($email, $fullName, $mailSubject, $mailHtml, $mailText)) {
+      error_log('Failed to send enquiry auto-reply to ' . $email . ': ' . last_mail_error());
+    }
   } catch (Exception $e) {
     // Log error but don't fail the enquiry save
     error_log('Failed to send enquiry auto-reply to ' . $email . ': ' . $e->getMessage());

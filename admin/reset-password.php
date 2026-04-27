@@ -27,15 +27,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $admin = get_admin_by_email($email);
       if ($admin && (int) $admin['is_active'] === 1) {
         $rawToken = create_admin_password_reset_token((int) $admin['id']);
-        $resetLink = 'http://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . '/reset-password.php?token=' . rawurlencode($rawToken);
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $resetLink = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . '/reset-password.php?token=' . rawurlencode($rawToken);
 
         $mailSubject = 'BM Properties Admin Password Reset';
-        $mailHtml = '<p>Hello ' . htmlspecialchars((string) ($admin['full_name'] !== '' ? $admin['full_name'] : $admin['username']), ENT_QUOTES, 'UTF-8') . ',</p>'
-          . '<p>We received a request to reset your admin password. Click the link below to continue:</p>'
-          . '<p><a href="' . htmlspecialchars($resetLink, ENT_QUOTES, 'UTF-8') . '">Reset My Password</a></p>'
-          . '<p>This link expires in 30 minutes. If you did not request this, you can ignore this email.</p>';
+        $mailHtml = email_template(
+          'Admin password reset',
+          'We received a request to reset your BM Properties admin password.',
+          [
+            'Admin' => (string) ($admin['full_name'] !== '' ? $admin['full_name'] : $admin['username']),
+            'Reset Link' => $resetLink,
+            'Expires' => '30 minutes',
+          ],
+          'Open the reset link above to create a new password. If you did not request this, you can ignore this email.',
+          'This message was generated automatically from the admin password reset form.'
+        );
         $mailText = "We received a request to reset your admin password. Use this link: {$resetLink}. This link expires in 30 minutes.";
-        send_mail_message((string) $admin['email'], (string) ($admin['full_name'] ?: $admin['username']), $mailSubject, $mailHtml, $mailText);
+        $sent = send_mail_message((string) $admin['email'], (string) ($admin['full_name'] ?: $admin['username']), $mailSubject, $mailHtml, $mailText);
+        if (!$sent) {
+          error_log('Failed to send admin password reset email to admin id ' . (int) $admin['id']);
+          $mailError = last_mail_error();
+          $requestError = 'Unable to send reset mail right now. Please verify SMTP settings.'
+            . ($mailError !== '' ? ' Mailer error: ' . $mailError : '');
+        }
 
         $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? '';
         if (in_array($remoteAddr, ['127.0.0.1', '::1'], true)) {
@@ -44,7 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
 
-    $requestSuccess = 'We will send you a password reset mail if your mail is registered with us.';
+    if ($requestError === '') {
+      $requestSuccess = 'We will send you a password reset mail if your mail is registered with us.';
+    }
   }
 
   if ($action === 'reset') {

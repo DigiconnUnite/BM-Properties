@@ -34,6 +34,42 @@ function resolve_asset_path(string $path, string $basePath = ''): string
     return ltrim($path, '/');
 }
 
+function delete_uploaded_file(string $path): void
+{
+    $path = trim($path);
+    if ($path === '' || preg_match('/^(https?:)?\/\//i', $path) === 1 || str_starts_with($path, 'data:')) {
+        return;
+    }
+
+    $relativePath = ltrim(str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $path), DIRECTORY_SEPARATOR);
+    $root = realpath(__DIR__ . '/..');
+    if (!is_string($root) || $root === '') {
+        return;
+    }
+
+    $uploadsRoot = realpath($root . DIRECTORY_SEPARATOR . 'uploads');
+    if (!is_string($uploadsRoot) || $uploadsRoot === '') {
+        return;
+    }
+
+    $target = $root . DIRECTORY_SEPARATOR . $relativePath;
+    $targetDir = realpath(dirname($target));
+    if (!is_string($targetDir) || !str_starts_with($targetDir, $uploadsRoot)) {
+        return;
+    }
+
+    if (is_file($target)) {
+        @unlink($target);
+    }
+}
+
+function delete_uploaded_files(array $paths): void
+{
+    foreach (array_unique(array_filter(array_map('strval', $paths))) as $path) {
+        delete_uploaded_file($path);
+    }
+}
+
 function get_categories(bool $onlyActive = true): array
 {
     $conn = db();
@@ -126,6 +162,26 @@ function get_all_properties(?string $categorySlug = null): array
         $sql = $baseSql . ' ORDER BY p.created_at DESC';
         $result = $conn->query($sql);
     }
+
+    $items = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $item = map_property_row($row);
+            $items[$item['slug']] = $item;
+        }
+    }
+
+    return $items;
+}
+
+function get_admin_properties(): array
+{
+    $conn = db();
+    $sql = "SELECT p.*, c.name AS category_name, c.slug AS category_slug
+        FROM properties p
+        LEFT JOIN categories c ON c.id = p.category_id
+        ORDER BY p.created_at DESC";
+    $result = $conn->query($sql);
 
     $items = [];
     if ($result) {
@@ -321,9 +377,19 @@ function save_property(array $data, ?int $id = null): int
 function delete_property(int $id): void
 {
     $conn = db();
+    $property = get_property_by_id($id);
+    $imagePaths = [];
+    if ($property) {
+        $imagePaths[] = (string) ($property['heroImage'] ?? '');
+        foreach (($property['galleryImages'] ?? []) as $imagePath) {
+            $imagePaths[] = (string) $imagePath;
+        }
+    }
+
     $stmt = $conn->prepare('DELETE FROM properties WHERE id = ?');
     $stmt->bind_param('i', $id);
     $stmt->execute();
+    delete_uploaded_files($imagePaths);
 }
 
 function get_gallery_items(bool $onlyActive = true): array
@@ -398,9 +464,13 @@ function save_gallery_item(array $data, ?int $id = null): int
 function delete_gallery_item(int $id): void
 {
     $conn = db();
+    $item = get_gallery_item_by_id($id);
     $stmt = $conn->prepare('DELETE FROM gallery_items WHERE id = ?');
     $stmt->bind_param('i', $id);
     $stmt->execute();
+    if ($item) {
+        delete_uploaded_file((string) ($item['image_path'] ?? ''));
+    }
 }
 
 function get_site_settings(): array
@@ -573,9 +643,13 @@ function save_explore_city(array $data, ?int $id = null): int
 function delete_explore_city(int $id): void
 {
     $conn = db();
+    $city = get_explore_city_by_id($id);
     $stmt = $conn->prepare('DELETE FROM explore_cities WHERE id = ?');
     $stmt->bind_param('i', $id);
     $stmt->execute();
+    if ($city) {
+        delete_uploaded_file((string) ($city['image_path'] ?? ''));
+    }
 }
 
 function get_testimonials(bool $onlyActive = true): array
@@ -631,9 +705,13 @@ function save_testimonial(array $data, ?int $id = null): int
 function delete_testimonial(int $id): void
 {
     $conn = db();
+    $testimonial = get_testimonial_by_id($id);
     $stmt = $conn->prepare('DELETE FROM testimonials WHERE id = ?');
     $stmt->bind_param('i', $id);
     $stmt->execute();
+    if ($testimonial) {
+        delete_uploaded_file((string) ($testimonial['image_path'] ?? ''));
+    }
 }
 
 function get_testimonial_count(bool $onlyActive = true): int

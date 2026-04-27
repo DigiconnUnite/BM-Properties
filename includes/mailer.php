@@ -15,8 +15,20 @@ function mail_config(): array
   return $config;
 }
 
+function set_last_mail_error(string $message): void
+{
+  $GLOBALS['bm_last_mail_error'] = $message;
+}
+
+function last_mail_error(): string
+{
+  return (string) ($GLOBALS['bm_last_mail_error'] ?? '');
+}
+
 function send_mail_message(string $toEmail, string $toName, string $subject, string $htmlBody, string $textBody = ''): bool
 {
+  set_last_mail_error('');
+
   $autoloadPath = __DIR__ . '/../vendor/autoload.php';
   if (!is_file($autoloadPath)) {
     throw new RuntimeException('PHPMailer dependency not installed. Run composer install.');
@@ -59,7 +71,47 @@ function send_mail_message(string $toEmail, string $toName, string $subject, str
 
     return $mail->send();
   } catch (Exception $e) {
-    error_log('Mailer error: ' . $e->getMessage());
+    $error = $mail->ErrorInfo !== '' ? $mail->ErrorInfo : $e->getMessage();
+    set_last_mail_error($error);
+    error_log('Mailer error: ' . $error);
     return false;
   }
+}
+
+function email_template(string $title, string $intro, array $rows = [], string $message = '', string $footerNote = ''): string
+{
+  $rowHtml = '';
+  foreach ($rows as $label => $value) {
+    $rowHtml .= '<tr>'
+      . '<td style="padding:8px 18px 8px 0;color:#0b7a47;font-weight:700;white-space:nowrap;vertical-align:top;">' . htmlspecialchars((string) $label, ENT_QUOTES, 'UTF-8') . ':</td>'
+      . '<td style="padding:8px 0;color:#0f1f3d;vertical-align:top;">' . nl2br(htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8')) . '</td>'
+      . '</tr>';
+  }
+
+  $messageHtml = '';
+  if (trim($message) !== '') {
+    $messageHtml = '<div style="margin-top:16px;color:#0b7a47;font-weight:700;">Message:</div>'
+      . '<div style="margin-top:12px;padding:14px 18px;border:1px solid #d7deea;border-radius:12px;background:#f8fbff;color:#0f1f3d;">'
+      . nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'))
+      . '</div>';
+  }
+
+  $footerNote = $footerNote !== '' ? $footerNote : 'This message was generated automatically by BM Properties.';
+
+  return '<div style="margin:0;padding:24px;background:#edf3f8;font-family:Arial,Helvetica,sans-serif;color:#0f1f3d;">'
+    . '<div style="max-width:720px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;">'
+    . '<div style="background:#2f8b60;padding:28px 32px;color:#ffffff;">'
+    . '<h1 style="margin:0 0 8px;font-size:26px;line-height:1.25;">' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '</h1>'
+    . '<p style="margin:0;font-size:16px;line-height:1.5;">' . htmlspecialchars($intro, ENT_QUOTES, 'UTF-8') . '</p>'
+    . '</div>'
+    . '<div style="padding:28px 32px;">'
+    . ($rowHtml !== '' ? '<table role="presentation" cellspacing="0" cellpadding="0" style="border-collapse:collapse;width:100%;font-size:16px;line-height:1.45;">' . $rowHtml . '</table>' : '')
+    . $messageHtml
+    . '<div style="margin-top:30px;padding-top:18px;border-top:1px solid #e5ebf3;color:#51617e;font-size:13px;line-height:1.6;">'
+    . '&copy; ' . date('Y') . ' BM Properties. All rights reserved.<br>'
+    . htmlspecialchars($footerNote, ENT_QUOTES, 'UTF-8')
+    . '</div>'
+    . '</div>'
+    . '</div>'
+    . '</div>';
 }

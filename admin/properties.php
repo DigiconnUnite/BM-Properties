@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
 
 $pageTitle = 'Properties';
 $activePage = 'properties';
-$properties = get_all_properties();
+$properties = get_admin_properties();
 
 include __DIR__ . '/_layout_top.php';
 ?>
@@ -41,7 +41,12 @@ include __DIR__ . '/_layout_top.php';
                         <td><?php echo htmlspecialchars($property['name'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($property['category'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($property['slug'], ENT_QUOTES, 'UTF-8'); ?></td>
-                        <td><?php echo htmlspecialchars($property['status'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td>
+                            <?php $propertyStatus = strtolower((string) ($property['status'] ?? 'active')); ?>
+                            <span class="admin-badge-status <?php echo $propertyStatus === 'active' ? 'active' : 'inactive'; ?>">
+                                <?php echo htmlspecialchars(ucfirst($propertyStatus), ENT_QUOTES, 'UTF-8'); ?>
+                            </span>
+                        </td>
                         <td>
                             <a class="btn btn-sm btn-outline-primary"
                                 href="modules/properties/edit.php?id=<?php echo (int) $property['id']; ?>">Edit</a>

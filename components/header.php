@@ -104,12 +104,9 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
                                 <a href="#modalRegister" data-bs-toggle="modal">Register</a>
                             </div> -->
                     <div class="menu-outer"></div>
-                    <div class="button-mobi-sell">
-                        <a class="tf-btn primary" href="contact.php">Contact us</a>
-                    </div>
-                    <div class="button-mobi-sell mt-12">
-                        <button type="button" class="tf-btn primary header-enquiry-btn" data-enquiry-open="1">Quick
-                            Enquiry</button>
+                    <div class="mobile-menu-actions">
+                        <a class="tf-btn primary" href="<?php echo htmlspecialchars($siteBasePath, ENT_QUOTES, 'UTF-8'); ?>contact.php">Contact Us</a>
+                        <button type="button" class="tf-btn primary header-enquiry-btn" data-enquiry-open="1">Quick Enquiry</button>
                     </div>
                     <!-- <div class="mobi-icon-box">
                                 <div class="box d-flex align-items-center">
@@ -133,8 +130,8 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
 <div class="enquiry-modal" id="enquiryModal" aria-hidden="true">
     <div class="enquiry-modal-backdrop" data-enquiry-close="1"></div>
     <div class="enquiry-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="enquiryModalTitle">
-        <button type="button" class="enquiry-modal-close" data-enquiry-close="1" aria-label="Close">×</button>
-        <h4 id="enquiryModalTitle">Start posting your property, it's free</h4>
+        <button type="button" class="enquiry-modal-close" data-enquiry-close="1" aria-label="Close">&times;</button>
+        <h4 id="enquiryModalTitle">“Connect with BM Properties for Your Property Needs”</h4>
         <p class="enquiry-subtitle">Add Basic Details</p>
 
         <form method="post"

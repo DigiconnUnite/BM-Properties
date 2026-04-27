@@ -189,20 +189,40 @@ function get_flash(string $key): string
     return $message;
 }
 
-function upload_image_file(array $file, string $directory, string $baseUrlPath): ?string
+function upload_image_file(array $file, string $directory, string $baseUrlPath, ?string &$error = null): ?string
 {
+    $error = null;
+
     if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        $uploadError = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
+        if ($uploadError === UPLOAD_ERR_INI_SIZE || $uploadError === UPLOAD_ERR_FORM_SIZE) {
+            $error = 'Image size must be 1MB or less.';
+        } elseif ($uploadError !== UPLOAD_ERR_NO_FILE) {
+            $error = 'Unable to read the uploaded image. Please try again.';
+        }
         return null;
     }
 
     $tmpName = (string) ($file['tmp_name'] ?? '');
     if ($tmpName === '' || !is_uploaded_file($tmpName)) {
+        $error = 'Unable to read the uploaded image. Please try again.';
         return null;
     }
 
     $maxBytes = 1024 * 1024; // 1MB
     $size = (int) ($file['size'] ?? 0);
-    if ($size <= 0 || $size > $maxBytes) {
+    if ($size <= 0) {
+        $error = 'Uploaded image is empty. Please choose a valid WEBP image.';
+        return null;
+    }
+    if ($size > $maxBytes) {
+        $error = 'Image size must be 1MB or less.';
+        return null;
+    }
+
+    $fileName = strtolower((string) ($file['name'] ?? ''));
+    if (pathinfo($fileName, PATHINFO_EXTENSION) !== 'webp') {
+        $error = 'Only WEBP images are allowed.';
         return null;
     }
 
@@ -220,64 +240,51 @@ function upload_image_file(array $file, string $directory, string $baseUrlPath):
         }
     }
 
-    if (!in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp', 'image/x-webp'], true)) {
+    if (!in_array($mimeType, ['image/webp', 'image/x-webp'], true)) {
+        $error = 'Only valid WEBP images are allowed.';
         return null;
     }
 
     if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) {
+        $error = 'Upload folder is not available.';
         return null;
     }
 
-    $extensionByMime = [
-        'image/jpeg' => 'jpg',
-        'image/png' => 'png',
-        'image/webp' => 'webp',
-        'image/x-webp' => 'webp',
-    ];
-    $targetExtension = (string) ($extensionByMime[$mimeType] ?? 'webp');
-
     $canConvertToWebp = function_exists('imagewebp')
-        && (($mimeType === 'image/jpeg' && function_exists('imagecreatefromjpeg'))
-            || ($mimeType === 'image/png' && function_exists('imagecreatefrompng'))
-            || (($mimeType === 'image/webp' || $mimeType === 'image/x-webp') && function_exists('imagecreatefromwebp')));
+        && function_exists('imagecreatefromwebp');
 
     if ($canConvertToWebp) {
         $webpName = bin2hex(random_bytes(16)) . '.webp';
         $webpPath = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $webpName;
         $image = null;
 
-        if ($mimeType === 'image/jpeg') {
-            $image = @imagecreatefromjpeg($tmpName) ?: null;
-        } elseif ($mimeType === 'image/png') {
-            $image = @imagecreatefrompng($tmpName) ?: null;
-            if ($image !== null && function_exists('imagealphablending') && function_exists('imagesavealpha')) {
-                @imagealphablending($image, true);
-                @imagesavealpha($image, true);
-            }
-        } else {
-            $image = @imagecreatefromwebp($tmpName) ?: null;
-        }
+        $image = @imagecreatefromwebp($tmpName) ?: null;
 
         if ($image !== null && @imagewebp($image, $webpPath, 82)) {
             @imagedestroy($image);
-            if (filesize($webpPath) !== false && (int) filesize($webpPath) <= $maxBytes) {
+            $webpSize = filesize($webpPath);
+            if ($webpSize !== false && (int) $webpSize > 0 && (int) $webpSize <= $maxBytes) {
                 return rtrim($baseUrlPath, '/') . '/' . $webpName;
             }
             @unlink($webpPath);
+            $error = 'Compressed WEBP image is still larger than 1MB.';
         } elseif ($image !== null) {
             @imagedestroy($image);
         }
     }
 
-    // Fallback when GD/WebP conversion is unavailable: store original uploaded format.
-    $fallbackName = bin2hex(random_bytes(16)) . '.' . $targetExtension;
+    // Fallback when GD cannot re-encode WEBP: store the original WEBP only.
+    $fallbackName = bin2hex(random_bytes(16)) . '.webp';
     $fallbackPath = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fallbackName;
     if (!@move_uploaded_file($tmpName, $fallbackPath)) {
+        $error = 'Unable to save the uploaded WEBP image.';
         return null;
     }
 
-    if (filesize($fallbackPath) === false || (int) filesize($fallbackPath) > $maxBytes) {
+    $fallbackSize = filesize($fallbackPath);
+    if ($fallbackSize === false || (int) $fallbackSize <= 0 || (int) $fallbackSize > $maxBytes) {
         @unlink($fallbackPath);
+        $error = 'Image size must be 1MB or less.';
         return null;
     }
 

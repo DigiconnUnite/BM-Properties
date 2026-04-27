@@ -28,23 +28,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $cityName = clean_text((string) ($_POST['city_name'] ?? ''));
         $propertyCount = max(0, (int) ($_POST['property_count'] ?? 0));
-        $sortOrder = max(0, (int) ($_POST['sort_order'] ?? 0));
+        $sortOrder = (int) ($existing['sort_order'] ?? 0);
         $isActive = isset($_POST['is_active']) ? 1 : 0;
         $imagePath = (string) ($existing['image_path'] ?? '');
+        $oldImagePath = $imagePath;
 
         $uploadRoot = realpath(__DIR__ . '/..');
         if (is_string($uploadRoot) && $uploadRoot !== '') {
             $citiesUploadDir = $uploadRoot . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'cities';
-            $uploadedImage = upload_image_file($_FILES['image_file'] ?? [], $citiesUploadDir, 'uploads/cities');
+            $uploadError = null;
+            $uploadedImage = upload_image_file($_FILES['image_file'] ?? [], $citiesUploadDir, 'uploads/cities', $uploadError);
             if ($uploadedImage !== null) {
                 $imagePath = $uploadedImage;
+            } elseif ($uploadError !== null) {
+                $error = $uploadError;
             }
         }
 
-        if ($cityName === '') {
+        if ($error !== '') {
+            // Keep upload validation message.
+        } elseif ($cityName === '') {
             $error = 'City/Location name is required.';
         } elseif ($imagePath === '') {
-            $error = 'Please upload an image file from your local system.';
+            $error = 'Please upload a WEBP image from your local system.';
         } else {
             save_explore_city([
                 'city_name' => $cityName,
@@ -53,6 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'sort_order' => $sortOrder,
                 'is_active' => $isActive,
             ], $id > 0 ? $id : null);
+            if ($oldImagePath !== '' && $oldImagePath !== $imagePath) {
+                delete_uploaded_file($oldImagePath);
+            }
 
             $message = $id > 0 ? 'City updated.' : 'City added.';
             $editing = null;
@@ -91,14 +100,8 @@ include __DIR__ . '/_layout_top.php';
         </div>
 
         <div>
-            <label>Sort Order</label>
-            <input class="form-control" type="number" min="0" name="sort_order"
-                value="<?php echo (int) ($editing['sort_order'] ?? 0); ?>">
-        </div>
-
-        <div>
-            <label>Upload Image from Local System (max 1MB, .jpg/.png/.webp only)</label>
-            <input class="form-control" type="file" name="image_file" accept=".jpg,.jpeg,.png,.webp" <?php echo $editing ? '' : 'required'; ?>>
+            <label>Upload Image from Local System (WEBP only, max 1MB)</label>
+            <input class="form-control" type="file" name="image_file" accept=".webp,image/webp" <?php echo $editing ? '' : 'required'; ?>>
             <?php if (!empty($editing['image_path'])): ?>
                 <div class="admin-city-preview">
                     <span>Current Image</span>
@@ -128,7 +131,6 @@ include __DIR__ . '/_layout_top.php';
                     <th>Image</th>
                     <th>Location</th>
                     <th>Properties</th>
-                    <th>Sort</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -149,7 +151,6 @@ include __DIR__ . '/_layout_top.php';
                             <div class="admin-table-sub"><?php echo htmlspecialchars((string) ($city['image_path'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></div>
                         </td>
                         <td><?php echo (int) ($city['property_count'] ?? 0); ?></td>
-                        <td><?php echo (int) ($city['sort_order'] ?? 0); ?></td>
                         <td>
                             <span class="admin-badge-status <?php echo (int) ($city['is_active'] ?? 0) === 1 ? 'active' : 'inactive'; ?>">
                                 <?php echo (int) ($city['is_active'] ?? 0) === 1 ? 'Active' : 'Inactive'; ?>
@@ -168,7 +169,7 @@ include __DIR__ . '/_layout_top.php';
                 <?php endforeach; ?>
                 <?php if (count($cities) === 0): ?>
                     <tr>
-                        <td colspan="6">No city items found.</td>
+                        <td colspan="5">No city items found.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

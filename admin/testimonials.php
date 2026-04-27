@@ -32,50 +32,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $body = clean_text((string) ($_POST['message'] ?? ''));
     $isActive = isset($_POST['is_active']) ? 1 : 0;
     $imagePath = (string) ($existing['image_path'] ?? '');
+    $oldImagePath = $imagePath;
 
     $file = $_FILES['image_file'] ?? [];
     $hasFile = (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE);
 
     if ($hasFile) {
-      $fileName = strtolower((string) ($file['name'] ?? ''));
-      $tmpName = (string) ($file['tmp_name'] ?? '');
-      $mimeType = '';
-
-      if (function_exists('mime_content_type') && $tmpName !== '' && is_uploaded_file($tmpName)) {
-        $mimeType = (string) mime_content_type($tmpName);
-      } elseif (function_exists('finfo_open') && $tmpName !== '' && is_uploaded_file($tmpName)) {
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        if ($finfo !== false) {
-          $mimeType = (string) finfo_file($finfo, $tmpName);
-          finfo_close($finfo);
-        }
-      }
-
-      $extension = pathinfo($fileName, PATHINFO_EXTENSION);
-      $isWebpMime = $mimeType === '' || in_array($mimeType, ['image/webp', 'image/x-webp'], true);
-      if ($extension !== 'webp' || !$isWebpMime) {
-        $error = 'Please upload only WEBP images for testimonials.';
-      }
-
-      $maxBytes = 1024 * 1024;
-      $size = (int) ($file['size'] ?? 0);
-      if ($error === '' && ($size <= 0 || $size > $maxBytes)) {
-        $error = 'Testimonial image must be up to 1MB.';
-      }
-
-      if ($error === '') {
-        $uploadRoot = realpath(__DIR__ . '/..');
-        if (is_string($uploadRoot) && $uploadRoot !== '') {
-          $testimonialDir = $uploadRoot . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'testimonials';
-          $uploadedImage = upload_image_file($file, $testimonialDir, 'uploads/testimonials');
-          if ($uploadedImage !== null) {
-            $imagePath = $uploadedImage;
-          } else {
-            $error = 'Unable to upload image. Please try again.';
-          }
+      $uploadRoot = realpath(__DIR__ . '/..');
+      if (is_string($uploadRoot) && $uploadRoot !== '') {
+        $testimonialDir = $uploadRoot . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'testimonials';
+        $uploadError = null;
+        $uploadedImage = upload_image_file($file, $testimonialDir, 'uploads/testimonials', $uploadError);
+        if ($uploadedImage !== null) {
+          $imagePath = $uploadedImage;
         } else {
-          $error = 'Unable to locate upload directory.';
+          $error = $uploadError ?? 'Unable to upload image. Please use WEBP up to 1MB.';
         }
+      } else {
+        $error = 'Unable to locate upload directory.';
       }
     }
 
@@ -99,6 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'sort_order' => 0,
         'is_active' => $isActive,
       ], $id > 0 ? $id : null);
+      if ($oldImagePath !== '' && $oldImagePath !== $imagePath) {
+        delete_uploaded_file($oldImagePath);
+      }
 
       $message = $id > 0 ? 'Testimonial updated.' : 'Testimonial added.';
       $editing = null;
@@ -188,7 +165,11 @@ include __DIR__ . '/_layout_top.php';
               </div>
             </td>
             <td><?php echo (int) $item['rating']; ?>/5</td>
-            <td><?php echo (int) $item['is_active'] === 1 ? 'Active' : 'Inactive'; ?></td>
+            <td>
+              <span class="admin-badge-status <?php echo (int) $item['is_active'] === 1 ? 'active' : 'inactive'; ?>">
+                <?php echo (int) $item['is_active'] === 1 ? 'Active' : 'Inactive'; ?>
+              </span>
+            </td>
             <td>
               <a class="btn btn-sm btn-outline-primary"
                 href="testimonials.php?edit=<?php echo (int) $item['id']; ?>">Edit</a>

@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $existing = $id > 0 ? get_gallery_item_by_id($id) : null;
         $title = clean_text((string) ($_POST['title'] ?? ''));
         $imagePath = (string) ($existing['image_path'] ?? '');
+        $oldImagePath = $imagePath;
         $isActive = isset($_POST['is_active']) ? 1 : 0;
         $uploadedBy = (string) (admin_user()['username'] ?? 'admin');
         $uploadedImage = null;
@@ -36,16 +37,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $uploadRoot = realpath(__DIR__ . '/..');
         if (is_string($uploadRoot) && $uploadRoot !== '') {
             $galleryUploadDir = $uploadRoot . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'gallery';
-            $uploadedImage = upload_image_file($_FILES['image_file'] ?? [], $galleryUploadDir, 'uploads/gallery');
+            $uploadError = null;
+            $uploadedImage = upload_image_file($_FILES['image_file'] ?? [], $galleryUploadDir, 'uploads/gallery', $uploadError);
             if ($uploadedImage !== null) {
                 $imagePath = $uploadedImage;
+            } elseif ($uploadError !== null) {
+                $error = $uploadError;
             }
         }
 
-        if ($title === '') {
+        if ($error !== '') {
+            // Keep upload validation message.
+        } elseif ($title === '') {
             $error = 'Title is required.';
         } elseif ($imagePath === '') {
-            $error = 'Please upload an image file from your local system.';
+            $error = 'Please upload a WEBP image from your local system.';
         } else {
             save_gallery_item([
                 'title' => $title,
@@ -54,6 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'is_active' => $isActive,
                 'uploaded_by' => $uploadedBy,
             ], $id > 0 ? $id : null);
+            if ($oldImagePath !== '' && $oldImagePath !== $imagePath) {
+                delete_uploaded_file($oldImagePath);
+            }
             $message = $id > 0 ? 'Gallery item updated.' : 'Gallery item added.';
             $editing = null;
         }
@@ -84,8 +93,8 @@ include __DIR__ . '/_layout_top.php';
         <div><label>Title</label><input class="form-control" name="title"
                 value="<?php echo htmlspecialchars((string) ($editing['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                 required></div>
-        <div><label>Upload Image from Local System (max 1MB, .jpg/.png/.webp only)</label><input class="form-control"
-                type="file" name="image_file" accept=".jpg,.jpeg,.png,.webp" <?php echo $editing ? '' : 'required'; ?>>
+        <div><label>Upload Image from Local System (WEBP only, max 1MB)</label><input class="form-control"
+                type="file" name="image_file" accept=".webp,image/webp" <?php echo $editing ? '' : 'required'; ?>>
         </div>
         <div class="admin-checkbox-wrap"><label><input type="checkbox" name="is_active" <?php echo isset($editing) ? ((int) ($editing['is_active'] ?? 1) === 1 ? 'checked' : '') : 'checked'; ?>> Active</label></div>
         <div class="admin-form-full">
@@ -103,7 +112,6 @@ include __DIR__ . '/_layout_top.php';
                 <tr>
                     <th>Image</th>
                     <th>Title</th>
-                    <th>Category</th>
                     <th>Section</th>
                     <th>Status</th>
                     <th>Uploaded By</th>
@@ -131,7 +139,6 @@ include __DIR__ . '/_layout_top.php';
                                 <?php echo htmlspecialchars((string) $item['image_path'], ENT_QUOTES, 'UTF-8'); ?>
                             </div>
                         </td>
-                        <td>-</td>
                         <td><span class="admin-badge-soft">Gallery</span></td>
                         <td>
                             <span
@@ -158,7 +165,7 @@ include __DIR__ . '/_layout_top.php';
                 <?php endforeach; ?>
                 <?php if (count($items) === 0): ?>
                     <tr>
-                        <td colspan="8">No gallery items found.</td>
+                        <td colspan="7">No gallery items found.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

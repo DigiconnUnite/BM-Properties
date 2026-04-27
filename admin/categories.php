@@ -108,7 +108,11 @@ include __DIR__ . '/_layout_top.php';
                     <tr>
                         <td><?php echo htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($category['slug'], ENT_QUOTES, 'UTF-8'); ?></td>
-                        <td><?php echo (int) $category['is_active'] === 1 ? 'Active' : 'Inactive'; ?></td>
+                        <td>
+                            <span class="admin-badge-status <?php echo (int) $category['is_active'] === 1 ? 'active' : 'inactive'; ?>">
+                                <?php echo (int) $category['is_active'] === 1 ? 'Active' : 'Inactive'; ?>
+                            </span>
+                        </td>
                         <td>
                             <a class="btn btn-sm btn-outline-primary"
                                 href="categories.php?edit=<?php echo (int) $category['id']; ?>">Edit</a>
