@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <?php include 'components/header.php'; ?>
             <!-- Page Title -->
-            <section class="flat-title-page page-title-default-bg">
+            <section class="flat-title-page page-title-contact">
                 <div class="container">
                     <div class="breadcrumb-content">
                         <ul class="breadcrumb">

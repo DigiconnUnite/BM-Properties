@@ -1722,6 +1722,8 @@
             </section> -->
             <!-- End Property  -->
 
+            <?php include 'components/top-properties-section.php'; ?>
+            <?php if (false): ?>
             <!-- Property  -->
             <section class="flat-section bg-primary-new">
                 <div class="container">
@@ -2033,6 +2035,7 @@
                 </div>
             </section>
             <!-- End Property  -->
+            <?php endif; ?>
             <!-- Testimonial -->
             <section class="flat-section flat-testimonial">
                 <div class="container">
@@ -2101,6 +2104,8 @@
                 </div>
             </section>
             <!-- End Testimonial -->
+            <?php include 'components/trusted-partners-section.php'; ?>
+            <?php if (false): ?>
             <!-- partner -->
             <section class="flat-section pt-0">
                 <div class="container2">
@@ -2174,6 +2179,7 @@
                 </div>
             </section>
             <!-- End partner -->
+            <?php endif; ?>
             <!-- Benefit -->
             <!-- <section class="mx-5 bg-primary-new radius-30">
                 <div class="flat-img-with-text">

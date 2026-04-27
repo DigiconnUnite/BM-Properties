@@ -158,6 +158,10 @@
 
         return line;
       });
+
+      if (config.maxItems && items.length > config.maxItems) {
+        items = items.slice(0, config.maxItems);
+      }
     }
 
     function syncStore() {
@@ -240,6 +244,12 @@
         return;
       }
 
+      if (config.maxItems && items.length >= config.maxItems) {
+        window.alert("You can add only up to " + config.maxItems + " items.");
+        textInput.value = "";
+        return;
+      }
+
       items.push(textValue);
       textInput.value = "";
       render();
@@ -298,6 +308,7 @@
     addButtonId: "features-add-btn",
     storeId: "features-textarea",
     textInputId: "features-input",
+    maxItems: 15,
   });
 
   initTextRepeater({

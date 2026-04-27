@@ -23,7 +23,7 @@
             <?php include 'components/header.php';?>
 
             <!-- Page Title -->
-            <section class="flat-title-page" style="background-image: url(images/banner/banner2.jpg);">
+            <section class="flat-title-page" style="background-image: url(images/breadcrumb/about.png);">
                 <div class="container">
                     <div class="breadcrumb-content">
                         <ul class="breadcrumb">
@@ -117,6 +117,8 @@
             <!-- End Service -->
 
 
+            <?php $trustedSectionClass = 'flat-section'; include 'components/trusted-partners-section.php'; unset($trustedSectionClass); ?>
+            <?php if (false): ?>
               <!-- partner -->
             <section class="flat-section">
                 <div class="container2">
@@ -178,6 +180,7 @@
             </div>
             </section>
             <!-- End partner -->
+            <?php endif; ?>
              <!-- Location -->
             <!-- <section class="flat-section">
                 <div class="container">

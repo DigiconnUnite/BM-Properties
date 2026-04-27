@@ -491,6 +491,7 @@ function get_site_settings(): array
         'instagram_url' => '#',
         'youtube_url' => '#',
         'page_title_bg' => 'images/banner/banner2.jpg',
+        'trusted_partners_heading' => 'Trusted by over 20+ major companies',
     ];
 }
 
@@ -521,6 +522,226 @@ function save_site_settings(array $data): void
         $data['page_title_bg']
     );
     $stmt->execute();
+}
+
+function get_trusted_partners(bool $onlyActive = true): array
+{
+    $conn = db();
+    $where = $onlyActive ? 'WHERE is_active = 1' : '';
+    $sql = "SELECT id, company_name, logo_path, sort_order, is_active, created_at
+            FROM trusted_partners
+            {$where}
+            ORDER BY sort_order ASC, id ASC";
+    $result = $conn->query($sql);
+
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
+function get_trusted_partner_by_id(int $id): ?array
+{
+    $conn = db();
+    $stmt = $conn->prepare('SELECT id, company_name, logo_path, sort_order, is_active, created_at FROM trusted_partners WHERE id = ? LIMIT 1');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+
+    return $row ?: null;
+}
+
+function save_trusted_partner(array $data, ?int $id = null): int
+{
+    $conn = db();
+    $companyName = (string) ($data['company_name'] ?? '');
+    $logoPath = (string) ($data['logo_path'] ?? '');
+    $sortOrder = max(0, (int) ($data['sort_order'] ?? 0));
+    $isActive = !empty($data['is_active']) ? 1 : 0;
+
+    if ($id === null) {
+        $stmt = $conn->prepare('INSERT INTO trusted_partners (company_name, logo_path, sort_order, is_active) VALUES (?, ?, ?, ?)');
+        $stmt->bind_param('ssii', $companyName, $logoPath, $sortOrder, $isActive);
+        $stmt->execute();
+
+        return (int) $conn->insert_id;
+    }
+
+    $stmt = $conn->prepare('UPDATE trusted_partners SET company_name = ?, logo_path = ?, sort_order = ?, is_active = ? WHERE id = ?');
+    $stmt->bind_param('ssiii', $companyName, $logoPath, $sortOrder, $isActive, $id);
+    $stmt->execute();
+
+    return $id;
+}
+
+function delete_trusted_partner(int $id): void
+{
+    $conn = db();
+    $partner = get_trusted_partner_by_id($id);
+    $stmt = $conn->prepare('DELETE FROM trusted_partners WHERE id = ?');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    if ($partner) {
+        delete_uploaded_file((string) ($partner['logo_path'] ?? ''));
+    }
+}
+
+function save_trusted_partners_heading(string $heading): void
+{
+    $conn = db();
+    $stmt = $conn->prepare('UPDATE site_settings SET trusted_partners_heading = ? WHERE id = 1');
+    $stmt->bind_param('s', $heading);
+    $stmt->execute();
+
+    if ($stmt->affected_rows === 0) {
+        $defaults = get_site_settings();
+        $insert = $conn->prepare('INSERT IGNORE INTO site_settings (id, office_address, phone, email, open_time, facebook_url, instagram_url, youtube_url, page_title_bg, trusted_partners_heading)
+            VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $insert->bind_param(
+            'sssssssss',
+            $defaults['office_address'],
+            $defaults['phone'],
+            $defaults['email'],
+            $defaults['open_time'],
+            $defaults['facebook_url'],
+            $defaults['instagram_url'],
+            $defaults['youtube_url'],
+            $defaults['page_title_bg'],
+            $heading
+        );
+        $insert->execute();
+    }
+}
+
+function get_featured_properties(int $limit = 4): array
+{
+    $conn = db();
+    $safeLimit = max(1, $limit);
+    $sql = "SELECT p.*, c.name AS category_name, c.slug AS category_slug
+        FROM properties p
+        LEFT JOIN categories c ON c.id = p.category_id
+        WHERE p.status = 'active' AND p.is_featured = 1
+        ORDER BY p.created_at DESC
+        LIMIT ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $safeLimit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $items = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $items[] = map_property_row($row);
+        }
+    }
+
+    return $items;
+}
+
+function map_top_property_row(array $row): array
+{
+    return [
+        'id' => (int) ($row['id'] ?? 0),
+        'title' => (string) ($row['title'] ?? ''),
+        'image_path' => (string) ($row['image_path'] ?? ''),
+        'detail_url' => (string) ($row['detail_url'] ?? ''),
+        'tag_label' => (string) ($row['tag_label'] ?? ''),
+        'highlights' => json_decode_or_default($row['highlights_json'] ?? '[]'),
+        'summary' => (string) ($row['summary'] ?? ''),
+        'sort_order' => (int) ($row['sort_order'] ?? 0),
+        'is_active' => (int) ($row['is_active'] ?? 0),
+        'created_at' => (string) ($row['created_at'] ?? ''),
+    ];
+}
+
+function get_top_properties(bool $onlyActive = true, int $limit = 4): array
+{
+    $conn = db();
+    $safeLimit = max(1, $limit);
+    $where = $onlyActive ? 'WHERE is_active = 1' : '';
+    $sql = "SELECT id, title, image_path, detail_url, tag_label, highlights_json, summary, sort_order, is_active, created_at
+            FROM top_properties
+            {$where}
+            ORDER BY sort_order ASC, id DESC
+            LIMIT ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $safeLimit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $items = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $items[] = map_top_property_row($row);
+        }
+    }
+
+    return $items;
+}
+
+function get_admin_top_properties(): array
+{
+    $conn = db();
+    $sql = 'SELECT id, title, image_path, detail_url, tag_label, highlights_json, summary, sort_order, is_active, created_at
+            FROM top_properties
+            ORDER BY sort_order ASC, id DESC';
+    $result = $conn->query($sql);
+
+    $items = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $items[] = map_top_property_row($row);
+        }
+    }
+
+    return $items;
+}
+
+function get_top_property_by_id(int $id): ?array
+{
+    $conn = db();
+    $stmt = $conn->prepare('SELECT id, title, image_path, detail_url, tag_label, highlights_json, summary, sort_order, is_active, created_at FROM top_properties WHERE id = ? LIMIT 1');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+
+    return $row ? map_top_property_row($row) : null;
+}
+
+function save_top_property(array $data, ?int $id = null): int
+{
+    $conn = db();
+    $title = (string) ($data['title'] ?? '');
+    $imagePath = (string) ($data['image_path'] ?? '');
+    $detailUrl = (string) ($data['detail_url'] ?? '');
+    $tagLabel = (string) ($data['tag_label'] ?? '');
+    $highlightsJson = to_json(array_slice(array_values(array_filter(array_map('strval', $data['highlights'] ?? []))), 0, 3));
+    $summary = (string) ($data['summary'] ?? '');
+    $sortOrder = max(0, (int) ($data['sort_order'] ?? 0));
+    $isActive = !empty($data['is_active']) ? 1 : 0;
+
+    if ($id === null) {
+        $stmt = $conn->prepare('INSERT INTO top_properties (title, image_path, detail_url, tag_label, highlights_json, summary, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt->bind_param('ssssssii', $title, $imagePath, $detailUrl, $tagLabel, $highlightsJson, $summary, $sortOrder, $isActive);
+        $stmt->execute();
+
+        return (int) $conn->insert_id;
+    }
+
+    $stmt = $conn->prepare('UPDATE top_properties SET title = ?, image_path = ?, detail_url = ?, tag_label = ?, highlights_json = ?, summary = ?, sort_order = ?, is_active = ? WHERE id = ?');
+    $stmt->bind_param('ssssssiii', $title, $imagePath, $detailUrl, $tagLabel, $highlightsJson, $summary, $sortOrder, $isActive, $id);
+    $stmt->execute();
+
+    return $id;
+}
+
+function delete_top_property(int $id): void
+{
+    $conn = db();
+    $item = get_top_property_by_id($id);
+    $stmt = $conn->prepare('DELETE FROM top_properties WHERE id = ?');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    if ($item) {
+        delete_uploaded_file((string) ($item['image_path'] ?? ''));
+    }
 }
 
 function save_contact_message(array $data): int
@@ -590,6 +811,15 @@ function get_property_count(): int
 function get_gallery_count(): int
 {
     return get_gallery_total_count(true);
+}
+
+function get_top_property_count(bool $onlyActive = true): int
+{
+    $conn = db();
+    $where = $onlyActive ? 'WHERE is_active = 1' : '';
+    $row = $conn->query("SELECT COUNT(*) AS total FROM top_properties {$where}")->fetch_assoc();
+
+    return (int) ($row['total'] ?? 0);
 }
 
 function get_explore_cities(bool $onlyActive = true): array

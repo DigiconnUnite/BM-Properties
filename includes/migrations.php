@@ -110,4 +110,51 @@ function run_app_migrations(): void
             INDEX idx_explore_cities_active_sort (is_active, sort_order)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
   }
+
+  if (!has_column('site_settings', 'trusted_partners_heading')) {
+    $conn->query("ALTER TABLE site_settings ADD COLUMN trusted_partners_heading VARCHAR(180) NOT NULL DEFAULT 'Trusted by over 20+ major companies' AFTER page_title_bg");
+  }
+
+  if (!table_exists('trusted_partners')) {
+    $conn->query("CREATE TABLE trusted_partners (
+            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            company_name VARCHAR(140) NOT NULL,
+            logo_path VARCHAR(255) NOT NULL,
+            sort_order INT NOT NULL DEFAULT 0,
+            is_active TINYINT(1) NOT NULL DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX idx_trusted_partners_active_sort (is_active, sort_order)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+    $seedPartners = [
+      ['Ahinsa', 'images/partners/ahinsa.png', 1],
+      ['Corporate Park', 'images/partners/corporate-park.png', 2],
+      ['Landmark City', 'images/partners/landmark-city.png', 3],
+      ['Lodha', 'images/partners/lodha.png', 4],
+      ['UPSIC', 'images/partners/upsic.png', 5],
+    ];
+    $stmt = $conn->prepare('INSERT INTO trusted_partners (company_name, logo_path, sort_order, is_active) VALUES (?, ?, ?, 1)');
+    foreach ($seedPartners as $partner) {
+      $stmt->bind_param('ssi', $partner[0], $partner[1], $partner[2]);
+      $stmt->execute();
+    }
+  }
+
+  if (!table_exists('top_properties')) {
+    $conn->query("CREATE TABLE top_properties (
+            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(160) NOT NULL,
+            image_path VARCHAR(255) NOT NULL,
+            detail_url VARCHAR(255) NOT NULL DEFAULT '',
+            tag_label VARCHAR(120) NOT NULL DEFAULT '',
+            highlights_json LONGTEXT NOT NULL,
+            summary TEXT NOT NULL,
+            sort_order INT NOT NULL DEFAULT 0,
+            is_active TINYINT(1) NOT NULL DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX idx_top_properties_active_sort (is_active, sort_order)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+  }
 }

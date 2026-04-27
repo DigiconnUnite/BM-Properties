@@ -30,8 +30,12 @@ $activePage = $activePage ?? '';
                     href="categories.php">Categories</a>
                 <a class="<?php echo $activePage === 'properties' ? 'active' : ''; ?>"
                     href="properties.php">Properties</a>
+                <a class="<?php echo $activePage === 'top-properties' ? 'active' : ''; ?>"
+                    href="top-properties.php">Top Properties</a>
                 <a class="<?php echo $activePage === 'gallery' ? 'active' : ''; ?>" href="gallery.php">Gallery</a>
                 <a class="<?php echo $activePage === 'cities' ? 'active' : ''; ?>" href="cities.php">Explore Cities</a>
+                <a class="<?php echo $activePage === 'partners' ? 'active' : ''; ?>"
+                    href="partners.php">Trusted Companies</a>
                 <a class="<?php echo $activePage === 'testimonials' ? 'active' : ''; ?>"
                     href="testimonials.php">Testimonials</a>
                 <a class="<?php echo $activePage === 'messages' ? 'active' : ''; ?>" href="messages.php">Messages</a>

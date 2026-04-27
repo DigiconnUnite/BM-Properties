@@ -290,3 +290,62 @@ function upload_image_file(array $file, string $directory, string $baseUrlPath, 
 
     return rtrim($baseUrlPath, '/') . '/' . $fallbackName;
 }
+
+function upload_partner_logo_file(array $file, string $directory, string $baseUrlPath, ?string &$error = null): ?string
+{
+    $error = null;
+
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        $uploadError = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
+        if ($uploadError === UPLOAD_ERR_INI_SIZE || $uploadError === UPLOAD_ERR_FORM_SIZE) {
+            $error = 'Logo size must be 1MB or less.';
+        } elseif ($uploadError !== UPLOAD_ERR_NO_FILE) {
+            $error = 'Unable to read the uploaded logo. Please try again.';
+        }
+        return null;
+    }
+
+    $tmpName = (string) ($file['tmp_name'] ?? '');
+    if ($tmpName === '' || !is_uploaded_file($tmpName)) {
+        $error = 'Unable to read the uploaded logo. Please try again.';
+        return null;
+    }
+
+    $size = (int) ($file['size'] ?? 0);
+    if ($size <= 0 || $size > (1024 * 1024)) {
+        $error = 'Logo size must be 1MB or less.';
+        return null;
+    }
+
+    $extension = strtolower(pathinfo((string) ($file['name'] ?? ''), PATHINFO_EXTENSION));
+    $allowed = [
+        'webp' => ['image/webp', 'image/x-webp'],
+        'png' => ['image/png'],
+        'jpg' => ['image/jpeg'],
+        'jpeg' => ['image/jpeg'],
+    ];
+    if (!isset($allowed[$extension])) {
+        $error = 'Only WEBP, PNG, JPG, or JPEG logos are allowed.';
+        return null;
+    }
+
+    $mimeType = function_exists('mime_content_type') ? (string) mime_content_type($tmpName) : '';
+    if ($mimeType !== '' && !in_array($mimeType, $allowed[$extension], true)) {
+        $error = 'Please upload a valid logo image.';
+        return null;
+    }
+
+    if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) {
+        $error = 'Upload folder is not available.';
+        return null;
+    }
+
+    $fileName = bin2hex(random_bytes(16)) . '.' . $extension;
+    $targetPath = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fileName;
+    if (!@move_uploaded_file($tmpName, $targetPath)) {
+        $error = 'Unable to save the uploaded logo.';
+        return null;
+    }
+
+    return rtrim($baseUrlPath, '/') . '/' . $fileName;
+}

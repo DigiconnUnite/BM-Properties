@@ -207,6 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $descriptionLines = split_non_empty_lines($form['description']);
   $detailRows = text_to_details($form['details']);
   $featureLines = split_non_empty_lines($form['features']);
+  $featureLines = array_slice($featureLines, 0, 15);
   $cardHighlightLines = split_non_empty_lines($form['card_highlights']);
   $nearbyItems = split_non_empty_lines($form['nearby_items']);
   $mapEmbed = normalize_map_embed_input($form['map_embed']);
@@ -264,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'nearby' => $form['nearby'],
         'nearby_items' => $nearbyItems,
         'details' => $detailRows,
-        'features' => [array_slice($featureLines, 0, 20)],
+        'features' => [array_slice($featureLines, 0, 15)],
         'map_address' => $form['map_address'],
         'map_city' => $form['map_city'],
         'map_state' => $form['map_state'],
@@ -276,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'website_label' => 'Visit Website',
         'whatsapp_number' => normalize_phone($form['whatsapp_number']),
         'card_highlights' => array_slice($cardHighlightLines, 0, 6),
-        'is_featured' => 1,
+        'is_featured' => 0,
         'status' => $form['status'] === 'inactive' ? 'inactive' : 'active',
       ];
 

@@ -20,7 +20,7 @@
             <?php include 'components/header.php'; ?>
 
             <!-- Page Title -->
-            <section class="flat-title-page page-title-default-bg">
+            <section class="flat-title-page page-title-gallery">
                 <div class="container">
                     <div class="breadcrumb-content">
                         <ul class="breadcrumb">
@@ -40,7 +40,15 @@
                         <h3 class="mt-4 title">Explore Our Featured Gallery</h3>
                     </div>
 
-                    <?php $galleryItems = get_gallery_items(true); ?>
+                    <?php
+                    $galleryPerPage = 9;
+                    $galleryCurrentPage = max(1, (int) ($_GET['page'] ?? 1));
+                    $galleryTotalItems = get_gallery_total_count(true);
+                    $galleryTotalPages = max(1, (int) ceil($galleryTotalItems / $galleryPerPage));
+                    $galleryCurrentPage = min($galleryCurrentPage, $galleryTotalPages);
+                    $galleryOffset = ($galleryCurrentPage - 1) * $galleryPerPage;
+                    $galleryItems = get_gallery_items_paginated($galleryOffset, $galleryPerPage, true);
+                    ?>
                     <div class="row g-4 gallery-grid-custom wow fadeInUp" data-wow-delay=".2s">
                         <?php foreach ($galleryItems as $item): ?>
                             <div class="col-lg-4 col-md-6">
@@ -50,6 +58,17 @@
                             </div>
                         <?php endforeach; ?>
                     </div>
+                    <?php if ($galleryTotalPages > 1): ?>
+                        <div class="text-center property-list-pagination gallery-list-pagination">
+                            <?php if ($galleryCurrentPage > 1): ?>
+                                <a class="tf-btn btn-view primary size-1 hover-btn-view" href="?page=<?php echo (int) ($galleryCurrentPage - 1); ?>">Previous</a>
+                            <?php endif; ?>
+                            <span class="property-page-indicator">Page <?php echo (int) $galleryCurrentPage; ?> of <?php echo (int) $galleryTotalPages; ?></span>
+                            <?php if ($galleryCurrentPage < $galleryTotalPages): ?>
+                                <a class="tf-btn btn-view primary size-1 hover-btn-view" href="?page=<?php echo (int) ($galleryCurrentPage + 1); ?>">Next</a>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </section>
 

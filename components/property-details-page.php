@@ -72,6 +72,25 @@ $features = $property['features'] ?? [
     ['Hangers', 'Bed linens', 'Extra pillows & blankets', 'Iron', 'TV with standard cable'],
     ['Refrigerator', 'Microwave', 'Dishwasher', 'Coffee maker'],
 ];
+$featureItems = [];
+foreach (is_array($features) ? $features : [] as $featureGroup) {
+    if (is_array($featureGroup)) {
+        foreach ($featureGroup as $featureItem) {
+            $featureText = trim((string) $featureItem);
+            if ($featureText !== '') {
+                $featureItems[] = $featureText;
+            }
+        }
+        continue;
+    }
+
+    $featureText = trim((string) $featureGroup);
+    if ($featureText !== '') {
+        $featureItems[] = $featureText;
+    }
+}
+$featureItems = array_slice(array_values(array_unique($featureItems)), 0, 15);
+$featureColumns = array_chunk($featureItems, 5);
 $map = $property['map'] ?? [
     'address' => $location,
     'city' => 'Agra',
@@ -257,9 +276,9 @@ $websiteIsExternal = preg_match('/^https?:\/\//i', $websiteUrl) === 1;
                             </div>
                         </div>
                         <div class="single-property-element single-property-feature">
-                            <h5 class="title fw-6">Amenities and features</h5>
+                            <h5 class="title fw-6">Amenities And Features</h5>
                             <div class="wrap-feature">
-                                <?php foreach ($features as $featureGroup): ?>
+                                <?php foreach ($featureColumns as $featureGroup): ?>
                                     <div class="box-feature">
                                         <ul>
                                             <?php foreach ($featureGroup as $featureItem): ?>

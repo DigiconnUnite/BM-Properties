@@ -84,6 +84,21 @@ CREATE TABLE IF NOT EXISTS explore_cities (
     INDEX idx_explore_cities_active_sort (is_active, sort_order)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS top_properties (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(160) NOT NULL,
+    image_path VARCHAR(255) NOT NULL,
+    detail_url VARCHAR(255) NOT NULL DEFAULT '',
+    tag_label VARCHAR(120) NOT NULL DEFAULT '',
+    highlights_json LONGTEXT NOT NULL,
+    summary TEXT NOT NULL,
+    sort_order INT NOT NULL DEFAULT 0,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_top_properties_active_sort (is_active, sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS site_settings (
     id TINYINT UNSIGNED PRIMARY KEY,
     office_address TEXT NOT NULL,

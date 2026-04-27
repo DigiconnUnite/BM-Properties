@@ -54,20 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   if ($action === 'update_contact_settings') {
-    $pageTitleBg = clean_text((string) ($_POST['page_title_bg'] ?? 'images/banner/banner2.jpg'));
-    $oldPageTitleBg = (string) ($settings['page_title_bg'] ?? '');
-    $uploadRoot = realpath(__DIR__ . '/..');
-    if (is_string($uploadRoot) && $uploadRoot !== '') {
-      $bannerUploadDir = $uploadRoot . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'banner';
-      $uploadError = null;
-      $uploadedBanner = upload_image_file($_FILES['page_title_bg_file'] ?? [], $bannerUploadDir, 'uploads/banner', $uploadError);
-      if ($uploadedBanner !== null) {
-        $pageTitleBg = $uploadedBanner;
-      } elseif ($uploadError !== null) {
-        $error = $uploadError;
-      }
-    }
-
     if ($error === '') {
       save_site_settings([
         'office_address' => clean_text((string) ($_POST['office_address'] ?? '')),
@@ -77,11 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'facebook_url' => clean_text((string) ($_POST['facebook_url'] ?? '#')),
         'instagram_url' => clean_text((string) ($_POST['instagram_url'] ?? '#')),
         'youtube_url' => clean_text((string) ($_POST['youtube_url'] ?? '#')),
-        'page_title_bg' => $pageTitleBg,
+        'page_title_bg' => (string) ($settings['page_title_bg'] ?? 'images/banner/banner2.jpg'),
       ]);
-      if ($oldPageTitleBg !== '' && $oldPageTitleBg !== $pageTitleBg) {
-        delete_uploaded_file($oldPageTitleBg);
-      }
       $settings = get_site_settings();
       $message = 'Contact settings updated successfully.';
     }
@@ -165,15 +148,6 @@ include __DIR__ . '/_layout_top.php';
       <label>YouTube URL</label>
       <input class="form-control" name="youtube_url"
         value="<?php echo htmlspecialchars((string) ($settings['youtube_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>">
-    </div>
-    <div>
-      <label>Page Title Background Image</label>
-      <input class="form-control" name="page_title_bg"
-        value="<?php echo htmlspecialchars((string) ($settings['page_title_bg'] ?? 'images/banner/banner2.jpg'), ENT_QUOTES, 'UTF-8'); ?>">
-    </div>
-    <div>
-      <label>Upload Background Image (WEBP only, max 1MB)</label>
-      <input class="form-control" type="file" name="page_title_bg_file" accept=".webp,image/webp">
     </div>
     <div class="admin-form-full">
       <button class="btn btn-primary admin-btn" type="submit">Save Contact Settings</button>

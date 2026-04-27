@@ -160,9 +160,21 @@ body {
   color: #161e2d;
   background-color: #ffffff;
 }
-
+.page-title-gallery {
+  background-image: url("../images/breadcrumb/gallery.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .page-title-properties {
-  background-image: url("../images/banner/banner2.jpg");
+  background-image: url("../images/breadcrumb/properties.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.page-title-contact {
+  background-image: url("../images/breadcrumb/contact.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -7910,28 +7922,33 @@ label {
 }
 
 .single-property-feature .title {
-  margin-bottom: 16px;
+  margin-bottom: 14px;
+  color: #00112f;
+  font-size: 28px;
+  line-height: 1.25;
 }
 .single-property-feature .wrap-feature {
-  display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px 72px;
   justify-content: space-between;
 }
 .single-property-feature .wrap-feature .box-feature ul {
-  padding-left: 15px;
+  padding-left: 16px;
   list-style: disc;
+  margin-bottom: 0;
 }
 .single-property-feature .wrap-feature .box-feature ul li {
   list-style: disc;
 }
 .single-property-feature .wrap-feature .box-feature ul li:not(:last-child) {
-  margin-bottom: 10px;
+  margin-bottom: 9px;
 }
 .single-property-feature .wrap-feature .box-feature .feature-item {
-  color: #5c6368;
+  color: #4f565c;
   gap: 8px;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 15px;
 }
 
 .single-property-map .title {
@@ -11160,7 +11177,8 @@ tr {
     border-radius: 15px;
   }
   .single-property-feature .wrap-feature {
-    gap: 30px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 40px;
   }
   .wrapper-sidebar-right {
     margin-bottom: 0;
@@ -11696,6 +11714,15 @@ tr {
   .box-amenities-property,
   .single-property-feature .wrap-feature {
     display: grid;
+  }
+
+  .single-property-feature .wrap-feature {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .single-property-feature .title {
+    font-size: 24px;
   }
 
   .whatsapp-float-btn {
