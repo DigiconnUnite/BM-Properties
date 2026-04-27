@@ -321,47 +321,52 @@
             
 
               <section class="flat-slider-detail-v1 px-10">
+                <div class="box-title text-center wow fadeInUp">
+                    <div class="text-subtitle text-primary">Gallery</div>
+                    <h3 class="mt-4 title">Project Gallery</h3>
+                </div>
+                <?php
+                $galleryItems = get_gallery_items(true);
+                $topGalleryItems = array_slice($galleryItems, 0, 6);
+                ?>
                 <div dir="ltr" class="swiper tf-sw-location" data-preview="3" data-tablet="2" data-mobile-sm="2"
                     data-mobile="1" data-space-lg="10" data-space-md="10" data-space="10" data-pagination="1"
                     data-pagination-sm="2" data-pagination-md="2" data-pagination-lg="3" data-loop="true"
                     data-autoplay="true" data-delay="2800">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <a href="images/gallery/dream-avenues.jpg" data-fancybox="gallery"
-                                class="box-img-detail d-block">
-                                <img src="images/gallery/dream-avenues.jpg" alt="img-property">
-                            </a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href="images/gallery/landmark-city.jpg" data-fancybox="gallery"
-                                class="box-img-detail d-block">
-                                <img src="images/gallery/landmark-city.jpg" alt="img-property">
-                            </a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href="images/gallery/the-grand-valley.jpg" data-fancybox="gallery"
-                                class="box-img-detail d-block">
-                                <img src="images/gallery/the-grand-valley.jpg" alt="img-property">
-                            </a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href="images/gallery/vrindavan-global.jpg" data-fancybox="gallery"
-                                class="box-img-detail d-block">
-                                <img src="images/gallery/vrindavan-global.jpg" alt="img-property">
-                            </a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href="images/gallery/upsic.jpg" data-fancybox="gallery"
-                                class="box-img-detail d-block">
-                                <img src="images/gallery/upsic.jpg" alt="img-property">
-                            </a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href="images/gallery/paramdeep-tower.png" data-fancybox="gallery"
-                                class="box-img-detail d-block">
-                                <img src="images/gallery/paramdeep-tower.png" alt="img-property">
-                            </a>
-                        </div>
+                        <?php foreach ($topGalleryItems as $galleryItem): ?>
+                            <div class="swiper-slide">
+                                <?php
+                                $imagePath = (string) ($galleryItem['image_path'] ?? '');
+                                $imageSrc = preg_match('/^https?:\/\//i', $imagePath) ? $imagePath : $imagePath;
+                                ?>
+                                <a href="<?php echo htmlspecialchars($imageSrc, ENT_QUOTES, 'UTF-8'); ?>" data-fancybox="gallery"
+                                    class="box-img-detail d-block">
+                                    <img src="<?php echo htmlspecialchars($imageSrc, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars((string) $galleryItem['title'], ENT_QUOTES, 'UTF-8'); ?>">
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php if (count($topGalleryItems) === 0): ?>
+                            <!-- Fallback to static images if no gallery items exist -->
+                            <div class="swiper-slide">
+                                <a href="images/gallery/dream-avenues.jpg" data-fancybox="gallery"
+                                    class="box-img-detail d-block">
+                                    <img src="images/gallery/dream-avenues.jpg" alt="img-property">
+                                </a>
+                            </div>
+                            <div class="swiper-slide">
+                                <a href="images/gallery/landmark-city.jpg" data-fancybox="gallery"
+                                    class="box-img-detail d-block">
+                                    <img src="images/gallery/landmark-city.jpg" alt="img-property">
+                                </a>
+                            </div>
+                            <div class="swiper-slide">
+                                <a href="images/gallery/the-grand-valley.jpg" data-fancybox="gallery"
+                                    class="box-img-detail d-block">
+                                    <img src="images/gallery/the-grand-valley.jpg" alt="img-property">
+                                </a>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <!-- <div class="box-navigation">
                         <div class="navigation swiper-nav-next nav-next-location"><span class="icon icon-arr-l"></span></div>

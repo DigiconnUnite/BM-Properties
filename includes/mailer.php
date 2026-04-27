@@ -83,14 +83,14 @@ function email_template(string $title, string $intro, array $rows = [], string $
   $rowHtml = '';
   foreach ($rows as $label => $value) {
     $rowHtml .= '<tr>'
-      . '<td style="padding:8px 18px 8px 0;color:#0b7a47;font-weight:700;white-space:nowrap;vertical-align:top;">' . htmlspecialchars((string) $label, ENT_QUOTES, 'UTF-8') . ':</td>'
+      . '<td style="padding:8px 18px 8px 0;color:#1563df;font-weight:700;white-space:nowrap;vertical-align:top;">' . htmlspecialchars((string) $label, ENT_QUOTES, 'UTF-8') . ':</td>'
       . '<td style="padding:8px 0;color:#0f1f3d;vertical-align:top;">' . nl2br(htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8')) . '</td>'
       . '</tr>';
   }
 
   $messageHtml = '';
   if (trim($message) !== '') {
-    $messageHtml = '<div style="margin-top:16px;color:#0b7a47;font-weight:700;">Message:</div>'
+    $messageHtml = '<div style="margin-top:16px;color:#1563df;font-weight:700;">Message:</div>'
       . '<div style="margin-top:12px;padding:14px 18px;border:1px solid #d7deea;border-radius:12px;background:#f8fbff;color:#0f1f3d;">'
       . nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'))
       . '</div>';
@@ -100,7 +100,7 @@ function email_template(string $title, string $intro, array $rows = [], string $
 
   return '<div style="margin:0;padding:24px;background:#edf3f8;font-family:Arial,Helvetica,sans-serif;color:#0f1f3d;">'
     . '<div style="max-width:720px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;">'
-    . '<div style="background:#2f8b60;padding:28px 32px;color:#ffffff;">'
+    . '<div style="background:#1563df;padding:28px 32px;color:#ffffff;">'
     . '<h1 style="margin:0 0 8px;font-size:26px;line-height:1.25;">' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '</h1>'
     . '<p style="margin:0;font-size:16px;line-height:1.5;">' . htmlspecialchars($intro, ENT_QUOTES, 'UTF-8') . '</p>'
     . '</div>'

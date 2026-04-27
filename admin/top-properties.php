@@ -26,10 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = (int) ($_POST['id'] ?? 0);
         $existing = $id > 0 ? get_top_property_by_id($id) : null;
         $title = clean_text((string) ($_POST['title'] ?? ''));
-        $detailUrl = clean_text((string) ($_POST['detail_url'] ?? ''));
         $tagLabel = clean_text((string) ($_POST['tag_label'] ?? ''));
         $summary = clean_text((string) ($_POST['summary'] ?? ''));
-        $sortOrder = max(0, (int) ($_POST['sort_order'] ?? 0));
         $isActive = isset($_POST['is_active']) ? 1 : 0;
         $highlights = array_slice(split_lines((string) ($_POST['highlights'] ?? '')), 0, 3);
         $imagePath = (string) ($existing['image_path'] ?? '');
@@ -59,11 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             save_top_property([
                 'title' => $title,
                 'image_path' => $imagePath,
-                'detail_url' => $detailUrl,
                 'tag_label' => $tagLabel,
                 'highlights' => $highlights,
                 'summary' => $summary,
-                'sort_order' => $sortOrder,
                 'is_active' => $isActive,
             ], $id > 0 ? $id : null);
 
@@ -105,24 +101,18 @@ include __DIR__ . '/_layout_top.php';
                 value="<?php echo htmlspecialchars((string) ($editing['tag_label'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                 placeholder="Defaults to title">
         </div>
-        <div>
-            <label>Detail Link</label>
-            <input class="form-control" name="detail_url" maxlength="255"
-                value="<?php echo htmlspecialchars((string) ($editing['detail_url'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                placeholder="property-details.php?slug=project-name">
-        </div>
-        <div>
-            <label>Sort Order</label>
-            <input class="form-control" type="number" min="0" name="sort_order"
-                value="<?php echo (int) ($editing['sort_order'] ?? 0); ?>">
-        </div>
-        <div class="admin-form-full">
+                <div class="admin-form-full">
             <label>Upload Image (WEBP only, max 1MB)</label>
             <input class="form-control" type="file" name="image_file" accept=".webp,image/webp" <?php echo $editing ? '' : 'required'; ?>>
         </div>
-        <div class="admin-form-full">
-            <label>Highlights (one per line, max 3)</label>
-            <textarea class="form-control" name="highlights" rows="3"><?php echo htmlspecialchars(implode("\n", (array) ($editing['highlights'] ?? [])), ENT_QUOTES, 'UTF-8'); ?></textarea>
+        <div class="admin-form-full admin-repeater" id="top-highlights-repeater">
+            <label>Highlights</label>
+            <div class="admin-repeater-controls">
+                <input class="form-control" id="top-highlights-input" type="text" placeholder="Enter highlight">
+                <button class="btn btn-outline-primary admin-btn" type="button" id="top-highlights-add-btn">Add</button>
+            </div>
+            <ul class="admin-upload-list" id="top-highlights-list"></ul>
+            <textarea class="form-control d-none" id="top-highlights-textarea" name="highlights" rows="3"><?php echo htmlspecialchars(implode("\n", (array) ($editing['highlights'] ?? [])), ENT_QUOTES, 'UTF-8'); ?></textarea>
         </div>
         <div class="admin-form-full">
             <label>Summary</label>
@@ -161,7 +151,6 @@ include __DIR__ . '/_layout_top.php';
                         </td>
                         <td>
                             <div class="admin-table-main"><?php echo htmlspecialchars((string) $item['title'], ENT_QUOTES, 'UTF-8'); ?></div>
-                            <div class="admin-table-sub"><?php echo htmlspecialchars((string) $item['detail_url'], ENT_QUOTES, 'UTF-8'); ?></div>
                         </td>
                         <td><?php echo htmlspecialchars(implode(', ', (array) ($item['highlights'] ?? [])), ENT_QUOTES, 'UTF-8'); ?></td>
                         <td>
@@ -187,4 +176,5 @@ include __DIR__ . '/_layout_top.php';
         </table>
     </div>
 </section>
+<script src="../js/admin-property-images.js"></script>
 <?php include __DIR__ . '/_layout_bottom.php'; ?>

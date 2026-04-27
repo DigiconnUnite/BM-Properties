@@ -326,4 +326,14 @@
     storeId: "nearby-textarea",
     textInputId: "nearby-input",
   });
+
+  // Top properties page highlights repeater
+  initTextRepeater({
+    mode: "single",
+    listId: "top-highlights-list",
+    addButtonId: "top-highlights-add-btn",
+    storeId: "top-highlights-textarea",
+    textInputId: "top-highlights-input",
+    maxItems: 3,
+  });
 })();
