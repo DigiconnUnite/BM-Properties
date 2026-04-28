@@ -15,7 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
 
 $pageTitle = 'Properties';
 $activePage = 'properties';
-$properties = get_admin_properties();
+$perPage = 10;
+$page = max(1, (int) ($_GET['p'] ?? 1));
+$offset = ($page - 1) * $perPage;
+$total = get_admin_properties_total_count();
+$properties = get_admin_properties_paginated($offset, $perPage);
 
 require_once __DIR__ . '/_layout.php';
 admin_layout_top($pageTitle, $activePage);
@@ -69,4 +73,5 @@ admin_layout_top($pageTitle, $activePage);
         </table>
     </div>
 </section>
+<?php echo render_admin_pagination($total, $perPage, $page, 'properties.php'); ?>
 <?php admin_layout_bottom(); ?>

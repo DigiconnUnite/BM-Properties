@@ -15,7 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
 
 $pageTitle = 'Enquiries';
 $activePage = 'enquiries';
-$enquiries = get_enquiries();
+$perPage = 10;
+$page = max(1, (int) ($_GET['p'] ?? 1));
+$offset = ($page - 1) * $perPage;
+$total = get_enquiry_count();
+$enquiries = get_enquiries_paginated($offset, $perPage);
 
 require_once __DIR__ . '/_layout.php';
 admin_layout_top($pageTitle, $activePage);
@@ -82,5 +86,6 @@ admin_layout_top($pageTitle, $activePage);
     </tbody>
   </table>
 </section>
+<?php echo render_admin_pagination($total, $perPage, $page, 'enquiries.php'); ?>
 <script src="../js/admin-messages.js"></script>
 <?php admin_layout_bottom(); ?>

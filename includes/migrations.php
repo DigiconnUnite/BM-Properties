@@ -77,6 +77,12 @@ function run_app_migrations(): void
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
   }
 
+  if (table_exists('enquiries') && has_column('enquiries', 'looking_to')) {
+    $conn->query("ALTER TABLE enquiries MODIFY COLUMN looking_to ENUM('sell','rent','pg','buy') NOT NULL DEFAULT 'sell'");
+    $conn->query("UPDATE enquiries SET looking_to = 'buy' WHERE looking_to = 'pg'");
+    $conn->query("ALTER TABLE enquiries MODIFY COLUMN looking_to ENUM('sell','rent','buy') NOT NULL DEFAULT 'sell'");
+  }
+
   if (!has_column('gallery_items', 'uploaded_by')) {
     $conn->query("ALTER TABLE gallery_items ADD COLUMN uploaded_by VARCHAR(80) NOT NULL DEFAULT 'admin' AFTER sort_order");
   }

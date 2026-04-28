@@ -181,7 +181,7 @@ CREATE TABLE `enquiries` (
   `phone` varchar(25) NOT NULL,
   `subject` varchar(180) NOT NULL,
   `message` text NOT NULL,
-  `looking_to` enum('sell','rent','pg') NOT NULL DEFAULT 'sell',
+  `looking_to` enum('sell','rent','buy') NOT NULL DEFAULT 'sell',
   `property_group` enum('residential','commercial') NOT NULL DEFAULT 'residential',
   `property_type` varchar(100) NOT NULL,
   `source` varchar(60) NOT NULL DEFAULT 'header-modal',

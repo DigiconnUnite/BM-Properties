@@ -75,7 +75,19 @@ function delete_uploaded_file(string $path): void
         return;
     }
 
+    // Normalize accidental admin-relative prefixes like ../uploads/... before filesystem checks.
+    while (str_starts_with($path, './') || str_starts_with($path, '.\\') || str_starts_with($path, '../') || str_starts_with($path, '..\\')) {
+        if (str_starts_with($path, './') || str_starts_with($path, '.\\')) {
+            $path = substr($path, 2);
+            continue;
+        }
+        $path = substr($path, 3);
+    }
+
     $relativePath = ltrim(str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $path), DIRECTORY_SEPARATOR);
+    if ($relativePath === '' || str_contains($relativePath, '..' . DIRECTORY_SEPARATOR)) {
+        return;
+    }
     $root = realpath(__DIR__ . '/..');
     if (!is_string($root) || $root === '') {
         return;
@@ -1281,4 +1293,81 @@ function get_enquiry_count(): int
     $conn = db();
     $row = $conn->query('SELECT COUNT(*) AS total FROM enquiries')->fetch_assoc();
     return (int) ($row['total'] ?? 0);
+}
+
+function get_enquiries_paginated(int $offset, int $limit): array
+{
+    $conn = db();
+    $safeOffset = max(0, $offset);
+    $safeLimit = max(1, $limit);
+    $sql = 'SELECT id, full_name, email, phone, subject, message, looking_to, property_group, property_type, source, page_url, created_at FROM enquiries ORDER BY created_at DESC LIMIT ?, ?';
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ii', $safeOffset, $safeLimit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
+function get_admin_properties_total_count(): int
+{
+    $conn = db();
+    $row = $conn->query('SELECT COUNT(*) AS total FROM properties')->fetch_assoc();
+
+    return (int) ($row['total'] ?? 0);
+}
+
+function get_admin_properties_paginated(int $offset, int $limit): array
+{
+    $conn = db();
+    $safeOffset = max(0, $offset);
+    $safeLimit = max(1, $limit);
+    $sql = "SELECT p.*, c.name AS category_name, c.slug AS category_slug FROM properties p LEFT JOIN categories c ON c.id = p.category_id ORDER BY p.created_at DESC LIMIT ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ii', $safeOffset, $safeLimit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $items = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $items[] = map_property_row($row);
+        }
+    }
+
+    return $items;
+}
+
+function render_admin_pagination(int $total, int $perPage, int $currentPage, string $baseUrl): string
+{
+    if ($perPage < 1) {
+        $perPage = 10;
+    }
+
+    $totalPages = (int) ceil($total / $perPage);
+    if ($totalPages <= 1) {
+        return '';
+    }
+
+    $querySep = strpos($baseUrl, '?') !== false ? '&' : '?';
+    $html = '<nav class="admin-pagination"><ul class="pagination">';
+
+    if ($currentPage > 1) {
+        $html .= '<li class="page-item"><a class="page-link" href="' . htmlspecialchars($baseUrl . $querySep . 'p=' . ($currentPage - 1), ENT_QUOTES, 'UTF-8') . '">Previous</a></li>';
+    }
+
+    $start = max(1, $currentPage - 2);
+    $end = min($totalPages, $currentPage + 2);
+    for ($i = $start; $i <= $end; $i++) {
+        $active = $i === $currentPage ? ' active' : '';
+        $html .= '<li class="page-item' . $active . '"><a class="page-link" href="' . htmlspecialchars($baseUrl . $querySep . 'p=' . $i, ENT_QUOTES, 'UTF-8') . '">' . $i . '</a></li>';
+    }
+
+    if ($currentPage < $totalPages) {
+        $html .= '<li class="page-item"><a class="page-link" href="' . htmlspecialchars($baseUrl . $querySep . 'p=' . ($currentPage + 1), ENT_QUOTES, 'UTF-8') . '">Next</a></li>';
+    }
+
+    $html .= '</ul></nav>';
+
+    return $html;
 }

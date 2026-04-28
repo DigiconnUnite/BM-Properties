@@ -149,7 +149,7 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
                 <div class="enquiry-choice-row">
                     <label><input type="radio" name="looking_to" value="sell" checked> <span>Sell</span></label>
                     <label><input type="radio" name="looking_to" value="rent"> <span>Rent / Lease</span></label>
-                    <label><input type="radio" name="looking_to" value="pg"> <span>PG</span></label>
+                    <label><input type="radio" name="looking_to" value="buy"> <span>Buy</span></label>
                 </div>
             </div>
 

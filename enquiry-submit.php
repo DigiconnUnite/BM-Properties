@@ -19,12 +19,17 @@ $phone = clean_text((string) ($_POST['phone'] ?? ''));
 $subject = clean_text((string) ($_POST['subject'] ?? 'Website Enquiry'));
 $message = clean_text((string) ($_POST['message'] ?? ''));
 $lookingTo = clean_text((string) ($_POST['looking_to'] ?? 'sell'));
+$lookingToBuy = (string) ($_POST['looking_to_buy'] ?? '');
 $propertyGroup = clean_text((string) ($_POST['property_group'] ?? 'residential'));
 $propertyType = clean_text((string) ($_POST['property_type'] ?? 'Flat/Apartment'));
 $source = clean_text((string) ($_POST['source'] ?? 'header-modal'));
 $returnUrl = clean_text((string) ($_POST['return_url'] ?? 'index.php'));
 
-if (!in_array($lookingTo, ['sell', 'rent', 'pg'], true)) {
+if ($lookingToBuy === '1') {
+  $lookingTo = 'buy';
+}
+
+if (!in_array($lookingTo, ['sell', 'rent', 'buy'], true)) {
   $lookingTo = 'sell';
 }
 if (!in_array($propertyGroup, ['residential', 'commercial'], true)) {
