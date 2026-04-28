@@ -152,15 +152,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ? array_values(array_filter(array_map(static fn($value) => clean_text((string) $value), $_POST['existing_gallery_images']), static fn($value) => $value !== ''))
     : [];
   $uploadedGallery = [];
+  $oldHeroImagePath = (string) ($property['hero_image'] ?? '');
+  $heroImagePath = $oldHeroImagePath;
+  $heroImageReplacementPath = '';
   
   // Handle hero image upload
-  $heroImagePath = (string) ($property['hero_image'] ?? '');
   $removeHeroImage = isset($_POST['remove_hero_image']) ? (bool) $_POST['remove_hero_image'] : false;
   
   if ($removeHeroImage) {
-    if ($heroImagePath !== '') {
-      delete_uploaded_file($heroImagePath);
-    }
+    $heroImageReplacementPath = $heroImagePath;
     $heroImagePath = '';
   }
   
@@ -182,10 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $uploadError = null;
         $savedHeroPath = upload_image_file($heroImageFile, $propertyUploadDir, 'uploads/properties', $uploadError);
         if ($savedHeroPath !== null) {
-          // Delete old hero image if exists
-          if ($heroImagePath !== '') {
-            delete_uploaded_file($heroImagePath);
-          }
+          $heroImageReplacementPath = $heroImagePath;
           $heroImagePath = $savedHeroPath;
         } else {
           $error = $uploadError ?? 'Unable to upload hero image.';
@@ -254,16 +251,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $mapEmbed = normalize_map_embed_input($form['map_embed']);
 
   if ($error === '') {
+    // Validate required fields
     if ($form['name'] === '') {
       $error = 'Property title is required.';
+    } elseif ($form['category_id'] === '' || !is_numeric($form['category_id'])) {
+      $error = 'Please select a valid category.';
     } elseif ($form['website_url'] === '') {
       $error = 'Reference website URL is required.';
+    } elseif (!filter_var($form['website_url'], FILTER_VALIDATE_URL)) {
+      $error = 'Please enter a valid website URL.';
     } elseif (count($galleryImages) === 0) {
       $error = 'Please add at least one showcase image.';
     } elseif (count($galleryImages) > 5) {
       $error = 'You can use only up to 5 showcase images.';
     } elseif ($mapEmbed === '') {
       $error = 'Map location is required. Paste map URL or iframe code.';
+    } elseif ($form['map_city'] === '') {
+      $error = 'City is required for location.';
+    } elseif ($form['map_state'] === '') {
+      $error = 'State is required for location.';
+    } elseif (empty($descriptionLines)) {
+      $error = 'Property description is required.';
     }
   }
 
@@ -319,11 +327,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'whatsapp_number' => normalize_phone($form['whatsapp_number']),
         'card_highlights' => array_slice($cardHighlightLines, 0, 6),
         'is_featured' => 0,
-        'status' => $form['status'] === 'inactive' ? 'inactive' : 'active',
+        'status' => normalize_property_status($form['status']),
       ];
 
       try {
         $savedId = save_property($payload, $id > 0 ? $id : null);
+        if ($heroImageReplacementPath !== '' && $heroImageReplacementPath !== $heroImagePath) {
+          delete_uploaded_file($heroImageReplacementPath);
+        }
         if ($id > 0) {
           delete_uploaded_files(array_diff($existingGalleryImages, $galleryImages));
         }
@@ -331,7 +342,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
       } catch (Throwable $exception) {
         error_log('Property save failed: ' . $exception->getMessage());
-        $error = 'Unable to save property right now. Please verify database table columns and try again.';
+        // Show actual error in development mode for debugging
+        $error = 'Unable to save property right now. Error: ' . $exception->getMessage();
       }
     }
   }

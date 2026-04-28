@@ -1,5 +1,6 @@
 <?php
 $topProperties = get_top_properties(true, 4);
+$basePath = $basePath ?? '.';
 ?>
 <?php if (count($topProperties) > 0): ?>
 <section class="flat-section bg-primary-new">
@@ -14,6 +15,7 @@ $topProperties = get_top_properties(true, 4);
                     <?php
                     $imagePath = (string) ($property['image_path'] ?? '');
                     $imagePath = $imagePath !== '' ? $imagePath : 'images/top-properties/dream-avenues.webp';
+                    $imagePath = property_asset_url($basePath, $imagePath);
                     $detailUrl = trim((string) ($property['detail_url'] ?? ''));
                     $detailUrl = $detailUrl !== '' ? $detailUrl : '#';
                     $title = (string) ($property['title'] ?? '');

@@ -28,5 +28,8 @@ function db(): mysqli
         exit('Failed to set database charset.');
     }
 
+    // Enable mysqli exception mode for better error handling
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
     return $connection;
 }

@@ -34,6 +34,40 @@ function resolve_asset_path(string $path, string $basePath = ''): string
     return ltrim($path, '/');
 }
 
+function property_asset_url(string $basePath, string $path): string
+{
+    $path = trim($path);
+    if ($path === '') {
+        return '';
+    }
+
+    $path = preg_replace('#^\./+#', '', $path) ?? $path;
+    if (preg_match('/^(https?:)?\/\//i', $path) === 1 || str_starts_with($path, 'data:')) {
+        return $path;
+    }
+
+    return resolve_asset_path($path, $basePath);
+}
+
+function normalize_property_status(string $status): string
+{
+    $status = strtolower(trim($status));
+
+    return in_array($status, ['active', 'inactive'], true) ? $status : 'active';
+}
+
+function log_sql_error(string $action, string $sql, mysqli_stmt $stmt, array $values = []): void
+{
+    $context = [
+        'action' => $action,
+        'error' => $stmt->error,
+        'sql' => $sql,
+        'values' => $values,
+    ];
+
+    error_log('SQL error: ' . json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+}
+
 function delete_uploaded_file(string $path): void
 {
     $path = trim($path);
@@ -250,19 +284,19 @@ function save_property(array $data, ?int $id = null): int
         'nearby_items_json' => to_json($data['nearby_items']),
         'details_json' => to_json($data['details']),
         'features_json' => to_json($data['features']),
-        'map_address' => $data['map_address'],
-        'map_city' => $data['map_city'],
-        'map_state' => $data['map_state'],
-        'map_postal' => $data['map_postal'],
-        'map_area' => $data['map_area'],
-        'map_country' => $data['map_country'],
-        'map_embed' => $data['map_embed'],
+        'map_address' => $data['map_address'] !== '' ? $data['map_address'] : 'Address not specified',
+        'map_city' => $data['map_city'] !== '' ? $data['map_city'] : 'City not specified',
+        'map_state' => $data['map_state'] !== '' ? $data['map_state'] : 'State not specified',
+        'map_postal' => $data['map_postal'] !== '' ? $data['map_postal'] : '000000',
+        'map_area' => $data['map_area'] !== '' ? $data['map_area'] : 'Area not specified',
+        'map_country' => $data['map_country'] !== '' ? $data['map_country'] : 'India',
+        'map_embed' => $data['map_embed'] !== '' ? $data['map_embed'] : 'https://maps.google.com',
         'website_url' => $data['website_url'],
         'website_label' => $data['website_label'],
         'whatsapp_number' => $data['whatsapp_number'],
         'card_highlights_json' => to_json($data['card_highlights']),
         'is_featured' => !empty($data['is_featured']) ? 1 : 0,
-        'status' => $data['status'],
+        'status' => normalize_property_status((string) ($data['status'] ?? 'active')),
     ];
 
     if ($id === null) {
@@ -313,8 +347,9 @@ function save_property(array $data, ?int $id = null): int
         if (!$stmt instanceof mysqli_stmt) {
             throw new RuntimeException('Failed to prepare property insert statement: ' . $conn->error);
         }
-        bind_params_dynamic($stmt, 'i' . str_repeat('s', 30) . 'i', $values);
+        bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'is', $values);
         if (!$stmt->execute()) {
+            log_sql_error('insert property', $sql, $stmt, $values);
             throw new RuntimeException('Failed to save property: ' . $stmt->error);
         }
 
@@ -368,8 +403,9 @@ function save_property(array $data, ?int $id = null): int
         $sqlData['status'],
         $id,
     ];
-    bind_params_dynamic($stmt, 'i' . str_repeat('s', 30) . 'ii', $values);
+    bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'isi', $values);
     if (!$stmt->execute()) {
+        log_sql_error('update property', $sql, $stmt, $values);
         throw new RuntimeException('Failed to update property: ' . $stmt->error);
     }
 

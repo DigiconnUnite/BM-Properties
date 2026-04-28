@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/../includes/app.php';
 
+$basePath = $basePath ?? '.';
+
 $properties = get_all_properties();
 $categories = get_categories(true);
 $settings = get_site_settings();
@@ -50,7 +52,7 @@ foreach ($orderedProperties as $propertyRow) {
 if (!function_exists('render_property_card')) {
     function render_property_card(array $property): void
     {
-        global $defaultWhatsappNumber;
+        global $defaultWhatsappNumber, $basePath;
 
         if (!function_exists('property_feature_icon_class')) {
             function property_feature_icon_class(string $feature): string
@@ -122,7 +124,7 @@ if (!function_exists('render_property_card')) {
         }
 
         $detailPage = $property['detailPage'] ?? ('property-details/' . $property['slug'] . '.php');
-        $image = $property['heroImage'] ?? 'images/banner/banner-property-1.webp';
+        $image = property_asset_url($basePath, (string) ($property['heroImage'] ?? 'images/banner/banner-property-1.webp'));
         $name = $property['name'] ?? 'Property';
         $summary = $property['summary'] ?? '';
         $whatsappNumber = normalize_phone((string) ($property['whatsappNumber'] ?? ''));
