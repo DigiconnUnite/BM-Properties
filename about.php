@@ -110,7 +110,7 @@
             <!-- End Service -->
 
 
-            <?php $trustedSectionClass = 'flat-section'; include 'components/trusted-partners-section.php'; unset($trustedSectionClass); ?>
+            <?php $trustedSectionClass = 'flat-section about-partners'; include 'components/trusted-partners-section.php'; unset($trustedSectionClass); ?>
             <?php if (false): ?>
               <!-- partner -->
             <section class="flat-section">

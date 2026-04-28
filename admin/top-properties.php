@@ -76,6 +76,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $pageTitle = 'Top Properties';
 $activePage = 'top-properties';
 $items = get_admin_top_properties();
+$limitReached = count($items) >= 4 && !$editing;
+$limitWarning = '';
+if ($limitReached) {
+    $limitWarning = 'You have reached the maximum limit of 4 top properties. To add a new property, please delete an existing one first.';
+}
 
 require_once __DIR__ . '/_layout.php';
 admin_layout_top($pageTitle, $activePage);
@@ -86,6 +91,9 @@ admin_layout_top($pageTitle, $activePage);
         <div class="alert alert-success"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
     <?php if ($error !== ''): ?>
         <div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
+    <?php if ($limitWarning !== ''): ?>
+        <div class="alert alert-warning"><?php echo htmlspecialchars($limitWarning, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
+    <?php if (!$limitReached): ?>
     <form method="post" class="admin-form-grid" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
         <input type="hidden" name="id" value="<?php echo (int) ($editing['id'] ?? 0); ?>">
@@ -127,6 +135,7 @@ admin_layout_top($pageTitle, $activePage);
             <?php if ($editing): ?><a class="btn btn-outline-secondary admin-btn" href="top-properties.php">Cancel</a><?php endif; ?>
         </div>
     </form>
+    <?php endif; ?>
 </section>
 
 <section class="admin-card">

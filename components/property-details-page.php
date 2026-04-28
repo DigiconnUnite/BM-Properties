@@ -115,13 +115,9 @@ if (trim($mapEmbed) === '') {
     }
     $mapEmbed = 'https://maps.google.com/maps?q=' . rawurlencode($mapQuery) . '&output=embed';
 }
-$defaultWebsiteUrl = property_asset_url($basePath, 'contact.php');
-if ($propertySlug !== '') {
-    $defaultWebsiteUrl .= '?property=' . rawurlencode($propertySlug);
-}
-$websiteUrl = $property['websiteUrl'] ?? $defaultWebsiteUrl;
+$websiteUrl = trim((string) ($property['websiteUrl'] ?? ''));
 $websiteLabel = $property['websiteLabel'] ?? 'Click here for more info';
-$websiteIsExternal = preg_match('/^https?:\/\//i', $websiteUrl) === 1;
+$websiteIsExternal = $websiteUrl !== '' && preg_match('/^https?:\/\//i', $websiteUrl) === 1;
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">

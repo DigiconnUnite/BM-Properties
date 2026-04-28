@@ -256,9 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $error = 'Property title is required.';
     } elseif ($form['category_id'] === '' || !is_numeric($form['category_id'])) {
       $error = 'Please select a valid category.';
-    } elseif ($form['website_url'] === '') {
-      $error = 'Reference website URL is required.';
-    } elseif (!filter_var($form['website_url'], FILTER_VALIDATE_URL)) {
+    } elseif ($form['website_url'] !== '' && !filter_var($form['website_url'], FILTER_VALIDATE_URL)) {
       $error = 'Please enter a valid website URL.';
     } elseif (count($galleryImages) === 0) {
       $error = 'Please add at least one showcase image.';
@@ -389,10 +387,10 @@ admin_layout_top($pageTitle, $activePage);
     </div>
 
     <div>
-      <label>Reference Website URL</label>
+      <label>Reference Website URL (optional)</label>
       <input class="form-control" name="website_url"
         value="<?php echo htmlspecialchars($form['website_url'], ENT_QUOTES, 'UTF-8'); ?>"
-        placeholder="https://example.com" required>
+        placeholder="https://example.com">
     </div>
 
     <div class="admin-form-full">
