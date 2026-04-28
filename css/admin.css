@@ -603,3 +603,327 @@ body.admin-body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Modal Styles */
+.admin-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-modal {
+  background: var(--admin-card);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(15, 31, 61, 0.3);
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--admin-border);
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-dark) 100%);
+  color: white;
+}
+
+.admin-modal-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.admin-modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.admin-modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.admin-modal-content {
+  line-height: 1.6;
+}
+
+.admin-modal-content strong {
+  color: var(--admin-primary);
+  font-weight: 600;
+}
+
+.admin-modal-content br {
+  margin-bottom: 8px;
+}
+
+/* Detailed Modal Styles - Using Website Color Scheme */
+.admin-detail-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-detail-modal {
+  background: var(--admin-card);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(15, 31, 61, 0.3);
+  max-width: 800px;
+  width: 95%;
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-detail-modal-header {
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-dark) 100%);
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-detail-modal-header-info h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.admin-detail-modal-subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+.admin-detail-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-detail-modal-read-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-detail-modal-read-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.admin-detail-modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.admin-detail-modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-detail-modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.admin-detail-contact-info {
+  margin-bottom: 16px;
+}
+
+.admin-detail-contact-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid var(--admin-border);
+}
+
+.admin-detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-detail-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-detail-value {
+  font-size: 14px;
+  color: #1b2a41;
+  font-weight: 500;
+}
+
+.admin-detail-modal-message-section {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.admin-detail-modal-message-section .admin-detail-label {
+  margin-bottom: 8px;
+}
+
+.admin-detail-subject-content,
+.admin-detail-message-content {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #1b2a41;
+  white-space: pre-wrap;
+  min-height: 16px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.admin-detail-message-content {
+  min-height: 40px;
+  max-height: 100px;
+}
+
+.admin-detail-modal-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 12px;
+  border-top: 1px solid var(--admin-border);
+}
+
+.admin-detail-modal-reply-btn,
+.admin-detail-modal-delete-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.admin-detail-modal-reply-btn {
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-dark) 100%);
+  color: white;
+}
+
+.admin-detail-modal-reply-btn:hover {
+  background: linear-gradient(135deg, #0e49a6 0%, #0d3d8a 100%);
+}
+
+.admin-detail-modal-delete-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.admin-detail-modal-delete-btn:hover {
+  background: #c82333;
+}
+
+@media (max-width: 768px) {
+  .admin-modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+  
+  .admin-modal-header {
+    padding: 16px 20px;
+  }
+  
+  .admin-modal-body {
+    padding: 20px;
+  }
+
+  .admin-detail-modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .admin-detail-modal-header {
+    padding: 16px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .admin-detail-modal-actions {
+    align-self: flex-end;
+  }
+  
+  .admin-detail-modal-body {
+    padding: 20px;
+  }
+  
+  .admin-detail-contact-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+  
+  .admin-detail-modal-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .admin-detail-modal-reply-btn,
+  .admin-detail-modal-delete-btn {
+    width: 100%;
+  }
+}

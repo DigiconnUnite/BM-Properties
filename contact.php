@@ -112,9 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="contact-content">
-                                <h4>Drop Us A Line</h4>
-                                <p class="body-2 text-variant-1">Feel free to connect with us through our online
-                                    channels for updates, news, and more.</p>
+                                <h4>Get in Touch with BM Properties</h4>
+                                <p class="body-2 text-variant-1">Have a question or looking for the perfect property? Our team at BM Properties is here to help you find the best residential and investment opportunities in Agra. Reach out to us anytime — we’re just a message away.</p>
                                 <?php if ($contactMessage !== ''): ?>
                                     <div class="alert alert-success">
                                         <?php echo htmlspecialchars($contactMessage, ENT_QUOTES, 'UTF-8'); ?></div>

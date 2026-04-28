@@ -140,9 +140,7 @@ function map_property_row(array $row): array
         'isFeatured' => (int) ($row['is_featured'] ?? 0) === 1,
         'status' => (string) ($row['status'] ?? 'active'),
         'category_slug' => (string) ($row['category_slug'] ?? ''),
-        'featuredBadgeText' => (string) ($row['featured_badge_text'] ?? 'Featured'),
-        'forSaleBadgeText' => (string) ($row['for_sale_badge_text'] ?? 'For Sale'),
-    ];
+            ];
 }
 
 function get_all_properties(?string $categorySlug = null): array
@@ -263,8 +261,6 @@ function save_property(array $data, ?int $id = null): int
         'website_label' => $data['website_label'],
         'whatsapp_number' => $data['whatsapp_number'],
         'card_highlights_json' => to_json($data['card_highlights']),
-        'featured_badge_text' => $data['featured_badge_text'] ?? 'Featured',
-        'for_sale_badge_text' => $data['for_sale_badge_text'] ?? 'For Sale',
         'is_featured' => !empty($data['is_featured']) ? 1 : 0,
         'status' => $data['status'],
     ];
@@ -301,8 +297,6 @@ function save_property(array $data, ?int $id = null): int
             $sqlData['website_label'],
             $sqlData['whatsapp_number'],
             $sqlData['card_highlights_json'],
-            $sqlData['featured_badge_text'],
-            $sqlData['for_sale_badge_text'],
             $sqlData['is_featured'],
             $sqlData['status'],
         ];
@@ -313,13 +307,13 @@ function save_property(array $data, ?int $id = null): int
             nearby, nearby_items_json, details_json, features_json,
             map_address, map_city, map_state, map_postal, map_area, map_country,
             map_embed, website_url, website_label, whatsapp_number, card_highlights_json, 
-            featured_badge_text, for_sale_badge_text, is_featured, status
+            is_featured, status
         ) VALUES (' . $placeholders . ')';
         $stmt = $conn->prepare($sql);
         if (!$stmt instanceof mysqli_stmt) {
             throw new RuntimeException('Failed to prepare property insert statement: ' . $conn->error);
         }
-        bind_params_dynamic($stmt, 'i' . str_repeat('s', 32) . 'i', $values);
+        bind_params_dynamic($stmt, 'i' . str_repeat('s', 30) . 'i', $values);
         if (!$stmt->execute()) {
             throw new RuntimeException('Failed to save property: ' . $stmt->error);
         }
@@ -333,7 +327,7 @@ function save_property(array $data, ?int $id = null): int
         nearby = ?, nearby_items_json = ?, details_json = ?, features_json = ?,
         map_address = ?, map_city = ?, map_state = ?, map_postal = ?, map_area = ?, map_country = ?,
         map_embed = ?, website_url = ?, website_label = ?, whatsapp_number = ?, card_highlights_json = ?, 
-        featured_badge_text = ?, for_sale_badge_text = ?, is_featured = ?, status = ?
+        is_featured = ?, status = ?
         WHERE id = ?';
     $stmt = $conn->prepare($sql);
     if (!$stmt instanceof mysqli_stmt) {
@@ -370,13 +364,11 @@ function save_property(array $data, ?int $id = null): int
         $sqlData['website_label'],
         $sqlData['whatsapp_number'],
         $sqlData['card_highlights_json'],
-        $sqlData['featured_badge_text'],
-        $sqlData['for_sale_badge_text'],
         $sqlData['is_featured'],
         $sqlData['status'],
         $id,
     ];
-    bind_params_dynamic($stmt, 'i' . str_repeat('s', 32) . 'ii', $values);
+    bind_params_dynamic($stmt, 'i' . str_repeat('s', 30) . 'ii', $values);
     if (!$stmt->execute()) {
         throw new RuntimeException('Failed to update property: ' . $stmt->error);
     }

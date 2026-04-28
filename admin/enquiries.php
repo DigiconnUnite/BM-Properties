@@ -71,16 +71,8 @@ admin_layout_top($pageTitle, $activePage);
         <tr id="enquiry-row-<?php echo (int) $enquiry['id']; ?>" class="d-none">
           <td colspan="6">
             <div class="admin-detail">
-              <div class="admin-detail-label">Full Enquiry</div>
+              <div class="admin-detail-label">Full Message</div>
               <div class="admin-detail-value">
-                <strong>Subject:</strong> <?php echo htmlspecialchars((string) $enquiry['subject'], ENT_QUOTES, 'UTF-8'); ?><br>
-                <strong>Name:</strong> <?php echo htmlspecialchars((string) $enquiry['full_name'], ENT_QUOTES, 'UTF-8'); ?><br>
-                <strong>Phone:</strong> <?php echo htmlspecialchars((string) $enquiry['phone'], ENT_QUOTES, 'UTF-8'); ?><br>
-                <strong>Email:</strong> <?php echo htmlspecialchars((string) $enquiry['email'], ENT_QUOTES, 'UTF-8'); ?><br>
-                <strong>Looking to:</strong> <?php echo htmlspecialchars(ucfirst((string) $enquiry['looking_to']), ENT_QUOTES, 'UTF-8'); ?><br>
-                <strong>Property Type:</strong> <?php echo htmlspecialchars((string) $enquiry['property_type'], ENT_QUOTES, 'UTF-8'); ?><br>
-                <strong>Property Group:</strong> <?php echo htmlspecialchars(ucfirst((string) $enquiry['property_group']), ENT_QUOTES, 'UTF-8'); ?><br>
-                <strong>Message:</strong><br>
                 <?php echo nl2br(htmlspecialchars((string) $enquiry['message'], ENT_QUOTES, 'UTF-8')); ?>
               </div>
             </div>

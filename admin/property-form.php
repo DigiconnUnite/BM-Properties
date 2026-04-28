@@ -141,9 +141,7 @@ $form = [
   'nearby_items' => isset($property['nearbyItems']) ? implode("\n", $property['nearbyItems']) : '',
   'whatsapp_number' => (string) ($property['whatsappNumber'] ?? ''),
   'status' => (string) ($property['status'] ?? 'active'),
-  'featured_badge_text' => (string) ($property['featuredBadgeText'] ?? 'Featured'),
-  'for_sale_badge_text' => (string) ($property['forSaleBadgeText'] ?? 'For Sale'),
-];
+  ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   foreach ($form as $key => $value) {
@@ -320,8 +318,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'website_label' => 'Visit Website',
         'whatsapp_number' => normalize_phone($form['whatsapp_number']),
         'card_highlights' => array_slice($cardHighlightLines, 0, 6),
-        'featured_badge_text' => $form['featured_badge_text'],
-        'for_sale_badge_text' => $form['for_sale_badge_text'],
         'is_featured' => 0,
         'status' => $form['status'] === 'inactive' ? 'inactive' : 'active',
       ];
@@ -540,22 +536,7 @@ admin_layout_top($pageTitle, $activePage);
       </select>
     </div>
 
-    <div>
-      <label>Featured Badge Text</label>
-      <input class="form-control" name="featured_badge_text"
-        value="<?php echo htmlspecialchars($form['featured_badge_text'], ENT_QUOTES, 'UTF-8'); ?>"
-        placeholder="e.g., Featured, Hot Deal, Premium">
-      <small class="text-muted">Text for the first badge (leave empty to hide badge)</small>
-    </div>
-
-    <div>
-      <label>For Sale Badge Text</label>
-      <input class="form-control" name="for_sale_badge_text"
-        value="<?php echo htmlspecialchars($form['for_sale_badge_text'], ENT_QUOTES, 'UTF-8'); ?>"
-        placeholder="e.g., For Sale, Available, New Launch">
-      <small class="text-muted">Text for the second badge (leave empty to hide badge)</small>
-    </div>
-
+    
     <div class="admin-form-full">
       <button class="btn btn-primary admin-btn" type="submit">Save Property</button>
       <a class="btn btn-outline-secondary admin-btn" href="properties.php">Back to list</a>
