@@ -20,35 +20,47 @@
     <div id="wrapper">
         <div id="pagee" class="clearfix">
             <?php include 'components/header.php'; ?>
-            <?php $testimonials = get_testimonials(true); ?>
+            <?php 
+            $testimonials = get_testimonials(true);
+            $heroSections = array_slice(get_hero_sections(true), 0, 4); // Get max 4 active hero sections
+            ?>
 
             <!-- Slider -->
             <section class="flat-slider home-5">
                 <div class="wrap-slider-swiper">
                     <div dir="ltr" class="swiper-container thumbs-swiper-column">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="box-img">
-                                    <img src="images/slider/sli-1.webp" alt="images" fetchpriority="high">
+                            <?php if (count($heroSections) > 0): ?>
+                                <?php foreach ($heroSections as $heroSection): ?>
+                                    <div class="swiper-slide">
+                                        <div class="box-img">
+                                            <img src="<?php echo htmlspecialchars($heroSection['image_path'], ENT_QUOTES, 'UTF-8'); ?>" alt="images" fetchpriority="high">
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <!-- Fallback to static images if no dynamic content -->
+                                <div class="swiper-slide">
+                                    <div class="box-img">
+                                        <img src="images/slider/sli-1.webp" alt="images" fetchpriority="high">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="box-img">
-                                    <img src="images/slider/sli-2.webp" alt="images" fetchpriority="high">
+                                <div class="swiper-slide">
+                                    <div class="box-img">
+                                        <img src="images/slider/sli-2.webp" alt="images" fetchpriority="high">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="box-img">
-                                    <img src="images/slider/sli-3.webp" alt="images" fetchpriority="high">
+                                <div class="swiper-slide">
+                                    <div class="box-img">
+                                        <img src="images/slider/sli-3.webp" alt="images" fetchpriority="high">
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="box-img">
-                                    <img src="images/slider/sli-4.webp" alt="images" fetchpriority="high">
+                                <div class="swiper-slide">
+                                    <div class="box-img">
+                                        <img src="images/slider/sli-4.webp" alt="images" fetchpriority="high">
+                                    </div>
                                 </div>
-                            </div>
-
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="box-content">
@@ -57,22 +69,47 @@
                                 <div class="col-lg-6">
                                     <div class="slider-content">
                                         <div class="heading">
-                                            <h1 class="title-large title text-white wow fadeIn animationtext clip"
-                                                data-wow-delay=".2s" data-wow-duration="2000ms">
-                                                Find your
-                                                <br>
-                                                <span class="tf-text s1 cd-words-wrapper">
-                                                    <span class="item-text is-visible">Dream Home</span>
-                                                    <span class="item-text is-hidden">Perfect Property</span>
-                                                    <span class="item-text is-hidden">Perfect Space</span>
-                                                </span>
-                                            </h1>
-                                            <p class="subtitle text-white body-2 wow fadeInUp" data-wow-delay=".2s">
-                                                At BM Properties, we help you discover the perfect property that fits
-                                                your lifestyle and budget. Whether you are looking to buy, sell, or
-                                                rent, our carefully selected listings in prime locations ensure quality,
-                                                comfort, and long-term value. Start your journey with us and find a
-                                                place you can truly call home.</p>
+                                            <?php if (count($heroSections) > 0): ?>
+                                                <?php 
+                                                // Use the first hero section for the main content
+                                                $firstHero = $heroSections[0];
+                                                $subtitles = array_map(function($section) { 
+                                                    return $section['subtitle']; 
+                                                }, $heroSections);
+                                                ?>
+                                                <h1 class="title-large title text-white wow fadeIn animationtext clip"
+                                                    data-wow-delay=".2s" data-wow-duration="2000ms">
+                                                    <?php echo htmlspecialchars($firstHero['title'], ENT_QUOTES, 'UTF-8'); ?>
+                                                    <br>
+                                                    <span class="tf-text s1 cd-words-wrapper">
+                                                        <?php foreach ($subtitles as $index => $subtitle): ?>
+                                                            <span class="item-text <?php echo $index === 0 ? 'is-visible' : 'is-hidden'; ?>">
+                                                                <?php echo htmlspecialchars($subtitle, ENT_QUOTES, 'UTF-8'); ?>
+                                                            </span>
+                                                        <?php endforeach; ?>
+                                                    </span>
+                                                </h1>
+                                                <p class="subtitle text-white body-2 wow fadeInUp" data-wow-delay=".2s">
+                                                    <?php echo htmlspecialchars($firstHero['description'], ENT_QUOTES, 'UTF-8'); ?></p>
+                                            <?php else: ?>
+                                                <!-- Fallback to static content -->
+                                                <h1 class="title-large title text-white wow fadeIn animationtext clip"
+                                                    data-wow-delay=".2s" data-wow-duration="2000ms">
+                                                    Find your
+                                                    <br>
+                                                    <span class="tf-text s1 cd-words-wrapper">
+                                                        <span class="item-text is-visible">Dream Home</span>
+                                                        <span class="item-text is-hidden">Perfect Property</span>
+                                                        <span class="item-text is-hidden">Perfect Space</span>
+                                                    </span>
+                                                </h1>
+                                                <p class="subtitle text-white body-2 wow fadeInUp" data-wow-delay=".2s">
+                                                    At BM Properties, we help you discover the perfect property that fits
+                                                    your lifestyle and budget. Whether you are looking to buy, sell, or
+                                                    rent, our carefully selected listings in prime locations ensure quality,
+                                                    comfort, and long-term value. Start your journey with us and find a
+                                                    place you can truly call home.</p>
+                                            <?php endif; ?>
                                         </div>
                                         <!-- <div class="wrap-search-link">
                                             <div class="categories-list style-2">
@@ -88,27 +125,37 @@
                                 <div class="col-lg-6">
                                     <div class="swiper-container thumbs-swiper-column1 swiper-pagination5">
                                         <div class="swiper-wrapper">
-                                            <div class="swiper-slide">
-                                                <div class="image-detail">
-                                                    <img src="images/slider/sli-1.webp" alt="images">
+                                            <?php if (count($heroSections) > 0): ?>
+                                                <?php foreach ($heroSections as $heroSection): ?>
+                                                    <div class="swiper-slide">
+                                                        <div class="image-detail">
+                                                            <img src="<?php echo htmlspecialchars($heroSection['image_path'], ENT_QUOTES, 'UTF-8'); ?>" alt="images">
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <!-- Fallback to static images -->
+                                                <div class="swiper-slide">
+                                                    <div class="image-detail">
+                                                        <img src="images/slider/sli-1.webp" alt="images">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="image-detail">
-                                                    <img src="images/slider/sli-2.webp" alt="images">
+                                                <div class="swiper-slide">
+                                                    <div class="image-detail">
+                                                        <img src="images/slider/sli-2.webp" alt="images">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="image-detail">
-                                                    <img src="images/slider/sli-3.webp" alt="images">
+                                                <div class="swiper-slide">
+                                                    <div class="image-detail">
+                                                        <img src="images/slider/sli-3.webp" alt="images">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="image-detail">
-                                                    <img src="images/slider/sli-4.webp" alt="images">
+                                                <div class="swiper-slide">
+                                                    <div class="image-detail">
+                                                        <img src="images/slider/sli-4.webp" alt="images">
+                                                    </div>
                                                 </div>
-                                            </div>
-
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>

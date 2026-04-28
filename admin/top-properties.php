@@ -77,7 +77,8 @@ $pageTitle = 'Top Properties';
 $activePage = 'top-properties';
 $items = get_admin_top_properties();
 
-include __DIR__ . '/_layout_top.php';
+require_once __DIR__ . '/_layout.php';
+admin_layout_top($pageTitle, $activePage);
 ?>
 <section class="admin-card">
     <h2><?php echo $editing ? 'Edit Top Property' : 'Add Top Property'; ?></h2>
@@ -264,4 +265,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-<?php include __DIR__ . '/_layout_bottom.php'; ?>
+<?php admin_layout_bottom(); ?>

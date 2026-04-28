@@ -17,7 +17,8 @@ $pageTitle = 'Enquiries';
 $activePage = 'enquiries';
 $enquiries = get_enquiries();
 
-include __DIR__ . '/_layout_top.php';
+require_once __DIR__ . '/_layout.php';
+admin_layout_top($pageTitle, $activePage);
 ?>
 <section class="admin-card">
   <h2>Incoming Enquiries</h2>
@@ -90,4 +91,4 @@ include __DIR__ . '/_layout_top.php';
   </table>
 </section>
 <script src="../js/admin-messages.js"></script>
-<?php include __DIR__ . '/_layout_bottom.php'; ?>
+<?php admin_layout_bottom(); ?>

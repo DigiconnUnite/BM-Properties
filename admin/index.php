@@ -11,7 +11,8 @@ $enquiryCount = get_enquiry_count();
 $testimonialCount = get_testimonial_count();
 $topPropertyCount = get_top_property_count();
 
-include __DIR__ . '/_layout_top.php';
+require_once __DIR__ . '/_layout.php';
+admin_layout_top($pageTitle, $activePage);
 ?>
 <section class="admin-grid-cards">
     <article class="admin-card">
@@ -52,4 +53,4 @@ include __DIR__ . '/_layout_top.php';
         <a class="btn btn-outline-primary admin-btn" href="profile.php">Manage Profile</a>
     </div>
 </section>
-<?php include __DIR__ . '/_layout_bottom.php'; ?>
+<?php admin_layout_bottom(); ?>

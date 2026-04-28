@@ -1,7 +1,8 @@
 <?php
-$pageTitle = $pageTitle ?? 'Admin Panel';
-$activePage = $activePage ?? '';
-?>
+
+function admin_layout_top(string $pageTitle = 'Admin Panel', string $activePage = ''): void
+{
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,6 +31,7 @@ $activePage = $activePage ?? '';
                     href="properties.php">Properties</a>
                 <a class="<?php echo $activePage === 'top-properties' ? 'active' : ''; ?>"
                     href="top-properties.php">Top Properties</a>
+                <a class="<?php echo $activePage === 'hero-section' ? 'active' : ''; ?>" href="hero-section.php">Hero Section</a>
                 <a class="<?php echo $activePage === 'gallery' ? 'active' : ''; ?>" href="gallery.php">Gallery</a>
                 <a class="<?php echo $activePage === 'cities' ? 'active' : ''; ?>" href="cities.php">Explore Cities</a>
                 <a class="<?php echo $activePage === 'partners' ? 'active' : ''; ?>"
@@ -60,3 +62,16 @@ $activePage = $activePage ?? '';
                     <a class="btn btn-outline-primary admin-btn" href="logout.php">Logout</a>
                 </div>
             </header>
+    <?php
+}
+
+function admin_layout_bottom(): void
+{
+    ?>
+        </main>
+    </div>
+</body>
+
+</html>
+    <?php
+}

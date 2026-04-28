@@ -140,6 +140,8 @@ function map_property_row(array $row): array
         'isFeatured' => (int) ($row['is_featured'] ?? 0) === 1,
         'status' => (string) ($row['status'] ?? 'active'),
         'category_slug' => (string) ($row['category_slug'] ?? ''),
+        'featuredBadgeText' => (string) ($row['featured_badge_text'] ?? 'Featured'),
+        'forSaleBadgeText' => (string) ($row['for_sale_badge_text'] ?? 'For Sale'),
     ];
 }
 
@@ -261,6 +263,8 @@ function save_property(array $data, ?int $id = null): int
         'website_label' => $data['website_label'],
         'whatsapp_number' => $data['whatsapp_number'],
         'card_highlights_json' => to_json($data['card_highlights']),
+        'featured_badge_text' => $data['featured_badge_text'] ?? 'Featured',
+        'for_sale_badge_text' => $data['for_sale_badge_text'] ?? 'For Sale',
         'is_featured' => !empty($data['is_featured']) ? 1 : 0,
         'status' => $data['status'],
     ];
@@ -297,6 +301,8 @@ function save_property(array $data, ?int $id = null): int
             $sqlData['website_label'],
             $sqlData['whatsapp_number'],
             $sqlData['card_highlights_json'],
+            $sqlData['featured_badge_text'],
+            $sqlData['for_sale_badge_text'],
             $sqlData['is_featured'],
             $sqlData['status'],
         ];
@@ -306,13 +312,14 @@ function save_property(array $data, ?int $id = null): int
             description_json, location, price, price_suffix, beds, baths, sqft, overview_id,
             nearby, nearby_items_json, details_json, features_json,
             map_address, map_city, map_state, map_postal, map_area, map_country,
-            map_embed, website_url, website_label, whatsapp_number, card_highlights_json, is_featured, status
+            map_embed, website_url, website_label, whatsapp_number, card_highlights_json, 
+            featured_badge_text, for_sale_badge_text, is_featured, status
         ) VALUES (' . $placeholders . ')';
         $stmt = $conn->prepare($sql);
         if (!$stmt instanceof mysqli_stmt) {
             throw new RuntimeException('Failed to prepare property insert statement: ' . $conn->error);
         }
-        bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'is', $values);
+        bind_params_dynamic($stmt, 'i' . str_repeat('s', 32) . 'i', $values);
         if (!$stmt->execute()) {
             throw new RuntimeException('Failed to save property: ' . $stmt->error);
         }
@@ -325,7 +332,8 @@ function save_property(array $data, ?int $id = null): int
         description_json = ?, location = ?, price = ?, price_suffix = ?, beds = ?, baths = ?, sqft = ?, overview_id = ?,
         nearby = ?, nearby_items_json = ?, details_json = ?, features_json = ?,
         map_address = ?, map_city = ?, map_state = ?, map_postal = ?, map_area = ?, map_country = ?,
-        map_embed = ?, website_url = ?, website_label = ?, whatsapp_number = ?, card_highlights_json = ?, is_featured = ?, status = ?
+        map_embed = ?, website_url = ?, website_label = ?, whatsapp_number = ?, card_highlights_json = ?, 
+        featured_badge_text = ?, for_sale_badge_text = ?, is_featured = ?, status = ?
         WHERE id = ?';
     $stmt = $conn->prepare($sql);
     if (!$stmt instanceof mysqli_stmt) {
@@ -362,11 +370,13 @@ function save_property(array $data, ?int $id = null): int
         $sqlData['website_label'],
         $sqlData['whatsapp_number'],
         $sqlData['card_highlights_json'],
+        $sqlData['featured_badge_text'],
+        $sqlData['for_sale_badge_text'],
         $sqlData['is_featured'],
         $sqlData['status'],
         $id,
     ];
-    bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'isi', $values);
+    bind_params_dynamic($stmt, 'i' . str_repeat('s', 32) . 'ii', $values);
     if (!$stmt->execute()) {
         throw new RuntimeException('Failed to update property: ' . $stmt->error);
     }
@@ -989,6 +999,116 @@ function delete_category(int $id): void
     $stmt = $conn->prepare('DELETE FROM categories WHERE id = ?');
     $stmt->bind_param('i', $id);
     $stmt->execute();
+}
+
+function map_hero_section_row(array $row): array
+{
+    return [
+        'id' => (int) ($row['id'] ?? 0),
+        'title' => (string) ($row['title'] ?? ''),
+        'subtitle' => (string) ($row['subtitle'] ?? ''),
+        'description' => (string) ($row['description'] ?? ''),
+        'image_path' => (string) ($row['image_path'] ?? ''),
+        'sort_order' => (int) ($row['sort_order'] ?? 0),
+        'is_active' => (int) ($row['is_active'] ?? 0),
+        'created_at' => (string) ($row['created_at'] ?? ''),
+        'updated_at' => (string) ($row['updated_at'] ?? ''),
+    ];
+}
+
+function get_hero_sections(bool $onlyActive = true): array
+{
+    $conn = db();
+    $where = $onlyActive ? 'WHERE is_active = 1' : '';
+    $sql = "SELECT id, title, subtitle, description, image_path, sort_order, is_active, created_at, updated_at
+            FROM hero_section
+            {$where}
+            ORDER BY sort_order ASC, id ASC";
+    $result = $conn->query($sql);
+
+    $items = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $items[] = map_hero_section_row($row);
+        }
+    }
+
+    return $items;
+}
+
+function get_admin_hero_sections(): array
+{
+    $conn = db();
+    $sql = "SELECT id, title, subtitle, description, image_path, sort_order, is_active, created_at, updated_at
+            FROM hero_section
+            ORDER BY sort_order ASC, id ASC";
+    $result = $conn->query($sql);
+
+    $items = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $items[] = map_hero_section_row($row);
+        }
+    }
+
+    return $items;
+}
+
+function get_hero_section_by_id(int $id): ?array
+{
+    $conn = db();
+    $stmt = $conn->prepare('SELECT id, title, subtitle, description, image_path, sort_order, is_active, created_at, updated_at FROM hero_section WHERE id = ? LIMIT 1');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+
+    return $row ? map_hero_section_row($row) : null;
+}
+
+function save_hero_section(array $data, ?int $id = null): int
+{
+    $conn = db();
+    $title = (string) ($data['title'] ?? '');
+    $subtitle = (string) ($data['subtitle'] ?? '');
+    $description = (string) ($data['description'] ?? '');
+    $imagePath = (string) ($data['image_path'] ?? '');
+    $sortOrder = max(0, (int) ($data['sort_order'] ?? 0));
+    $isActive = !empty($data['is_active']) ? 1 : 0;
+
+    if ($id === null) {
+        $stmt = $conn->prepare('INSERT INTO hero_section (title, subtitle, description, image_path, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?)');
+        $stmt->bind_param('ssssii', $title, $subtitle, $description, $imagePath, $sortOrder, $isActive);
+        $stmt->execute();
+
+        return (int) $conn->insert_id;
+    }
+
+    $stmt = $conn->prepare('UPDATE hero_section SET title = ?, subtitle = ?, description = ?, image_path = ?, sort_order = ?, is_active = ? WHERE id = ?');
+    $stmt->bind_param('ssssiii', $title, $subtitle, $description, $imagePath, $sortOrder, $isActive, $id);
+    $stmt->execute();
+
+    return $id;
+}
+
+function delete_hero_section(int $id): void
+{
+    $conn = db();
+    $heroSection = get_hero_section_by_id($id);
+    $stmt = $conn->prepare('DELETE FROM hero_section WHERE id = ?');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    if ($heroSection) {
+        delete_uploaded_file((string) ($heroSection['image_path'] ?? ''));
+    }
+}
+
+function get_hero_section_count(bool $onlyActive = true): int
+{
+    $conn = db();
+    $where = $onlyActive ? 'WHERE is_active = 1' : '';
+    $row = $conn->query("SELECT COUNT(*) AS total FROM hero_section {$where}")->fetch_assoc();
+
+    return (int) ($row['total'] ?? 0);
 }
 
 function get_admin_by_email(string $email): ?array

@@ -17,7 +17,8 @@ $pageTitle = 'Properties';
 $activePage = 'properties';
 $properties = get_admin_properties();
 
-include __DIR__ . '/_layout_top.php';
+require_once __DIR__ . '/_layout.php';
+admin_layout_top($pageTitle, $activePage);
 ?>
 <section class="admin-card">
     <div class="admin-card-head">
@@ -68,4 +69,4 @@ include __DIR__ . '/_layout_top.php';
         </table>
     </div>
 </section>
-<?php include __DIR__ . '/_layout_bottom.php'; ?>
+<?php admin_layout_bottom(); ?>

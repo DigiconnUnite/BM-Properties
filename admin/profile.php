@@ -74,7 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $pageTitle = 'My Profile';
 $activePage = 'profile';
 
-include __DIR__ . '/_layout_top.php';
+require_once __DIR__ . '/_layout.php';
+admin_layout_top($pageTitle, $activePage);
 ?>
 <section class="admin-card">
   <h2>Profile Details</h2>
@@ -181,4 +182,4 @@ include __DIR__ . '/_layout_top.php';
     </div>
   </form>
 </section>
-<?php include __DIR__ . '/_layout_bottom.php'; ?>
+<?php admin_layout_bottom(); ?>

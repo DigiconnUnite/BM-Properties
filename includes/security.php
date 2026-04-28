@@ -254,11 +254,46 @@ function upload_image_file(array $file, string $directory, string $baseUrlPath, 
         && function_exists('imagecreatefromwebp');
 
     if ($canConvertToWebp) {
+        // Check available memory before processing large images
+        $memoryLimit = ini_get('memory_limit');
+        $memoryLimitBytes = -1;
+        if (preg_match('/^(\d+)(.)$/', $memoryLimit, $matches)) {
+            $mem = (int) $matches[1];
+            switch (strtoupper($matches[2])) {
+                case 'G':
+                    $memoryLimitBytes = $mem * 1024 * 1024 * 1024;
+                    break;
+                case 'M':
+                    $memoryLimitBytes = $mem * 1024 * 1024;
+                    break;
+                case 'K':
+                    $memoryLimitBytes = $mem * 1024;
+                    break;
+                default:
+                    $memoryLimitBytes = $mem;
+            }
+        }
+
+        // Estimate memory needed for image processing (width * height * 4 bytes * 2 for safety)
+        $imageInfo = @getimagesize($tmpName);
+        if ($imageInfo !== false) {
+            $estimatedMemory = $imageInfo[0] * $imageInfo[1] * 4 * 2;
+            if ($memoryLimitBytes > 0 && $estimatedMemory > $memoryLimitBytes * 0.8) {
+                $error = 'Image is too large to process. Please use a smaller image (under 2000x2000 pixels).';
+                return null;
+            }
+        }
+
         $webpName = bin2hex(random_bytes(16)) . '.webp';
         $webpPath = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $webpName;
         $image = null;
 
-        $image = @imagecreatefromwebp($tmpName) ?: null;
+        try {
+            $image = @imagecreatefromwebp($tmpName) ?: null;
+        } catch (Exception $e) {
+            $error = 'Unable to process WEBP image. Please try a different image.';
+            return null;
+        }
 
         if ($image !== null && @imagewebp($image, $webpPath, 82)) {
             @imagedestroy($image);

@@ -77,7 +77,8 @@ $currentPage = min($currentPage, $totalPages);
 $offset = ($currentPage - 1) * $perPage;
 $items = get_gallery_items_paginated($offset, $perPage, false);
 
-include __DIR__ . '/_layout_top.php';
+require_once __DIR__ . '/_layout.php';
+admin_layout_top($pageTitle, $activePage);
 ?>
 <section class="admin-card">
     <h2><?php echo $editing ? 'Edit Gallery Item' : 'Add Gallery Item'; ?></h2>
@@ -185,4 +186,4 @@ include __DIR__ . '/_layout_top.php';
         <?php endif; ?>
     </div>
 </section>
-<?php include __DIR__ . '/_layout_bottom.php'; ?>
+<?php admin_layout_bottom(); ?>

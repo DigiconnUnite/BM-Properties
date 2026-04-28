@@ -141,6 +141,8 @@ $form = [
   'nearby_items' => isset($property['nearbyItems']) ? implode("\n", $property['nearbyItems']) : '',
   'whatsapp_number' => (string) ($property['whatsappNumber'] ?? ''),
   'status' => (string) ($property['status'] ?? 'active'),
+  'featured_badge_text' => (string) ($property['featuredBadgeText'] ?? 'Featured'),
+  'for_sale_badge_text' => (string) ($property['forSaleBadgeText'] ?? 'For Sale'),
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -318,6 +320,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'website_label' => 'Visit Website',
         'whatsapp_number' => normalize_phone($form['whatsapp_number']),
         'card_highlights' => array_slice($cardHighlightLines, 0, 6),
+        'featured_badge_text' => $form['featured_badge_text'],
+        'for_sale_badge_text' => $form['for_sale_badge_text'],
         'is_featured' => 0,
         'status' => $form['status'] === 'inactive' ? 'inactive' : 'active',
       ];
@@ -340,7 +344,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $pageTitle = $id > 0 ? 'Edit Property' : 'Add Property';
 $activePage = 'properties';
 
-include __DIR__ . '/_layout_top.php';
+require_once __DIR__ . '/_layout.php';
+admin_layout_top($pageTitle, $activePage);
 ?>
 <section class="admin-card">
   <h2><?php echo $id > 0 ? 'Update Property' : 'Add New Property'; ?></h2>
@@ -535,6 +540,22 @@ include __DIR__ . '/_layout_top.php';
       </select>
     </div>
 
+    <div>
+      <label>Featured Badge Text</label>
+      <input class="form-control" name="featured_badge_text"
+        value="<?php echo htmlspecialchars($form['featured_badge_text'], ENT_QUOTES, 'UTF-8'); ?>"
+        placeholder="e.g., Featured, Hot Deal, Premium">
+      <small class="text-muted">Text for the first badge (leave empty to hide badge)</small>
+    </div>
+
+    <div>
+      <label>For Sale Badge Text</label>
+      <input class="form-control" name="for_sale_badge_text"
+        value="<?php echo htmlspecialchars($form['for_sale_badge_text'], ENT_QUOTES, 'UTF-8'); ?>"
+        placeholder="e.g., For Sale, Available, New Launch">
+      <small class="text-muted">Text for the second badge (leave empty to hide badge)</small>
+    </div>
+
     <div class="admin-form-full">
       <button class="btn btn-primary admin-btn" type="submit">Save Property</button>
       <a class="btn btn-outline-secondary admin-btn" href="properties.php">Back to list</a>
@@ -542,4 +563,19 @@ include __DIR__ . '/_layout_top.php';
   </form>
 </section>
 <script src="../js/admin-property-images.js"></script>
-<?php include __DIR__ . '/_layout_bottom.php'; ?>
+<script>
+// Auto-hide alert messages after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+        setTimeout(function() {
+            alert.style.transition = 'opacity 0.5s ease-out';
+            alert.style.opacity = '0';
+            setTimeout(function() {
+                alert.style.display = 'none';
+            }, 500);
+        }, 5000);
+    });
+});
+</script>
+<?php admin_layout_bottom(); ?>

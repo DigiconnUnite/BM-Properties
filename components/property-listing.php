@@ -182,8 +182,16 @@ if (!function_exists('render_property_card')) {
                         </div>
                         <div class="top">
                             <ul class="d-flex gap-6">
-                                <li class="flag-tag primary">Featured</li>
-                                <li class="flag-tag style-1">For Sale</li>
+                                <?php 
+                                $featuredBadgeText = trim($property['featuredBadgeText'] ?? '');
+                                if ($featuredBadgeText !== ''): ?>
+                                    <li class="flag-tag primary"><?php echo htmlspecialchars($featuredBadgeText, ENT_QUOTES, 'UTF-8'); ?></li>
+                                <?php endif; ?>
+                                <?php 
+                                $forSaleBadgeText = trim($property['forSaleBadgeText'] ?? '');
+                                if ($forSaleBadgeText !== ''): ?>
+                                    <li class="flag-tag style-1"><?php echo htmlspecialchars($forSaleBadgeText, ENT_QUOTES, 'UTF-8'); ?></li>
+                                <?php endif; ?>
                             </ul>
                         </div>
                     </a>

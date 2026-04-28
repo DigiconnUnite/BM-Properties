@@ -40,6 +40,8 @@ CREATE TABLE IF NOT EXISTS properties (
     website_label VARCHAR(120) NOT NULL DEFAULT '',
     whatsapp_number VARCHAR(25) NOT NULL DEFAULT '',
     card_highlights_json LONGTEXT NOT NULL,
+    featured_badge_text VARCHAR(50) NOT NULL DEFAULT 'Featured',
+    for_sale_badge_text VARCHAR(50) NOT NULL DEFAULT 'For Sale',
     is_featured TINYINT(1) NOT NULL DEFAULT 1,
     status ENUM('active','inactive') NOT NULL DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
