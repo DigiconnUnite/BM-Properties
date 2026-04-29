@@ -40,10 +40,8 @@ $basePath = $basePath ?? '.';
                             </div>
                             <div class="archive-bottom">
                                 <div class="content-top">
-                                    <h6 class="text-capitalize">
-                                        <a class="link text-line-clamp-4" href="<?php echo htmlspecialchars($detailUrl, ENT_QUOTES, 'UTF-8'); ?>">
-                                            <?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>
-                                        </a>
+                                    <h6 class="text-capitalize text-line-clamp-4">
+                                        <?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>
                                     </h6>
                                     <ul class="meta-list top-feature-meta-list">
                                         <?php foreach ($highlights as $highlightIndex => $highlight): ?>

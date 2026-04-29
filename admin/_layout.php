@@ -56,9 +56,9 @@ function admin_layout_top(string $pageTitle = 'Admin Panel', string $activePage 
                         href="profile.php" aria-label="Profile">
                         <?php echo strtoupper(substr((string) (admin_user()['username'] ?? 'A'), 0, 1)); ?>
                     </a>
-                    <div class="admin-user">Signed in as
+                    <!-- <div class="admin-user">Signed in as
                         <?php echo htmlspecialchars((string) ((admin_user()['full_name'] ?? '') !== '' ? admin_user()['full_name'] : (admin_user()['username'] ?? '')), ENT_QUOTES, 'UTF-8'); ?>
-                    </div>
+                    </div> -->
                     <a class="btn btn-outline-primary admin-btn" href="logout.php">Logout</a>
                 </div>
             </header>

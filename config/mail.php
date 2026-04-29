@@ -7,7 +7,7 @@ return [
   'username' => getenv('MAIL_USERNAME') ?: '120b154f30d18f',
   'password' => getenv('MAIL_PASSWORD') ?: '793e5ec90f9768',
   'encryption' => getenv('MAIL_ENCRYPTION') ?: 'none',
-  'from_email' => getenv('MAIL_FROM_ADDRESS') ?: 'rahulrajput81680@gmail.com',
+  'from_email' => getenv('MAIL_FROM_ADDRESS') ?: 'bmrealestateagra@gmail.com',
   'from_name' => getenv('MAIL_FROM_NAME') ?: 'BM Properties',
   'reply_to_email' => getenv('MAIL_REPLY_TO') ?: '',
   'reply_to_name' => getenv('MAIL_REPLY_TO_NAME') ?: '',
