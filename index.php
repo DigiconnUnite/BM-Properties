@@ -216,7 +216,6 @@
                                     <a href="properties.php" class="homelengo-categories style-02">
                                         <div class="icon-box">
                                             <p class="icon icon-office1"></p>
-
                                         </div>
                                         <div class="content text-center">
                                             <h6>Office</h6>
