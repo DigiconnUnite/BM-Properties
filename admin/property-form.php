@@ -106,6 +106,7 @@ $error = '';
 
 $form = [
   'category_id' => (string) ($property['category_id'] ?? $defaultCategoryId),
+  'listing_type' => (string) ($property['listingType'] ?? 'for_sale'),
   'name' => (string) ($property['name'] ?? ''),
   'slug' => (string) ($property['slug'] ?? ''),
   'website_url' => (string) ($property['websiteUrl'] ?? ''),
@@ -295,6 +296,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       $payload = [
         'category_id' => (int) $form['category_id'],
+        'listing_type' => in_array($form['listing_type'], ['for_sale', 'for_rent', 'for_sale_rent']) ? $form['listing_type'] : 'for_sale',
         'name' => $form['name'],
         'slug' => $slug,
         'page_title' => $form['name'] . ' - BM Real Estate',
@@ -349,6 +351,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $pageTitle = $id > 0 ? 'Edit Property' : 'Add Property';
 $activePage = 'properties';
+$activeStep = 1;
+if ($error !== '') {
+  if (str_contains($error, 'image') || str_contains($error, 'showcase')) {
+    $activeStep = 4;
+  } elseif (str_contains($error, 'Map location') || str_contains($error, 'City') || str_contains($error, 'State') || str_contains($error, 'WhatsApp')) {
+    $activeStep = 2;
+  } elseif (str_contains($error, 'description') || str_contains($error, 'Property Details') || str_contains($error, 'amenity') || str_contains($error, 'highlight') || str_contains($error, 'nearby')) {
+    $activeStep = 3;
+  }
+}
 
 require_once __DIR__ . '/_layout.php';
 admin_layout_top($pageTitle, $activePage);
@@ -360,201 +372,342 @@ admin_layout_top($pageTitle, $activePage);
   <?php if ($error !== ''): ?>
     <div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
 
-  <form method="post" class="admin-form-grid" enctype="multipart/form-data">
+  <form method="post" class="admin-form-grid admin-stepper-form" enctype="multipart/form-data" data-stepper data-active-step="<?php echo (int) $activeStep; ?>">
     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
-    <div>
-      <label>Category</label>
-      <select class="form-control" name="category_id" required>
-        <?php foreach ($categories as $category): ?>
-          <option value="<?php echo (int) $category['id']; ?>" <?php echo (string) $category['id'] === $form['category_id'] ? 'selected' : ''; ?>>
-            <?php echo htmlspecialchars((string) $category['name'], ENT_QUOTES, 'UTF-8'); ?>
-          </option>
-        <?php endforeach; ?>
-      </select>
+    <div class="admin-stepper" data-stepper-nav>
+      <button type="button" class="admin-stepper-tab is-active" data-step-target="1">
+        <span class="admin-stepper-index">1</span>
+        <span class="admin-stepper-label">Property details</span>
+      </button>
+      <button type="button" class="admin-stepper-tab" data-step-target="2">
+        <span class="admin-stepper-index">2</span>
+        <span class="admin-stepper-label">Contact details</span>
+      </button>
+      <button type="button" class="admin-stepper-tab" data-step-target="3">
+        <span class="admin-stepper-index">3</span>
+        <span class="admin-stepper-label">Property features</span>
+      </button>
+      <button type="button" class="admin-stepper-tab" data-step-target="4">
+        <span class="admin-stepper-index">4</span>
+        <span class="admin-stepper-label">Images</span>
+      </button>
     </div>
 
-    <div>
-      <label>Property Title</label>
-      <input class="form-control" name="name"
-        value="<?php echo htmlspecialchars($form['name'], ENT_QUOTES, 'UTF-8'); ?>" required>
-    </div>
-
-    <div>
-      <label>Slug (optional)</label>
-      <input class="form-control" name="slug"
-        value="<?php echo htmlspecialchars($form['slug'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="auto from title">
-    </div>
-
-    <div>
-      <label>Reference Website URL (optional)</label>
-      <input class="form-control" name="website_url"
-        value="<?php echo htmlspecialchars($form['website_url'], ENT_QUOTES, 'UTF-8'); ?>"
-        placeholder="https://example.com">
-    </div>
-
-    <div class="admin-form-full">
-      <label>Hero Image for Card Display (WEBP only, max 1MB)</label>
-      <input class="form-control" type="file" name="hero_image" accept=".webp,image/webp">
-      <?php if (isset($property['hero_image']) && $property['hero_image'] !== ''): ?>
-        <div class="mt-2">
-          <img src="../<?php echo htmlspecialchars($property['hero_image'], ENT_QUOTES, 'UTF-8'); ?>" alt="Current hero image" style="max-width: 200px; height: auto;">
-          <div class="form-check mt-2">
-            <input class="form-check-input" type="checkbox" name="remove_hero_image" id="remove_hero_image" value="1">
-            <label class="form-check-label" for="remove_hero_image">Remove current hero image</label>
-          </div>
+    <div class="admin-step-panel" data-step-panel="1">
+      <div class="admin-step-panel-head">
+        <h3>Property details</h3>
+        <p>Enter the core listing information for the property.</p>
+      </div>
+      <div class="admin-step-grid">
+        <div>
+          <label>Category</label>
+          <select class="form-control" name="category_id" required>
+            <?php foreach ($categories as $category): ?>
+              <option value="<?php echo (int) $category['id']; ?>" <?php echo (string) $category['id'] === $form['category_id'] ? 'selected' : ''; ?>>
+                <?php echo htmlspecialchars((string) $category['name'], ENT_QUOTES, 'UTF-8'); ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
         </div>
-      <?php endif; ?>
-    </div>
 
-    <div class="admin-form-full">
-      <label>Showcase Images (WEBP only, max 1MB each, up to 5)</label>
-      <div class="admin-image-uploader" id="showcase-image-uploader">
-        <input class="form-control" type="file" id="showcase-image-picker" accept=".webp,image/webp">
-        <button class="btn btn-outline-primary admin-btn" type="button" id="add-showcase-image-btn">Add</button>
+        <div>
+          <label>Listing Type</label>
+          <select class="form-control" name="listing_type" required>
+            <option value="for_sale" <?php echo $form['listing_type'] === 'for_sale' ? 'selected' : ''; ?>>For Sale</option>
+            <option value="for_rent" <?php echo $form['listing_type'] === 'for_rent' ? 'selected' : ''; ?>>For Rent</option>
+            <option value="for_sale_rent" <?php echo $form['listing_type'] === 'for_sale_rent' ? 'selected' : ''; ?>>For Sale / Rent</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Property Title</label>
+          <input class="form-control" name="name"
+            value="<?php echo htmlspecialchars($form['name'], ENT_QUOTES, 'UTF-8'); ?>" required>
+        </div>
+
+        <div>
+          <label>Slug (optional)</label>
+          <input class="form-control" name="slug"
+            value="<?php echo htmlspecialchars($form['slug'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="auto from title">
+        </div>
+
+        <div>
+          <label>Reference Website URL (optional)</label>
+          <input class="form-control" name="website_url"
+            value="<?php echo htmlspecialchars($form['website_url'], ENT_QUOTES, 'UTF-8'); ?>"
+            placeholder="https://example.com">
+        </div>
+
+        <div>
+          <label>Status</label>
+          <select class="form-control" name="status">
+            <option value="active" <?php echo $form['status'] === 'active' ? 'selected' : ''; ?>>Active</option>
+            <option value="inactive" <?php echo $form['status'] === 'inactive' ? 'selected' : ''; ?>>Inactive</option>
+          </select>
+        </div>
+
+        <div class="admin-form-full">
+          <label>Property Description (one paragraph per line)</label>
+          <textarea class="form-control" name="description"
+            rows="5"><?php echo htmlspecialchars($form['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+        </div>
+
+        <div class="admin-form-full admin-repeater" id="details-repeater">
+          <label>Property Details</label>
+          <div class="admin-repeater-controls admin-repeater-controls-tight">
+            <select class="form-control" id="details-label-select">
+              <option value="ID">ID</option>
+              <option value="Year built">Year built</option>
+              <option value="Type">Type</option>
+              <option value="Price">Price</option>
+              <option value="Size">Size</option>
+              <option value="Status">Status</option>
+              <option value="Facing">Facing</option>
+              <option value="Possession">Possession</option>
+              <option value="RERA No">RERA No</option>
+              <option value="Booking Amount">Booking Amount</option>
+              <option value="Plot Size">Plot Size</option>
+              <option value="__custom__">Custom...</option>
+            </select>
+            <input class="form-control" id="details-custom-label" type="text" placeholder="Custom label" style="display:none;">
+            <input class="form-control" id="details-value-input" type="text" placeholder="Enter value">
+            <button class="btn btn-outline-primary admin-btn" type="button" id="details-add-btn">Add</button>
+          </div>
+          <ul class="admin-upload-list" id="details-list"></ul>
+          <textarea class="form-control d-none" id="details-textarea" name="details" rows="5"><?php echo htmlspecialchars($form['details'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+        </div>
       </div>
-      <input class="d-none" type="file" name="showcase_images[]" id="showcase-images-input" accept=".webp,image/webp"
-        multiple>
-      <ul class="admin-upload-list" id="showcase-images-list">
-        <?php foreach ($existingGalleryImages as $existingImagePath): ?>
-          <li class="admin-upload-item" data-item-type="existing">
-            <input type="hidden" name="existing_gallery_images[]"
-              value="<?php echo htmlspecialchars($existingImagePath, ENT_QUOTES, 'UTF-8'); ?>">
-            <span><?php echo htmlspecialchars($existingImagePath, ENT_QUOTES, 'UTF-8'); ?></span>
-            <button type="button" class="btn btn-sm btn-outline-danger js-remove-existing-image">Remove</button>
-          </li>
-        <?php endforeach; ?>
-      </ul>
     </div>
 
-    <div class="admin-form-full">
-      <label>Property Description (one paragraph per line)</label>
-      <textarea class="form-control" name="description"
-        rows="5"><?php echo htmlspecialchars($form['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-    </div>
-
-    <div class="admin-form-full admin-repeater" id="details-repeater">
-      <label>Property Details</label>
-      <div class="admin-repeater-controls">
-        <select class="form-control" id="details-label-select">
-          <option value="ID">ID</option>
-          <option value="Year built">Year built</option>
-          <option value="Type">Type</option>
-          <option value="Price">Price</option>
-          <option value="Size">Size</option>
-          <option value="Status">Status</option>
-          <option value="Facing">Facing</option>
-          <option value="Possession">Possession</option>
-          <option value="RERA No">RERA No</option>
-          <option value="Booking Amount">Booking Amount</option>
-          <option value="Plot Size">Plot Size</option>
-          <option value="__custom__">Custom...</option>
-        </select>
-        <input class="form-control" id="details-custom-label" type="text" placeholder="Custom label" style="display:none;">
-        <input class="form-control" id="details-value-input" type="text" placeholder="Enter value">
-        <button class="btn btn-outline-primary admin-btn" type="button" id="details-add-btn">Add</button>
+    <div class="admin-step-panel" data-step-panel="2">
+      <div class="admin-step-panel-head">
+        <h3>Contact details</h3>
+        <p>Add the property location and contact details.</p>
       </div>
-      <ul class="admin-upload-list" id="details-list"></ul>
-      <textarea class="form-control d-none" id="details-textarea" name="details" rows="5"><?php echo htmlspecialchars($form['details'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-    </div>
+      <div class="admin-step-grid">
+        <div class="admin-form-full">
+          <label>Map Location (Google Maps embed URL or iframe code)</label>
+          <textarea class="form-control" name="map_embed" rows="3"
+            placeholder="https://www.google.com/maps/embed?... or full iframe code"><?php echo htmlspecialchars($form['map_embed'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+        </div>
 
-    <div class="admin-form-full admin-repeater" id="features-repeater">
-      <label>Amenities and Features</label>
-      <div class="admin-repeater-controls">
-        <input class="form-control" id="features-input" type="text" placeholder="Enter amenity or feature">
-        <button class="btn btn-outline-primary admin-btn" type="button" id="features-add-btn">Add</button>
+        <div>
+          <label>Address</label>
+          <input class="form-control" name="map_address"
+            value="<?php echo htmlspecialchars($form['map_address'], ENT_QUOTES, 'UTF-8'); ?>">
+        </div>
+        <div>
+          <label>City</label>
+          <input class="form-control" name="map_city"
+            value="<?php echo htmlspecialchars($form['map_city'], ENT_QUOTES, 'UTF-8'); ?>">
+        </div>
+        <div>
+          <label>State</label>
+          <input class="form-control" name="map_state"
+            value="<?php echo htmlspecialchars($form['map_state'], ENT_QUOTES, 'UTF-8'); ?>">
+        </div>
+        <div>
+          <label>Postal Code</label>
+          <input class="form-control" name="map_postal"
+            value="<?php echo htmlspecialchars($form['map_postal'], ENT_QUOTES, 'UTF-8'); ?>">
+        </div>
+        <div>
+          <label>Area</label>
+          <input class="form-control" name="map_area"
+            value="<?php echo htmlspecialchars($form['map_area'], ENT_QUOTES, 'UTF-8'); ?>">
+        </div>
+        <div>
+          <label>Country</label>
+          <input class="form-control" name="map_country"
+            value="<?php echo htmlspecialchars($form['map_country'], ENT_QUOTES, 'UTF-8'); ?>">
+        </div>
+
+        <div>
+          <label>WhatsApp Number (digits only)</label>
+          <input class="form-control" name="whatsapp_number"
+            value="<?php echo htmlspecialchars($form['whatsapp_number'], ENT_QUOTES, 'UTF-8'); ?>"
+            placeholder="919999999999">
+        </div>
       </div>
-      <ul class="admin-upload-list" id="features-list"></ul>
-      <textarea class="form-control d-none" id="features-textarea" name="features" rows="5"><?php echo htmlspecialchars($form['features'], ENT_QUOTES, 'UTF-8'); ?></textarea>
     </div>
 
-    <div class="admin-form-full admin-repeater" id="highlights-repeater">
-      <label>Featured Highlights</label>
-      <div class="admin-repeater-controls">
-        <input class="form-control" id="highlights-input" type="text" placeholder="Enter featured highlight">
-        <button class="btn btn-outline-primary admin-btn" type="button" id="highlights-add-btn">Add</button>
+    <div class="admin-step-panel" data-step-panel="3">
+      <div class="admin-step-panel-head">
+        <h3>Property features</h3>
+        <p>Capture the supporting amenities and nearby points of interest.</p>
       </div>
-      <ul class="admin-upload-list" id="highlights-list"></ul>
-      <textarea class="form-control d-none" id="highlights-textarea" name="card_highlights" rows="3"><?php echo htmlspecialchars($form['card_highlights'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-    </div>
+      <div class="admin-step-grid">
+        <div class="admin-form-full">
+          <label>What's Nearby (intro)</label>
+          <textarea class="form-control" name="nearby"
+            rows="2"><?php echo htmlspecialchars($form['nearby'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+        </div>
 
-    <div class="admin-form-full">
-      <label>Map Location (Google Maps embed URL or iframe code)</label>
-      <textarea class="form-control" name="map_embed" rows="3"
-        placeholder="https://www.google.com/maps/embed?... or full iframe code"><?php echo htmlspecialchars($form['map_embed'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-    </div>
+        <div class="admin-form-full admin-repeater" id="nearby-repeater">
+          <label>Nearby Items</label>
+          <div class="admin-repeater-controls admin-repeater-controls-tight">
+            <input class="form-control" id="nearby-input" type="text" placeholder="Enter nearby item">
+            <button class="btn btn-outline-primary admin-btn" type="button" id="nearby-add-btn">Add</button>
+          </div>
+          <ul class="admin-upload-list" id="nearby-list"></ul>
+          <textarea class="form-control d-none" id="nearby-textarea" name="nearby_items"
+            rows="4"><?php echo htmlspecialchars($form['nearby_items'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+        </div>
 
-    <div>
-      <label>Address</label>
-      <input class="form-control" name="map_address"
-        value="<?php echo htmlspecialchars($form['map_address'], ENT_QUOTES, 'UTF-8'); ?>">
-    </div>
-    <div>
-      <label>City</label>
-      <input class="form-control" name="map_city"
-        value="<?php echo htmlspecialchars($form['map_city'], ENT_QUOTES, 'UTF-8'); ?>">
-    </div>
-    <div>
-      <label>State</label>
-      <input class="form-control" name="map_state"
-        value="<?php echo htmlspecialchars($form['map_state'], ENT_QUOTES, 'UTF-8'); ?>">
-    </div>
-    <div>
-      <label>Postal Code</label>
-      <input class="form-control" name="map_postal"
-        value="<?php echo htmlspecialchars($form['map_postal'], ENT_QUOTES, 'UTF-8'); ?>">
-    </div>
-    <div>
-      <label>Area</label>
-      <input class="form-control" name="map_area"
-        value="<?php echo htmlspecialchars($form['map_area'], ENT_QUOTES, 'UTF-8'); ?>">
-    </div>
-    <div>
-      <label>Country</label>
-      <input class="form-control" name="map_country"
-        value="<?php echo htmlspecialchars($form['map_country'], ENT_QUOTES, 'UTF-8'); ?>">
-    </div>
+        <div class="admin-form-full admin-repeater" id="features-repeater">
+          <label>Amenities and Features</label>
+          <div class="admin-repeater-controls admin-repeater-controls-tight">
+            <input class="form-control" id="features-input" type="text" placeholder="Enter amenity or feature">
+            <button class="btn btn-outline-primary admin-btn" type="button" id="features-add-btn">Add</button>
+          </div>
+          <ul class="admin-upload-list" id="features-list"></ul>
+          <textarea class="form-control d-none" id="features-textarea" name="features" rows="5"><?php echo htmlspecialchars($form['features'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+        </div>
 
-    <div class="admin-form-full">
-      <label>What's Nearby (intro)</label>
-      <textarea class="form-control" name="nearby"
-        rows="2"><?php echo htmlspecialchars($form['nearby'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-    </div>
-
-    <div class="admin-form-full admin-repeater" id="nearby-repeater">
-      <label>Nearby Items</label>
-      <div class="admin-repeater-controls">
-        <input class="form-control" id="nearby-input" type="text" placeholder="Enter nearby item">
-        <button class="btn btn-outline-primary admin-btn" type="button" id="nearby-add-btn">Add</button>
+        <div class="admin-form-full admin-repeater" id="highlights-repeater">
+          <label>Featured Highlights</label>
+          <div class="admin-repeater-controls admin-repeater-controls-tight">
+            <input class="form-control" id="highlights-input" type="text" placeholder="Enter featured highlight">
+            <button class="btn btn-outline-primary admin-btn" type="button" id="highlights-add-btn">Add</button>
+          </div>
+          <ul class="admin-upload-list" id="highlights-list"></ul>
+          <textarea class="form-control d-none" id="highlights-textarea" name="card_highlights" rows="3"><?php echo htmlspecialchars($form['card_highlights'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+        </div>
       </div>
-      <ul class="admin-upload-list" id="nearby-list"></ul>
-      <textarea class="form-control d-none" id="nearby-textarea" name="nearby_items"
-        rows="4"><?php echo htmlspecialchars($form['nearby_items'], ENT_QUOTES, 'UTF-8'); ?></textarea>
     </div>
 
-    <div>
-      <label>WhatsApp Number (digits only)</label>
-      <input class="form-control" name="whatsapp_number"
-        value="<?php echo htmlspecialchars($form['whatsapp_number'], ENT_QUOTES, 'UTF-8'); ?>"
-        placeholder="919999999999">
-    </div>
-    <div>
-      <label>Status</label>
-      <select class="form-control" name="status">
-        <option value="active" <?php echo $form['status'] === 'active' ? 'selected' : ''; ?>>Active</option>
-        <option value="inactive" <?php echo $form['status'] === 'inactive' ? 'selected' : ''; ?>>Inactive</option>
-      </select>
+    <div class="admin-step-panel" data-step-panel="4">
+      <div class="admin-step-panel-head">
+        <h3>Images</h3>
+        <p>Upload the hero image and the showcase gallery.</p>
+      </div>
+      <div class="admin-step-grid">
+        <div class="admin-form-full">
+          <label>Hero Image for Card Display (WEBP only, max 1MB)</label>
+          <input class="form-control" type="file" name="hero_image" accept=".webp,image/webp">
+          <?php if (isset($property['hero_image']) && $property['hero_image'] !== ''): ?>
+            <div class="mt-2">
+              <img src="../<?php echo htmlspecialchars($property['hero_image'], ENT_QUOTES, 'UTF-8'); ?>" alt="Current hero image" style="max-width: 200px; height: auto;">
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" name="remove_hero_image" id="remove_hero_image" value="1">
+                <label class="form-check-label" for="remove_hero_image">Remove current hero image</label>
+              </div>
+            </div>
+          <?php endif; ?>
+        </div>
+
+        <div class="admin-form-full">
+          <label>Showcase Images (WEBP only, max 1MB each, up to 5)</label>
+          <div class="admin-image-uploader" id="showcase-image-uploader">
+            <input class="form-control" type="file" id="showcase-image-picker" accept=".webp,image/webp">
+            <button class="btn btn-outline-primary admin-btn" type="button" id="add-showcase-image-btn">Add</button>
+          </div>
+          <input class="d-none" type="file" name="showcase_images[]" id="showcase-images-input" accept=".webp,image/webp"
+            multiple>
+          <ul class="admin-upload-list" id="showcase-images-list">
+            <?php foreach ($existingGalleryImages as $existingImagePath): ?>
+              <li class="admin-upload-item" data-item-type="existing">
+                <input type="hidden" name="existing_gallery_images[]"
+                  value="<?php echo htmlspecialchars($existingImagePath, ENT_QUOTES, 'UTF-8'); ?>">
+                <span><?php echo htmlspecialchars($existingImagePath, ENT_QUOTES, 'UTF-8'); ?></span>
+                <button type="button" class="btn btn-sm btn-outline-danger js-remove-existing-image">Remove</button>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    
-    <div class="admin-form-full">
-      <button class="btn btn-primary admin-btn" type="submit">Save Property</button>
-      <a class="btn btn-outline-secondary admin-btn" href="properties.php">Back to list</a>
+    <div class="admin-form-full admin-step-actions">
+      <div class="admin-step-actions-left">
+        <button class="btn btn-outline-secondary admin-btn" type="button" data-step-prev>Previous</button>
+        <button class="btn btn-primary admin-btn" type="button" data-step-next>Next</button>
+      </div>
+      <div class="admin-step-actions-right">
+        <button class="btn btn-primary admin-btn d-none" type="submit" data-step-submit>Save Property</button>
+        <a class="btn btn-outline-secondary admin-btn" href="properties.php">Back to list</a>
+      </div>
     </div>
   </form>
 </section>
 <script src="../js/admin-property-images.js"></script>
 <script>
+(function () {
+  var form = document.querySelector('[data-stepper]');
+  if (!form) {
+    return;
+  }
+
+  var tabs = Array.prototype.slice.call(form.querySelectorAll('[data-step-target]'));
+  var panels = Array.prototype.slice.call(form.querySelectorAll('[data-step-panel]'));
+  var prevButton = form.querySelector('[data-step-prev]');
+  var nextButton = form.querySelector('[data-step-next]');
+  var submitButton = form.querySelector('[data-step-submit]');
+  var activeStep = Number(form.getAttribute('data-active-step') || '1');
+
+  if (!activeStep || activeStep < 1) {
+    activeStep = 1;
+  }
+
+  function clampStep(step) {
+    return Math.min(4, Math.max(1, step));
+  }
+
+  function setStep(step) {
+    activeStep = clampStep(step);
+    form.setAttribute('data-active-step', String(activeStep));
+
+    tabs.forEach(function (tab) {
+      var target = Number(tab.getAttribute('data-step-target') || '1');
+      var isActive = target === activeStep;
+      tab.classList.toggle('is-active', isActive);
+      tab.classList.toggle('is-complete', target < activeStep);
+    });
+
+    panels.forEach(function (panel) {
+      var panelStep = Number(panel.getAttribute('data-step-panel') || '1');
+      panel.classList.toggle('is-active', panelStep === activeStep);
+    });
+
+    if (prevButton) {
+      prevButton.disabled = activeStep === 1;
+    }
+    if (nextButton) {
+      nextButton.classList.toggle('d-none', activeStep === 4);
+    }
+    if (submitButton) {
+      submitButton.classList.toggle('d-none', activeStep !== 4);
+    }
+  }
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      setStep(Number(tab.getAttribute('data-step-target') || '1'));
+    });
+  });
+
+  if (prevButton) {
+    prevButton.addEventListener('click', function () {
+      setStep(activeStep - 1);
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener('click', function () {
+      setStep(activeStep + 1);
+    });
+  }
+
+  form.addEventListener('submit', function () {
+    if (submitButton) {
+      submitButton.disabled = true;
+    }
+  });
+
+  setStep(activeStep);
+})();
+
 // Auto-hide alert messages after 5 seconds
 document.addEventListener('DOMContentLoaded', function() {
     const alerts = document.querySelectorAll('.alert');

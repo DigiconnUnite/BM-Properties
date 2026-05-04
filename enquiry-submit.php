@@ -21,9 +21,15 @@ $message = clean_text((string) ($_POST['message'] ?? ''));
 $lookingTo = clean_text((string) ($_POST['looking_to'] ?? 'sell'));
 $lookingToBuy = (string) ($_POST['looking_to_buy'] ?? '');
 $propertyGroup = clean_text((string) ($_POST['property_group'] ?? 'residential'));
-$propertyType = clean_text((string) ($_POST['property_type'] ?? 'Flat/Apartment'));
+$propertyType = clean_text((string) ($_POST['property_type'] ?? ''));
 $source = clean_text((string) ($_POST['source'] ?? 'header-modal'));
 $returnUrl = clean_text((string) ($_POST['return_url'] ?? 'index.php'));
+
+$activeCategories = get_categories(true);
+$allowedPropertyTypes = array_values(array_filter(array_map(
+  static fn(array $category): string => trim((string) ($category['name'] ?? '')),
+  $activeCategories
+), static fn(string $categoryName): bool => $categoryName !== ''));
 
 if ($lookingToBuy === '1') {
   $lookingTo = 'buy';
@@ -34,6 +40,9 @@ if (!in_array($lookingTo, ['sell', 'rent', 'buy'], true)) {
 }
 if (!in_array($propertyGroup, ['residential', 'commercial'], true)) {
   $propertyGroup = 'residential';
+}
+if (!in_array($propertyType, $allowedPropertyTypes, true)) {
+  $propertyType = (string) ($allowedPropertyTypes[0] ?? '');
 }
 
 $isValid = true;
@@ -47,6 +56,9 @@ if (!is_valid_phone($phone, 10)) {
   $isValid = false;
 }
 if ($message === '' || strlen($message) < 10) {
+  $isValid = false;
+}
+if ($propertyType === '') {
   $isValid = false;
 }
 

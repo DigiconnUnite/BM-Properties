@@ -468,9 +468,29 @@
       return;
     }
 
+    var refreshEnquirySelect = function () {
+      if (!$.fn.niceSelect) {
+        return;
+      }
+
+      $modal.find(".select_js").each(function () {
+        var $select = $(this);
+        if ($select.next(".nice-select").length) {
+          $select.niceSelect("update");
+        } else {
+          $select.niceSelect();
+        }
+      });
+    };
+
     var openModal = function () {
       $modal.addClass("is-visible").attr("aria-hidden", "false");
       $("body").addClass("enquiry-open");
+      if (window.requestAnimationFrame) {
+        window.requestAnimationFrame(refreshEnquirySelect);
+      } else {
+        setTimeout(refreshEnquirySelect, 0);
+      }
     };
 
     var closeModal = function () {

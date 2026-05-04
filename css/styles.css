@@ -5491,11 +5491,12 @@ label {
   cursor: pointer;
 }
 .flag-tag.style-1 {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: #1563df;
+  color: #fff;
 }
 .flag-tag.style-2 {
-  background-color: #ffffff;
-  color: #161e2d;
+  background-color: #1563df;
+  color: #fff;
   font-size: 14px;
   line-height: 24px;
   letter-spacing: 0.8px;
@@ -12239,8 +12240,9 @@ tr {
   background: #ffffff;
   border-radius: 14px;
   padding: 20px;
-  max-height: none;
-  overflow: visible;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  overflow-x: hidden;
   box-shadow: 0 22px 40px rgba(15, 31, 61, 0.25);
 }
 
@@ -12274,6 +12276,48 @@ tr {
 
 .enquiry-form-full {
   grid-column: 1 / -1;
+  overflow: visible;
+  position: relative;
+  z-index: 10;
+}
+
+.enquiry-form-full:has(select) {
+  overflow: visible;
+  z-index: 100;
+}
+
+.enquiry-form-full select {
+  position: relative;
+  z-index: 101;
+}
+
+.enquiry-modal .nice-select {
+  z-index: 101;
+  transition: none;
+}
+
+.enquiry-modal .nice-select.open {
+  z-index: 120;
+}
+
+.enquiry-modal .nice-select .list {
+  z-index: 121;
+  opacity: 0;
+  transform: none;
+  transition: none;
+  -webkit-transform: none;
+  -ms-transform: none;
+}
+
+.enquiry-modal .nice-select.open .list {
+  opacity: 1;
+  transform: none;
+  -webkit-transform: none;
+  -ms-transform: none;
+}
+
+.enquiry-modal .nice-select:after {
+  transition: none;
 }
 
 .enquiry-label {

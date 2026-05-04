@@ -8,6 +8,8 @@ if ($currentPage === 'property-details.php' || str_contains($currentScript, '/pr
 }
 $assetBasePath = isset($assetBasePath) ? rtrim($assetBasePath, '/') . '/' : '';
 $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
+$enquiryPropertyCategories = get_categories(true);
+$defaultEnquiryPropertyType = (string) ($enquiryPropertyCategories[0]['name'] ?? '');
 ?>
 
 <!-- Main Header -->
@@ -164,8 +166,21 @@ $siteBasePath = isset($siteBasePath) ? rtrim($siteBasePath, '/') . '/' : '';
 
             <div class="enquiry-form-full">
                 <label for="enquiry-property-type" class="enquiry-label">Property Type</label>
-                <input type="text" id="enquiry-property-type" class="form-control" name="property_type"
-                    value="Flat/Apartment" maxlength="100" required>
+                <select id="enquiry-property-type" class="form-control select_js" name="property_type" required>
+                    <?php if (count($enquiryPropertyCategories) > 0): ?>
+                        <?php foreach ($enquiryPropertyCategories as $enquiryCategory): ?>
+                            <?php $categoryName = trim((string) ($enquiryCategory['name'] ?? '')); ?>
+                            <?php if ($categoryName === '') {
+                                continue;
+                            } ?>
+                            <option value="<?php echo htmlspecialchars($categoryName, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $categoryName === $defaultEnquiryPropertyType ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($categoryName, ENT_QUOTES, 'UTF-8'); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <option value="" selected>No category available</option>
+                    <?php endif; ?>
+                </select>
             </div>
 
             <div>

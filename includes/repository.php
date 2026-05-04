@@ -150,6 +150,7 @@ function map_property_row(array $row): array
     return [
         'id' => (int) ($row['id'] ?? 0),
         'category_id' => (int) ($row['category_id'] ?? 0),
+        'listingType' => (string) ($row['listing_type'] ?? 'for_sale'),
         'name' => (string) ($row['name'] ?? ''),
         'slug' => (string) ($row['slug'] ?? ''),
         'pageTitle' => (string) ($row['page_title'] ?? ''),
@@ -187,6 +188,19 @@ function map_property_row(array $row): array
         'status' => (string) ($row['status'] ?? 'active'),
         'category_slug' => (string) ($row['category_slug'] ?? ''),
             ];
+}
+
+function listing_type_label(string $listingType): string
+{
+    if ($listingType === 'for_rent') {
+        return 'For Rent';
+    }
+
+    if ($listingType === 'for_sale_rent') {
+        return 'For Sale / Rent';
+    }
+
+    return 'For Sale';
 }
 
 function get_all_properties(?string $categorySlug = null): array
@@ -307,6 +321,7 @@ function save_property(array $data, ?int $id = null): int
         'website_label' => $data['website_label'],
         'whatsapp_number' => $data['whatsapp_number'],
         'card_highlights_json' => to_json($data['card_highlights']),
+        'listing_type' => in_array($data['listing_type'], ['for_sale', 'for_rent', 'for_sale_rent']) ? $data['listing_type'] : 'for_sale',
         'is_featured' => !empty($data['is_featured']) ? 1 : 0,
         'status' => normalize_property_status((string) ($data['status'] ?? 'active')),
     ];
@@ -345,6 +360,7 @@ function save_property(array $data, ?int $id = null): int
             $sqlData['card_highlights_json'],
             $sqlData['is_featured'],
             $sqlData['status'],
+            $sqlData['listing_type'],
         ];
         $placeholders = implode(', ', array_fill(0, count($values), '?'));
         $sql = 'INSERT INTO properties (
@@ -353,13 +369,13 @@ function save_property(array $data, ?int $id = null): int
             nearby, nearby_items_json, details_json, features_json,
             map_address, map_city, map_state, map_postal, map_area, map_country,
             map_embed, website_url, website_label, whatsapp_number, card_highlights_json, 
-            is_featured, status
+            is_featured, status, listing_type
         ) VALUES (' . $placeholders . ')';
         $stmt = $conn->prepare($sql);
         if (!$stmt instanceof mysqli_stmt) {
             throw new RuntimeException('Failed to prepare property insert statement: ' . $conn->error);
         }
-        bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'is', $values);
+        bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'iss', $values);
         if (!$stmt->execute()) {
             log_sql_error('insert property', $sql, $stmt, $values);
             throw new RuntimeException('Failed to save property: ' . $stmt->error);
@@ -374,7 +390,7 @@ function save_property(array $data, ?int $id = null): int
         nearby = ?, nearby_items_json = ?, details_json = ?, features_json = ?,
         map_address = ?, map_city = ?, map_state = ?, map_postal = ?, map_area = ?, map_country = ?,
         map_embed = ?, website_url = ?, website_label = ?, whatsapp_number = ?, card_highlights_json = ?, 
-        is_featured = ?, status = ?
+        is_featured = ?, status = ?, listing_type = ?
         WHERE id = ?';
     $stmt = $conn->prepare($sql);
     if (!$stmt instanceof mysqli_stmt) {
@@ -413,9 +429,10 @@ function save_property(array $data, ?int $id = null): int
         $sqlData['card_highlights_json'],
         $sqlData['is_featured'],
         $sqlData['status'],
+        $sqlData['listing_type'],
         $id,
     ];
-    bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'isi', $values);
+    bind_params_dynamic($stmt, 'i' . str_repeat('s', 29) . 'issi', $values);
     if (!$stmt->execute()) {
         log_sql_error('update property', $sql, $stmt, $values);
         throw new RuntimeException('Failed to update property: ' . $stmt->error);
@@ -856,6 +873,31 @@ function get_property_count(): int
     $conn = db();
     $row = $conn->query("SELECT COUNT(*) AS total FROM properties WHERE status = 'active'")->fetch_assoc();
     return (int) ($row['total'] ?? 0);
+}
+
+function get_active_property_counts_by_category_slug(): array
+{
+    $conn = db();
+    $sql = "SELECT c.slug AS category_slug, COUNT(p.id) AS total
+            FROM categories c
+            LEFT JOIN properties p ON p.category_id = c.id AND p.status = 'active'
+            WHERE c.is_active = 1
+            GROUP BY c.slug
+            ORDER BY c.sort_order ASC, c.name ASC";
+    $result = $conn->query($sql);
+
+    $counts = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $slug = (string) ($row['category_slug'] ?? '');
+            if ($slug === '') {
+                continue;
+            }
+            $counts[$slug] = (int) ($row['total'] ?? 0);
+        }
+    }
+
+    return $counts;
 }
 
 function get_gallery_count(): int

@@ -127,6 +127,22 @@ if (!function_exists('render_property_card')) {
         $image = property_asset_url($basePath, (string) ($property['heroImage'] ?? 'images/banner/banner-property-1.webp'));
         $name = $property['name'] ?? 'Property';
         $summary = $property['summary'] ?? '';
+        $categoryBadgeText = trim((string) ($property['category'] ?? ''));
+        if ($categoryBadgeText === '') {
+            $categorySlug = trim((string) ($property['category_slug'] ?? ''));
+            if ($categorySlug !== '') {
+                $categoryBadgeText = ucwords(str_replace('-', ' ', $categorySlug));
+            }
+        }
+        $listingTypeBadgeText = '';
+        $listingType = trim((string) ($property['listingType'] ?? 'for_sale'));
+        if ($listingType === 'for_rent') {
+            $listingTypeBadgeText = 'For Rent';
+        } elseif ($listingType === 'for_sale_rent') {
+            $listingTypeBadgeText = 'For Sale / Rent';
+        } elseif ($listingType === 'for_sale') {
+            $listingTypeBadgeText = 'For Sale';
+        }
         $whatsappNumber = normalize_phone((string) ($property['whatsappNumber'] ?? ''));
         if ($whatsappNumber === '') {
             $whatsappNumber = $defaultWhatsappNumber;
@@ -184,15 +200,16 @@ if (!function_exists('render_property_card')) {
                         </div>
                         <div class="top">
                             <ul class="d-flex gap-6">
+                                <?php if ($categoryBadgeText !== ''): ?>
+                                    <li class="flag-tag style-1"><?php echo htmlspecialchars($categoryBadgeText, ENT_QUOTES, 'UTF-8'); ?></li>
+                                <?php endif; ?>
+                                <?php if ($listingTypeBadgeText !== ''): ?>
+                                    <li class="flag-tag style-1"><?php echo htmlspecialchars($listingTypeBadgeText, ENT_QUOTES, 'UTF-8'); ?></li>
+                                <?php endif; ?>
                                 <?php 
                                 $featuredBadgeText = trim($property['featuredBadgeText'] ?? '');
                                 if ($featuredBadgeText !== ''): ?>
                                     <li class="flag-tag primary"><?php echo htmlspecialchars($featuredBadgeText, ENT_QUOTES, 'UTF-8'); ?></li>
-                                <?php endif; ?>
-                                <?php 
-                                $forSaleBadgeText = trim($property['forSaleBadgeText'] ?? '');
-                                if ($forSaleBadgeText !== ''): ?>
-                                    <li class="flag-tag style-1"><?php echo htmlspecialchars($forSaleBadgeText, ENT_QUOTES, 'UTF-8'); ?></li>
                                 <?php endif; ?>
                             </ul>
                         </div>

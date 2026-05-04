@@ -25,17 +25,17 @@ function admin_layout_top(string $pageTitle = 'Admin Panel', string $activePage 
             <nav class="admin-menu">
                 <a class="<?php echo $activePage === 'dashboard' ? 'active' : ''; ?>" href="index.php">Dashboard</a>
                 <h6 class="admin-menu-title">CONTENT MANAGEMENT</h6>
-                <a class="<?php echo $activePage === 'categories' ? 'active' : ''; ?>"
-                    href="categories.php">Categories</a>
+                <!-- <a class="<?php echo $activePage === 'categories' ? 'active' : ''; ?>"
+                    href="categories.php">Categories</a> -->
                 <a class="<?php echo $activePage === 'properties' ? 'active' : ''; ?>"
                     href="properties.php">Properties</a>
-                <a class="<?php echo $activePage === 'top-properties' ? 'active' : ''; ?>"
+                <!-- <a class="<?php echo $activePage === 'top-properties' ? 'active' : ''; ?>"
                     href="top-properties.php">Top Properties</a>
-                <a class="<?php echo $activePage === 'hero-section' ? 'active' : ''; ?>" href="hero-section.php">Hero Section</a>
+                <a class="<?php echo $activePage === 'hero-section' ? 'active' : ''; ?>" href="hero-section.php">Hero Section</a> -->
                 <a class="<?php echo $activePage === 'gallery' ? 'active' : ''; ?>" href="gallery.php">Gallery</a>
-                <a class="<?php echo $activePage === 'cities' ? 'active' : ''; ?>" href="cities.php">Explore Cities</a>
+                <!-- <a class="<?php echo $activePage === 'cities' ? 'active' : ''; ?>" href="cities.php">Explore Cities</a>
                 <a class="<?php echo $activePage === 'partners' ? 'active' : ''; ?>"
-                    href="partners.php">Trusted Companies</a>
+                    href="partners.php">Trusted Companies</a> -->
                 <a class="<?php echo $activePage === 'testimonials' ? 'active' : ''; ?>"
                     href="testimonials.php">Testimonials</a>
                 <a class="<?php echo $activePage === 'messages' ? 'active' : ''; ?>" href="messages.php">Messages</a>

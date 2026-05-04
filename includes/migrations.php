@@ -21,6 +21,23 @@ function table_exists(string $table): bool
   return $result instanceof mysqli_result && $result->num_rows > 0;
 }
 
+function column_type(string $table, string $column): string
+{
+  $conn = db();
+  $database = $conn->real_escape_string((string) $conn->query('SELECT DATABASE() AS db')->fetch_assoc()['db']);
+  $tableEscaped = $conn->real_escape_string($table);
+  $columnEscaped = $conn->real_escape_string($column);
+  $sql = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '{$database}' AND TABLE_NAME = '{$tableEscaped}' AND COLUMN_NAME = '{$columnEscaped}' LIMIT 1";
+  $result = $conn->query($sql);
+
+  if ($result instanceof mysqli_result) {
+    $row = $result->fetch_assoc();
+    return (string) ($row['COLUMN_TYPE'] ?? '');
+  }
+
+  return '';
+}
+
 function run_app_migrations(): void
 {
   static $hasRun = false;
@@ -42,6 +59,14 @@ function run_app_migrations(): void
 
   if (!has_column('properties', 'whatsapp_number')) {
     $conn->query("ALTER TABLE properties ADD COLUMN whatsapp_number VARCHAR(25) NOT NULL DEFAULT '' AFTER website_label");
+  }
+
+  if (!has_column('properties', 'listing_type')) {
+    $conn->query("ALTER TABLE properties ADD COLUMN listing_type ENUM('for_sale', 'for_rent', 'for_sale_rent') NOT NULL DEFAULT 'for_sale' AFTER whatsapp_number");
+  }
+
+  if (has_column('properties', 'listing_type') && strpos(column_type('properties', 'listing_type'), 'for_sale_rent') === false) {
+    $conn->query("ALTER TABLE properties MODIFY COLUMN listing_type ENUM('for_sale', 'for_rent', 'for_sale_rent') NOT NULL DEFAULT 'for_sale'");
   }
 
   if (!table_exists('admin_password_resets')) {

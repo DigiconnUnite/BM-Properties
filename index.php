@@ -23,6 +23,13 @@
             <?php 
             $testimonials = get_testimonials(true);
             $heroSections = array_slice(get_hero_sections(true), 0, 4); // Get max 4 active hero sections
+            $homeCategories = get_categories(true);
+            $homePropertyCountByCategory = get_active_property_counts_by_category_slug();
+            $propertyTypeIconsBySlug = [
+                'plot' => 'icon-villa-line',
+                'farmhouse' => 'icon-studio',
+                'office' => 'icon-office1',
+            ];
             ?>
 
             <!-- Slider -->
@@ -177,103 +184,26 @@
                         <div dir="ltr" class="swiper tf-sw-categories" data-preview="3" data-tablet="3"
                             data-mobile-sm="3" data-mobile="2" data-space="15" data-space-md="30" data-space-lg="30">
                             <div class="swiper-wrapper">
-                                <!-- <div class="swiper-slide">
-                                    <a href="#" class="homelengo-categories style-02">
-                                        <div class="icon-box">
-                                            <span class="icon icon-apartment1"></span>
-                                        </div>
-                                        <div class="content text-center">
-                                            <h6>Apartment</h6>
-                                            <p class="mt-4 text-variant-1">24 Property</p>
-                                        </div>
-                                    </a>
-                                </div> -->
-                                <div class="swiper-slide">
-                                    <a href="properties.php" class="homelengo-categories style-02">
-                                        <div class="icon-box">
-                                            <span class="icon icon-villa-line"></span>
-                                        </div>
-                                        <div class="content text-center">
-                                            <h6>Plot</h6>
-                                            <p class="mt-4 text-variant-1">14 Properties</p>
-                                        </div>
-                                    </a>
-
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="properties.php" class="homelengo-categories style-02">
-                                        <div class="icon-box">
-                                            <span class="icon icon-studio"></span>
-                                        </div>
-                                        <div class="content text-center">
-                                            <h6>Farmhouse</h6>
-                                            <p class="mt-4 text-variant-1">10 Properties</p>
-                                        </div>
-                                    </a>
-
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="properties.php" class="homelengo-categories style-02">
-                                        <div class="icon-box">
-                                            <p class="icon icon-office1"></p>
-                                        </div>
-                                        <div class="content text-center">
-                                            <h6>Office</h6>
-                                            <p class="mt-4 text-variant-1">50 Properties</p>
-                                        </div>
-                                    </a>
-
-                                </div>
-                                <!-- <div class="swiper-slide">
-                                    <a href="#" class="homelengo-categories style-02">
-                                        <div class="icon-box">
-                                            <p class="icon icon-townhouse"></p>
-
-                                        </div>
-                                        <div class="content text-center">
-                                            <h6>Land</h6>
-                                            <p class="mt-4 text-variant-1">10 Property</p>
-                                        </div>
-                                    </a>
-
-                                </div> -->
-                                <!-- <div class="swiper-slide">
-                                    <a href="#" class="homelengo-categories style-02">
-                                        <div class="icon-box">
-                                            <span class="icon icon-commercial"></span>
-
-                                        </div>
-                                        <div class="content text-center">
-                                            <h6>Commercial</h6>
-                                            <p class="mt-4 text-variant-1">28 Property</p>
-                                        </div>
-                                    </a>
-
-                                </div> -->
-                                <!-- <div class="swiper-slide">
-                                    <a href="#" class="homelengo-categories style-02">
-                                        <div class="icon-box">
-                                            <span class="icon icon-villa-line"></span>
-                                        </div>
-                                        <div class="content text-center">
-                                            <h6>Villa</h6>
-                                            <p class="mt-4 text-variant-1">234 Property</p>
-                                        </div>
-                                    </a>
-
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="#" class="homelengo-categories style-02">
-                                        <div class="icon-box">
-                                            <span class="icon icon-studio"></span>
-                                        </div>
-                                        <div class="content text-center">
-                                            <h6>Studio</h6>
-                                            <p class="mt-4 text-variant-1">234 Property</p>
-                                        </div>
-                                    </a>
-
-                                </div> -->
+                                <?php foreach ($homeCategories as $homeCategory): ?>
+                                    <?php
+                                    $categorySlug = (string) ($homeCategory['slug'] ?? '');
+                                    $categoryName = (string) ($homeCategory['name'] ?? 'Category');
+                                    $categoryCount = (int) ($homePropertyCountByCategory[$categorySlug] ?? 0);
+                                    $categoryIconClass = (string) ($propertyTypeIconsBySlug[$categorySlug] ?? 'icon-home');
+                                    $propertyWord = $categoryCount === 1 ? 'Property' : 'Properties';
+                                    ?>
+                                    <div class="swiper-slide">
+                                        <a href="properties.php" class="homelengo-categories style-02">
+                                            <div class="icon-box">
+                                                <span class="icon <?php echo htmlspecialchars($categoryIconClass, ENT_QUOTES, 'UTF-8'); ?>"></span>
+                                            </div>
+                                            <div class="content text-center">
+                                                <h6><?php echo htmlspecialchars($categoryName, ENT_QUOTES, 'UTF-8'); ?></h6>
+                                                <p class="mt-4 text-variant-1"><?php echo (int) $categoryCount; ?> <?php echo $propertyWord; ?></p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
                             <div class="sw-pagination sw-pagination-category text-center"></div>
 
