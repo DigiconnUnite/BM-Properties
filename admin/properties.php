@@ -35,7 +35,7 @@ admin_layout_top($pageTitle, $activePage);
                 <tr>
                     <th>Name</th>
                     <th>Category</th>
-                    <th>Slug</th>
+                    <th>Listing Type</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -45,7 +45,12 @@ admin_layout_top($pageTitle, $activePage);
                     <tr>
                         <td><?php echo htmlspecialchars($property['name'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($property['category'], ENT_QUOTES, 'UTF-8'); ?></td>
-                        <td><?php echo htmlspecialchars($property['slug'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td>
+                            <?php $listingType = strtolower((string) ($property['listing_type'] ?? 'for_sale')); ?>
+                            <span class="admin-badge-type">
+                                <?php echo htmlspecialchars(listing_type_label($listingType), ENT_QUOTES, 'UTF-8'); ?>
+                            </span>
+                        </td>
                         <td>
                             <?php $propertyStatus = strtolower((string) ($property['status'] ?? 'active')); ?>
                             <span class="admin-badge-status <?php echo $propertyStatus === 'active' ? 'active' : 'inactive'; ?>">

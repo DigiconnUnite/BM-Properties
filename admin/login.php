@@ -52,19 +52,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body class="admin-body admin-auth-body">
     <div class="admin-auth-wrap">
-        <!-- <aside class="admin-auth-brand-panel">
-            <h1>BM Properties</h1>
+        <aside class="admin-auth-brand-panel">
+            <p class="auth-kicker">BM Properties</p>
+            <h1>Admin Panel</h1>
             <p>Secure administration for properties, gallery, enquiries, and website content.</p>
             <ul>
                 <li>Manage live property listings</li>
                 <li>Review messages and enquiries</li>
                 <li>Keep website images and content fresh</li>
             </ul>
-        </aside> -->
+        </aside>
+
         <div class="admin-auth-card admin-login-card">
             <div class="admin-login-head">
-                <h1>BM Properties</h1>
-                <p>Admin Panel Login</p>
+                <h1>Welcome back</h1>
+                <p>Sign in to continue to the admin dashboard.</p>
             </div>
             <div class="admin-login-content">
 

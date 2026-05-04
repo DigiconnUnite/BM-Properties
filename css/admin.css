@@ -285,8 +285,8 @@ body.admin-body {
 }
 
 .admin-stepper-tab.is-complete .admin-stepper-index {
-  background: #ec7f68;
-  border-color: #ec7f68;
+  background: #1563df;
+  border-color: #1563df;
 }
 
 .admin-step-panel {
@@ -402,6 +402,11 @@ body.admin-body {
   color: #fff;
 }
 
+/* .admin-badge-type {
+  background: #245ebd;
+  color: #fff;
+} */
+
 .admin-pagination {
   margin-top: 14px;
   display: flex;
@@ -473,25 +478,46 @@ body.admin-body {
   margin: 10px 0 0;
   padding: 0;
   list-style: none;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 8px;
 }
 
 .admin-upload-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 12px;
   border: 1px solid #d8e0ed;
   border-radius: 8px;
-  padding: 8px 10px;
+  padding: 8px 12px;
   background: #fff;
+  max-width: 100%;
 }
 
 .admin-upload-item span {
   color: #101a2f;
   font-size: 14px;
   word-break: break-all;
+}
+
+.admin-upload-item-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-step-alert {
+  display: none;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(201, 55, 55, 0.18);
+  background: rgba(201, 55, 55, 0.08);
+  color: #a11d1d;
+  font-weight: 600;
 }
 
 .message-cell {
@@ -512,6 +538,9 @@ body.admin-body {
   align-items: center;
   justify-content: center;
   padding: 28px;
+  background:
+    radial-gradient(circle at top left, rgba(21, 99, 223, 0.18), transparent 36%),
+    linear-gradient(180deg, #f4f7fb 0%, #edf2f8 100%);
 }
 
 .admin-auth-card {
@@ -545,15 +574,25 @@ body.admin-body {
   color: #102a54;
 }
 
-/* .admin-auth-wrap {
-  width: min(100%, 980px);
+.admin-auth-wrap {
+  width: min(100%, 1040px);
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) minmax(360px, 460px);
+  grid-template-columns: minmax(280px, 1.1fr) minmax(360px, 0.9fr);
   gap: 18px;
-} */
+  align-items: stretch;
+}
+
+.auth-kicker {
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.72);
+}
 
 .admin-auth-brand-panel {
-  background: linear-gradient(145deg, #0f1f3d 0%, #1563df 100%);
+  /* background: url(images/all-properties/green-valley-empire.webp); */
   color: #fff;
   border-radius: 14px;
   padding: 34px 30px;
@@ -736,6 +775,10 @@ body.admin-body {
 
   .admin-auth-wrap {
     grid-template-columns: 1fr;
+  }
+
+  .admin-auth-body {
+    padding: 18px;
   }
 
   .admin-form-grid {

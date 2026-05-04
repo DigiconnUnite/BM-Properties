@@ -5,6 +5,7 @@ require_once __DIR__ . '/_bootstrap.php';
 $pageTitle = 'Dashboard';
 $activePage = 'dashboard';
 $propertyCount = get_property_count();
+$propertyTypeCount = count(get_categories(true));
 $galleryCount = get_gallery_count();
 $messageCount = get_message_count();
 $enquiryCount = get_enquiry_count();
@@ -16,8 +17,12 @@ admin_layout_top($pageTitle, $activePage);
 ?>
 <section class="admin-grid-cards">
     <article class="admin-card">
-        <h2>Total Properties</h2>
+        <h2>Listed Properties</h2>
         <p class="admin-stat"><?php echo (int) $propertyCount; ?></p>
+    </article>
+    <article class="admin-card">
+        <h2>Property Types</h2>
+        <p class="admin-stat"><?php echo (int) $propertyTypeCount; ?></p>
     </article>
     <article class="admin-card">
         <h2>Gallery Images</h2>

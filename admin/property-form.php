@@ -149,6 +149,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form[$key] = clean_text((string) ($_POST[$key] ?? ''));
   }
 
+  if (!array_key_exists('slug', $_POST)) {
+    $form['slug'] = (string) ($property['slug'] ?? '');
+  }
+
+  if (!array_key_exists('nearby', $_POST)) {
+    $form['nearby'] = (string) ($property['nearby'] ?? '');
+  }
+
   $existingGallery = isset($_POST['existing_gallery_images']) && is_array($_POST['existing_gallery_images'])
     ? array_values(array_filter(array_map(static fn($value) => clean_text((string) $value), $_POST['existing_gallery_images']), static fn($value) => $value !== ''))
     : [];
@@ -275,9 +283,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   if ($error === '') {
-    $slug = $form['slug'] !== '' ? normalize_slug($form['slug']) : normalize_slug($form['name']);
+    $slugSource = $form['slug'] !== '' ? $form['slug'] : (string) ($property['slug'] ?? '');
+    $slug = $slugSource !== '' ? normalize_slug($slugSource) : normalize_slug($form['name']);
     if ($slug === '') {
-      $error = 'Please provide a valid property slug or title.';
+      $error = 'Please provide a valid property title.';
     } else {
       $summary = (string) ($descriptionLines[0] ?? '');
       $locationParts = array_filter([
@@ -366,7 +375,7 @@ require_once __DIR__ . '/_layout.php';
 admin_layout_top($pageTitle, $activePage);
 ?>
 <section class="admin-card">
-  <h2><?php echo $id > 0 ? 'Update Property' : 'Add New Property'; ?></h2>
+  <!-- <h2><?php echo $id > 0 ? 'Update Property' : 'Add New Property'; ?></h2> -->
   <?php if ($message !== ''): ?>
     <div class="alert alert-success"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
   <?php if ($error !== ''): ?>
@@ -424,12 +433,6 @@ admin_layout_top($pageTitle, $activePage);
           <label>Property Title</label>
           <input class="form-control" name="name"
             value="<?php echo htmlspecialchars($form['name'], ENT_QUOTES, 'UTF-8'); ?>" required>
-        </div>
-
-        <div>
-          <label>Slug (optional)</label>
-          <input class="form-control" name="slug"
-            value="<?php echo htmlspecialchars($form['slug'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="auto from title">
         </div>
 
         <div>
@@ -538,12 +541,6 @@ admin_layout_top($pageTitle, $activePage);
         <p>Capture the supporting amenities and nearby points of interest.</p>
       </div>
       <div class="admin-step-grid">
-        <div class="admin-form-full">
-          <label>What's Nearby (intro)</label>
-          <textarea class="form-control" name="nearby"
-            rows="2"><?php echo htmlspecialchars($form['nearby'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-        </div>
-
         <div class="admin-form-full admin-repeater" id="nearby-repeater">
           <label>Nearby Items</label>
           <div class="admin-repeater-controls admin-repeater-controls-tight">
@@ -654,6 +651,132 @@ admin_layout_top($pageTitle, $activePage);
     return Math.min(4, Math.max(1, step));
   }
 
+  function getPanel(step) {
+    return form.querySelector('[data-step-panel="' + step + '"]');
+  }
+
+  function clearStepError(step) {
+    var panel = getPanel(step);
+    if (!panel) {
+      return;
+    }
+
+    var feedback = panel.querySelector('.admin-step-alert');
+    if (feedback) {
+      feedback.textContent = '';
+      feedback.style.display = 'none';
+    }
+  }
+
+  function showStepError(step, message) {
+    var panel = getPanel(step);
+    if (!panel) {
+      window.alert(message);
+      return;
+    }
+
+    var feedback = panel.querySelector('.admin-step-alert');
+    if (!feedback) {
+      feedback = document.createElement('div');
+      feedback.className = 'admin-step-alert';
+      var head = panel.querySelector('.admin-step-panel-head');
+      if (head && head.parentNode) {
+        head.parentNode.insertBefore(feedback, head.nextSibling);
+      } else {
+        panel.appendChild(feedback);
+      }
+    }
+
+    feedback.textContent = message;
+    feedback.style.display = 'block';
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function isValidUrl(value) {
+    if (!value) {
+      return true;
+    }
+
+    try {
+      new URL(value);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function validateStep(step) {
+    clearStepError(step);
+
+    var message = '';
+    var focusField = null;
+
+    if (step === 1) {
+      var category = form.querySelector('[name="category_id"]');
+      var listingType = form.querySelector('[name="listing_type"]');
+      var title = form.querySelector('[name="name"]');
+      var description = form.querySelector('[name="description"]');
+      var websiteUrl = form.querySelector('[name="website_url"]');
+
+      if (title && title.value.trim() === '') {
+        message = 'Property title is required.';
+        focusField = title;
+      } else if (category && category.value.trim() === '') {
+        message = 'Please select a valid category.';
+        focusField = category;
+      } else if (listingType && listingType.value.trim() === '') {
+        message = 'Please select a listing type.';
+        focusField = listingType;
+      } else if (description && description.value.trim() === '') {
+        message = 'Property description is required.';
+        focusField = description;
+      } else if (websiteUrl && websiteUrl.value.trim() !== '' && !isValidUrl(websiteUrl.value.trim())) {
+        message = 'Please enter a valid website URL.';
+        focusField = websiteUrl;
+      }
+    }
+
+    if (step === 2 && message === '') {
+      var mapEmbed = form.querySelector('[name="map_embed"]');
+      var mapCity = form.querySelector('[name="map_city"]');
+      var mapState = form.querySelector('[name="map_state"]');
+
+      if (mapEmbed && mapEmbed.value.trim() === '') {
+        message = 'Map location is required. Paste map URL or iframe code.';
+        focusField = mapEmbed;
+      } else if (mapCity && mapCity.value.trim() === '') {
+        message = 'City is required for location.';
+        focusField = mapCity;
+      } else if (mapState && mapState.value.trim() === '') {
+        message = 'State is required for location.';
+        focusField = mapState;
+      }
+    }
+
+    if (step === 4 && message === '') {
+      var showcaseList = document.getElementById('showcase-images-list');
+      var showcaseInput = document.getElementById('showcase-images-input');
+      var imageCount = showcaseList ? showcaseList.querySelectorAll('li[data-item-type]').length : 0;
+      if (showcaseInput && showcaseInput.files && showcaseInput.files.length > 0) {
+        imageCount += showcaseInput.files.length;
+      }
+
+      if (imageCount === 0) {
+        message = 'Please add at least one showcase image.';
+      }
+    }
+
+    if (message !== '') {
+      showStepError(step, message);
+      if (focusField && typeof focusField.focus === 'function') {
+        focusField.focus();
+      }
+      return false;
+    }
+
+    return true;
+  }
+
   function setStep(step) {
     activeStep = clampStep(step);
     form.setAttribute('data-active-step', String(activeStep));
@@ -670,6 +793,13 @@ admin_layout_top($pageTitle, $activePage);
       panel.classList.toggle('is-active', panelStep === activeStep);
     });
 
+    panels.forEach(function (panel) {
+      var panelStep = Number(panel.getAttribute('data-step-panel') || '1');
+      if (panelStep !== activeStep) {
+        clearStepError(panelStep);
+      }
+    });
+
     if (prevButton) {
       prevButton.disabled = activeStep === 1;
     }
@@ -683,7 +813,11 @@ admin_layout_top($pageTitle, $activePage);
 
   tabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
-      setStep(Number(tab.getAttribute('data-step-target') || '1'));
+      var targetStep = Number(tab.getAttribute('data-step-target') || '1');
+      if (targetStep > activeStep && !validateStep(activeStep)) {
+        return;
+      }
+      setStep(targetStep);
     });
   });
 
@@ -695,11 +829,27 @@ admin_layout_top($pageTitle, $activePage);
 
   if (nextButton) {
     nextButton.addEventListener('click', function () {
+      if (!validateStep(activeStep)) {
+        return;
+      }
       setStep(activeStep + 1);
     });
   }
 
-  form.addEventListener('submit', function () {
+  form.addEventListener('submit', function (event) {
+    if (activeStep < 4) {
+      event.preventDefault();
+      if (validateStep(activeStep)) {
+        setStep(activeStep + 1);
+      }
+      return;
+    }
+
+    if (!validateStep(4)) {
+      event.preventDefault();
+      return;
+    }
+
     if (submitButton) {
       submitButton.disabled = true;
     }

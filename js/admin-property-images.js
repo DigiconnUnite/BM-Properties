@@ -177,6 +177,56 @@
       storeNode.value = items.join("\n");
     }
 
+    function editItem(index) {
+      if (index < 0 || index >= items.length) {
+        return;
+      }
+
+      if (config.mode === "pair") {
+        var currentItem = items[index];
+        var nextLabel = window.prompt("Edit label", currentItem.label);
+        if (nextLabel === null) {
+          return;
+        }
+
+        var trimmedLabel = nextLabel.trim();
+        if (trimmedLabel === "") {
+          return;
+        }
+
+        var nextValue = window.prompt("Edit value", currentItem.value);
+        if (nextValue === null) {
+          return;
+        }
+
+        var trimmedValue = nextValue.trim();
+        if (trimmedValue === "") {
+          return;
+        }
+
+        items[index] = {
+          label: trimmedLabel,
+          value: trimmedValue,
+        };
+        render();
+        return;
+      }
+
+      var currentText = items[index];
+      var nextText = window.prompt("Edit item", currentText);
+      if (nextText === null) {
+        return;
+      }
+
+      var trimmedText = nextText.trim();
+      if (trimmedText === "") {
+        return;
+      }
+
+      items[index] = trimmedText;
+      render();
+    }
+
     function render() {
       listNode.innerHTML = "";
 
@@ -190,6 +240,15 @@
             ? item.label + ": " + item.value
             : item;
 
+        var actions = document.createElement("div");
+        actions.className = "admin-upload-item-actions";
+
+        var editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.className = "btn btn-sm btn-outline-primary";
+        editButton.textContent = "Edit";
+        editButton.setAttribute("data-edit-index", String(index));
+
         var removeButton = document.createElement("button");
         removeButton.type = "button";
         removeButton.className = "btn btn-sm btn-outline-danger";
@@ -197,7 +256,9 @@
         removeButton.setAttribute("data-remove-index", String(index));
 
         row.appendChild(text);
-        row.appendChild(removeButton);
+        actions.appendChild(editButton);
+        actions.appendChild(removeButton);
+        row.appendChild(actions);
         listNode.appendChild(row);
       });
 
@@ -265,6 +326,17 @@
 
       var removeIndexAttr = target.getAttribute("data-remove-index");
       if (removeIndexAttr === null) {
+        var editIndexAttr = target.getAttribute("data-edit-index");
+        if (editIndexAttr === null) {
+          return;
+        }
+
+        var editIndex = Number(editIndexAttr);
+        if (Number.isNaN(editIndex) || editIndex < 0 || editIndex >= items.length) {
+          return;
+        }
+
+        editItem(editIndex);
         return;
       }
 
