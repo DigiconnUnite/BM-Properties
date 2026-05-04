@@ -51,63 +51,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body class="admin-body admin-auth-body">
-    <div class="admin-auth-wrap">
-        <aside class="admin-auth-brand-panel">
-            <p class="auth-kicker">BM Properties</p>
-            <h1>Admin Panel</h1>
-            <p>Secure administration for properties, gallery, enquiries, and website content.</p>
-            <ul>
-                <li>Manage live property listings</li>
-                <li>Review messages and enquiries</li>
-                <li>Keep website images and content fresh</li>
-            </ul>
-        </aside>
-
-        <div class="admin-auth-card admin-login-card">
-            <div class="admin-login-head">
-                <h1>Welcome back</h1>
-                <p>Sign in to continue to the admin dashboard.</p>
-            </div>
-            <div class="admin-login-content">
-
-            <?php if ($success !== ''): ?>
-                <div class="alert alert-success"><?php echo htmlspecialchars($success, ENT_QUOTES, 'UTF-8'); ?></div>
-            <?php endif; ?>
-            <?php if ($error !== ''): ?>
-                <div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div>
-            <?php endif; ?>
-
-            <form method="post" action="" class="admin-auth-form">
-                <input type="hidden" name="csrf_token"
-                    value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <div class="admin-input-group">
-                        <span class="admin-input-icon icon-profile" aria-hidden="true"></span>
-                        <input type="text" class="form-control" id="username" name="username" required
-                            autocomplete="username" maxlength="80">
-                    </div>
+    <div class="admin-auth-container">
+        <div class="admin-auth-form-section">
+            <div class="admin-login-card">
+                <div class="admin-login-head">
+                    <h1>Welcome back</h1>
+                    <p>Sign in to continue to the admin dashboard.</p>
                 </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="admin-input-group">
-                        <span class="admin-input-icon icon-lockers" aria-hidden="true"></span>
-                        <input type="password" class="form-control" id="password" name="password" required
-                            autocomplete="current-password" maxlength="200">
-                        <button class="admin-password-toggle" type="button" aria-label="Show password" data-target="password">
-                            <span class="icon-eye" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary admin-btn admin-btn-block admin-login-submit">
-                    <span class="icon-sign-out" aria-hidden="true"></span>
-                    Login
-                </button>
-            </form>
+                <div class="admin-login-content">
 
-            <div class="admin-auth-links">
-                <a href="reset-password.php">Reset Password</a>
+                <?php if ($success !== ''): ?>
+                    <div class="alert alert-success"><?php echo htmlspecialchars($success, ENT_QUOTES, 'UTF-8'); ?></div>
+                <?php endif; ?>
+                <?php if ($error !== ''): ?>
+                    <div class="alert alert-danger"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div>
+                <?php endif; ?>
+
+                <form method="post" action="" class="admin-auth-form">
+                    <input type="hidden" name="csrf_token"
+                        value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <div class="admin-input-group">
+                            <span class="admin-input-icon icon-profile" aria-hidden="true"></span>
+                            <input type="text" class="form-control" id="username" name="username" required
+                                autocomplete="username" maxlength="80">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="admin-input-group">
+                            <span class="admin-input-icon icon-lockers" aria-hidden="true"></span>
+                            <input type="password" class="form-control" id="password" name="password" required
+                                autocomplete="current-password" maxlength="200">
+                            <button class="admin-password-toggle" type="button" aria-label="Show password" data-target="password">
+                                <span class="icon-eye" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary admin-btn admin-btn-block admin-login-submit">
+                        <span class="icon-sign-out" aria-hidden="true"></span>
+                        Login
+                    </button>
+                </form>
+
+                <div class="admin-auth-links">
+                    <a href="reset-password.php">Reset Password</a>
+                </div>
+                </div>
             </div>
+        </div>
+
+        <div class="admin-auth-image-section">
+            <div class="admin-auth-image-content">
+                <h2>BM Properties</h2>
+                <p>Secure administration for properties, gallery, enquiries, and website content.</p>
             </div>
         </div>
     </div>

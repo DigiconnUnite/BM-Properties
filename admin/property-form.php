@@ -467,8 +467,8 @@ admin_layout_top($pageTitle, $activePage);
               <option value="Size">Size</option>
               <option value="Status">Status</option>
               <option value="Facing">Facing</option>
-              <option value="Possession">Possession</option>
-              <option value="RERA No">RERA No</option>
+              <!-- <option value="Possession">Possession</option> -->
+              <!-- <option value="RERA No">RERA No</option> -->
               <option value="Booking Amount">Booking Amount</option>
               <option value="Plot Size">Plot Size</option>
               <option value="__custom__">Custom...</option>

@@ -91,7 +91,7 @@ $items = get_admin_hero_sections();
 
 admin_layout_top($pageTitle, $activePage);
 ?>
-<section class="admin-card">
+<section class="admin-card main-content">
     <h2><?php echo $editing ? 'Edit Hero Section Item' : 'Add Hero Section Item'; ?></h2>
     <?php if ($message !== ''): ?>
         <div class="alert alert-success"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
@@ -154,7 +154,7 @@ admin_layout_top($pageTitle, $activePage);
     </form>
 </section>
 
-<section class="admin-card">
+<section class="admin-card main-content">
     <h2>Hero Section Items</h2>
     <div class="table-responsive">
         <table class="table admin-table">

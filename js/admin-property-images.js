@@ -184,47 +184,138 @@
 
       if (config.mode === "pair") {
         var currentItem = items[index];
-        var nextLabel = window.prompt("Edit label", currentItem.label);
-        if (nextLabel === null) {
-          return;
+        var row = listNode.children[index];
+        if (!row) return;
+
+        var textSpan = row.querySelector('span');
+        if (!textSpan) return;
+
+        var originalText = textSpan.textContent;
+        textSpan.innerHTML = '';
+
+        var labelInput = document.createElement('input');
+        labelInput.type = 'text';
+        labelInput.value = currentItem.label;
+        labelInput.className = 'form-control form-control-sm';
+        labelInput.style.marginRight = '5px';
+        labelInput.style.width = '120px';
+
+        var valueInput = document.createElement('input');
+        valueInput.type = 'text';
+        valueInput.value = currentItem.value;
+        valueInput.className = 'form-control form-control-sm';
+        valueInput.style.width = '150px';
+
+        var saveButton = document.createElement('button');
+        saveButton.type = 'button';
+        saveButton.className = 'btn btn-sm btn-success';
+        saveButton.textContent = 'Save';
+        saveButton.style.marginLeft = '5px';
+
+        var cancelButton = document.createElement('button');
+        cancelButton.type = 'button';
+        cancelButton.className = 'btn btn-sm btn-secondary';
+        cancelButton.textContent = 'Cancel';
+        cancelButton.style.marginLeft = '5px';
+
+        textSpan.appendChild(labelInput);
+        textSpan.appendChild(valueInput);
+        textSpan.appendChild(saveButton);
+        textSpan.appendChild(cancelButton);
+
+        var actions = row.querySelector('.admin-upload-item-actions');
+        if (actions) actions.style.display = 'none';
+
+        function saveEdit() {
+          var trimmedLabel = labelInput.value.trim();
+          var trimmedValue = valueInput.value.trim();
+          if (trimmedLabel !== "" && trimmedValue !== "") {
+            items[index] = {
+              label: trimmedLabel,
+              value: trimmedValue,
+            };
+            render();
+          }
         }
 
-        var trimmedLabel = nextLabel.trim();
-        if (trimmedLabel === "") {
-          return;
+        function cancelEdit() {
+          textSpan.textContent = originalText;
+          if (actions) actions.style.display = 'inline-flex';
         }
 
-        var nextValue = window.prompt("Edit value", currentItem.value);
-        if (nextValue === null) {
-          return;
-        }
-
-        var trimmedValue = nextValue.trim();
-        if (trimmedValue === "") {
-          return;
-        }
-
-        items[index] = {
-          label: trimmedLabel,
-          value: trimmedValue,
-        };
-        render();
+        saveButton.addEventListener('click', saveEdit);
+        cancelButton.addEventListener('click', cancelEdit);
+        labelInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            valueInput.focus();
+          }
+        });
+        valueInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            saveEdit();
+          }
+        });
         return;
       }
 
       var currentText = items[index];
-      var nextText = window.prompt("Edit item", currentText);
-      if (nextText === null) {
-        return;
+      var row = listNode.children[index];
+      if (!row) return;
+
+      var textSpan = row.querySelector('span');
+      if (!textSpan) return;
+
+      var originalText = textSpan.textContent;
+      textSpan.innerHTML = '';
+
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.value = currentText;
+      input.className = 'form-control form-control-sm';
+      input.style.width = '300px';
+
+      var saveButton = document.createElement('button');
+      saveButton.type = 'button';
+      saveButton.className = 'btn btn-sm btn-success';
+      saveButton.textContent = 'Save';
+      saveButton.style.marginLeft = '5px';
+
+      var cancelButton = document.createElement('button');
+      cancelButton.type = 'button';
+      cancelButton.className = 'btn btn-sm btn-secondary';
+      cancelButton.textContent = 'Cancel';
+      cancelButton.style.marginLeft = '5px';
+
+      textSpan.appendChild(input);
+      textSpan.appendChild(saveButton);
+      textSpan.appendChild(cancelButton);
+
+      var actions = row.querySelector('.admin-upload-item-actions');
+      if (actions) actions.style.display = 'none';
+
+      function saveEdit() {
+        var trimmedText = input.value.trim();
+        if (trimmedText !== "") {
+          items[index] = trimmedText;
+          render();
+        }
       }
 
-      var trimmedText = nextText.trim();
-      if (trimmedText === "") {
-        return;
+      function cancelEdit() {
+        textSpan.textContent = originalText;
+        if (actions) actions.style.display = 'inline-flex';
       }
 
-      items[index] = trimmedText;
-      render();
+      saveButton.addEventListener('click', saveEdit);
+      cancelButton.addEventListener('click', cancelEdit);
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          saveEdit();
+        }
+      });
     }
 
     function render() {

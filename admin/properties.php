@@ -24,7 +24,7 @@ $properties = get_admin_properties_paginated($offset, $perPage);
 require_once __DIR__ . '/_layout.php';
 admin_layout_top($pageTitle, $activePage);
 ?>
-<section class="admin-card">
+<section class="admin-card main-content">
     <div class="admin-card-head">
         <h2>All Properties</h2>
         <a class="btn btn-primary admin-btn" href="modules/properties/create.php">Add New Property</a>
@@ -46,7 +46,7 @@ admin_layout_top($pageTitle, $activePage);
                         <td><?php echo htmlspecialchars($property['name'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($property['category'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td>
-                            <?php $listingType = strtolower((string) ($property['listing_type'] ?? 'for_sale')); ?>
+                            <?php $listingType = strtolower((string) ($property['listingType'] ?? 'for_sale')); ?>
                             <span class="admin-badge-type">
                                 <?php echo htmlspecialchars(listing_type_label($listingType), ENT_QUOTES, 'UTF-8'); ?>
                             </span>

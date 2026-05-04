@@ -24,7 +24,7 @@ $enquiries = get_enquiries_paginated($offset, $perPage);
 require_once __DIR__ . '/_layout.php';
 admin_layout_top($pageTitle, $activePage);
 ?>
-<section class="admin-card">
+<section class="admin-card main-content">
   <h2>Incoming Enquiries</h2>
   <table class="table admin-table">
     <thead>

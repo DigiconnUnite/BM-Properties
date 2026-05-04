@@ -17,36 +17,57 @@ admin_layout_top($pageTitle, $activePage);
 ?>
 <section class="admin-grid-cards">
     <article class="admin-card">
+        <div class="admin-card-icon">
+            <i class="fa-solid fa-building"></i>
+        </div>
         <h2>Listed Properties</h2>
         <p class="admin-stat"><?php echo (int) $propertyCount; ?></p>
     </article>
     <article class="admin-card">
+        <div class="admin-card-icon">
+            <i class="fa-solid fa-layer-group"></i>
+        </div>
         <h2>Property Types</h2>
         <p class="admin-stat"><?php echo (int) $propertyTypeCount; ?></p>
     </article>
     <article class="admin-card">
+        <div class="admin-card-icon">
+            <i class="fa-solid fa-images"></i>
+        </div>
         <h2>Gallery Images</h2>
         <p class="admin-stat"><?php echo (int) $galleryCount; ?></p>
     </article>
     <article class="admin-card">
+        <div class="admin-card-icon">
+            <i class="fa-solid fa-star"></i>
+        </div>
         <h2>Top Properties</h2>
         <p class="admin-stat"><?php echo (int) $topPropertyCount; ?></p>
     </article>
     <article class="admin-card">
+        <div class="admin-card-icon">
+            <i class="fa-solid fa-message"></i>
+        </div>
         <h2>Contact Messages</h2>
         <p class="admin-stat"><?php echo (int) $messageCount; ?></p>
     </article>
     <article class="admin-card">
+        <div class="admin-card-icon">
+            <i class="fa-solid fa-envelope"></i>
+        </div>
         <h2>Total Enquiries</h2>
         <p class="admin-stat"><?php echo (int) $enquiryCount; ?></p>
     </article>
     <article class="admin-card">
+        <div class="admin-card-icon">
+            <i class="fa-solid fa-comments"></i>
+        </div>
         <h2>Testimonials</h2>
         <p class="admin-stat"><?php echo (int) $testimonialCount; ?></p>
     </article>
 </section>
 
-<section class="admin-card">
+<section class="admin-card main-content">
     <h2>Quick Actions</h2>
     <div class="admin-quick-actions">
         <a class="btn btn-primary admin-btn" href="property-form.php">Add Property</a>

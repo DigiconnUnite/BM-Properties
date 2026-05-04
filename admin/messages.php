@@ -20,7 +20,7 @@ $messages = get_contact_messages();
 require_once __DIR__ . '/_layout.php';
 admin_layout_top($pageTitle, $activePage);
 ?>
-<section class="admin-card">
+<section class="admin-card main-content">
     <h2>Incoming Messages</h2>
     <div class="table-responsive">
         <table class="table admin-table">

@@ -17,19 +17,45 @@ body.admin-body {
 .admin-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: auto 1fr;
 }
 
 .admin-sidebar {
+  grid-row: 1 / -1;
+  width: 260px;
   background: #0f1f3d;
-  color: #fff;
-  padding: 22px 14px 16px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
+  color: #ced7eb;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+.admin-menu{
+  padding: 15px;
+}
+.admin-sidebar-header {
+  background: #0f1f3d;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 60px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-sidebar-logo {
+  max-width: 100%;
+  height: auto;
+  max-height: 40px;
+  object-fit: contain;
+}
+
+.admin-sidebar-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .admin-brand {
@@ -50,13 +76,19 @@ body.admin-body {
 }
 
 .admin-menu a {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: #ced7eb;
   text-decoration: none;
   padding: 8px 10px;
   border-radius: 8px;
   margin-bottom: 6px;
   font-size: 16px;
+}
+
+.admin-menu a .icon {
+  font-size: 18px;
 }
 
 .admin-menu a.active,
@@ -88,25 +120,47 @@ body.admin-body {
 }
 
 .admin-main {
-  padding: 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .admin-header {
+  background: #0f1f3d;
+  padding: 16px 24px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  height: 60px;
+}
+
+.admin-header-content {
+  padding: 24px;
+}
+
+.admin-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-header-icon {
+  font-size: 24px;
+  color: #1563df;
 }
 
 .admin-header h1 {
-  font-size: 28px;
+  font-size: 24px;
   margin: 0;
+  color: #fff;
 }
 
 .admin-header-actions {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-left: auto;
 }
 
 .admin-user {
@@ -142,6 +196,7 @@ body.admin-body {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
   margin-bottom: 18px;
+  padding: 40px;
 }
 
 .admin-card {
@@ -150,11 +205,22 @@ body.admin-body {
   border-radius: 14px;
   padding: 20px;
   margin-bottom: 18px;
+  position: relative;
+}
+
+.admin-card-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 28px;
+  color: #1563df;
+  opacity: 0.8;
 }
 
 .admin-card h2 {
   margin-top: 0;
   font-size: 20px;
+  padding-right: 40px;
 }
 
 .admin-stat {
@@ -413,6 +479,7 @@ body.admin-body {
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
+  margin-right: 20px;
 }
 
 .admin-pagination-info {
@@ -574,12 +641,185 @@ body.admin-body {
   color: #102a54;
 }
 
-.admin-auth-wrap {
-  width: min(100%, 1040px);
-  display: grid;
-  grid-template-columns: minmax(280px, 1.1fr) minmax(360px, 0.9fr);
-  gap: 18px;
-  align-items: stretch;
+.admin-auth-body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: #f5f7fa;
+}
+
+.admin-auth-container {
+  display: flex;
+  max-width: 1000px;
+  width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.admin-auth-form-section {
+  flex: 1;
+  padding: 50px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #fff;
+}
+
+.admin-auth-image-section {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(21, 99, 223, 0.2), rgba(15, 79, 180, 0.2)),
+              url('../images/slider/sli-1.webp') center/cover no-repeat;
+  min-height: 500px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.admin-auth-image-content {
+  color: #fff;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.admin-auth-image-content h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.admin-auth-image-content p {
+  font-size: 16px;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  line-height: 1.6;
+}
+
+.admin-login-card {
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.admin-login-head {
+  background: transparent;
+  color: #1a1a1a;
+  padding: 0 0 30px;
+  text-align: left;
+}
+
+.admin-login-head h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.admin-login-head p {
+  font-size: 14px;
+  color: #fff;
+  margin: 0;
+}
+
+.admin-login-content {
+  padding: 0;
+}
+
+.admin-auth-form .form-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.admin-input-group {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.admin-input-group:focus-within {
+  border-color: #1563df;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(21, 99, 223, 0.1);
+}
+
+.admin-input-group .form-control {
+  min-height: 48px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  font-size: 15px;
+}
+
+.admin-input-icon,
+.admin-password-toggle {
+  background: transparent;
+  border: 0;
+  color: #666;
+}
+
+.admin-password-toggle {
+  border-left: 1px solid #e0e0e0;
+}
+
+.admin-login-submit {
+  min-height: 50px;
+  margin-top: 24px;
+  background: linear-gradient(135deg, #1563df 0%, #0f4fb4 100%);
+  border: 0;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.admin-login-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(21, 99, 223, 0.3);
+}
+
+.admin-auth-links {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.admin-auth-links a {
+  color: #1563df;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.admin-auth-links a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .admin-auth-container {
+    flex-direction: column;
+  }
+
+  .admin-auth-image-section {
+    min-height: 200px;
+  }
+
+  .admin-auth-form-section {
+    padding: 30px 20px;
+  }
 }
 
 .auth-kicker {
@@ -592,11 +832,30 @@ body.admin-body {
 }
 
 .admin-auth-brand-panel {
-  /* background: url(images/all-properties/green-valley-empire.webp); */
+  background: linear-gradient(135deg, rgba(21, 99, 223, 0.9), rgba(15, 79, 180, 0.95)),
+              url('../images/slider/sli-1.webp') center/cover no-repeat;
   color: #fff;
   border-radius: 14px;
   padding: 34px 30px;
   box-shadow: 0 16px 40px rgba(15, 31, 61, 0.24);
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-auth-brand-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 31, 61, 0.4);
+  z-index: 0;
+}
+
+.admin-auth-brand-panel > * {
+  position: relative;
+  z-index: 1;
 }
 
 .admin-auth-brand-panel h1 {
@@ -1144,4 +1403,10 @@ body.admin-body {
   .admin-detail-modal-delete-btn {
     width: 100%;
   }
+}
+
+.main-content{
+  margin: 20px;
+}main-content{
+  margin: 20px;
 }
