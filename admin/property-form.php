@@ -91,6 +91,11 @@ function is_valid_webp_upload(array $file): bool
   return $size > 0 && $size <= (1024 * 1024);
 }
 
+function is_digits_only(string $value): bool
+{
+  return $value !== '' && preg_match('/^\d+$/', $value) === 1;
+}
+
 require_csrf_post();
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
@@ -267,6 +272,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $error = 'Please select a valid category.';
     } elseif ($form['website_url'] !== '' && !filter_var($form['website_url'], FILTER_VALIDATE_URL)) {
       $error = 'Please enter a valid website URL.';
+    } elseif ($form['map_postal'] !== '' && !is_digits_only($form['map_postal'])) {
+      $error = 'Postal code must contain digits only.';
+    } elseif ($form['whatsapp_number'] !== '' && !is_digits_only($form['whatsapp_number'])) {
+      $error = 'WhatsApp number must contain digits only.';
     } elseif (count($galleryImages) === 0) {
       $error = 'Please add at least one showcase image.';
     } elseif (count($galleryImages) > 5) {
@@ -333,7 +342,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'map_embed' => $mapEmbed,
         'website_url' => $form['website_url'],
         'website_label' => 'Visit Website',
-        'whatsapp_number' => normalize_phone($form['whatsapp_number']),
+        'whatsapp_number' => $form['whatsapp_number'],
         'card_highlights' => array_slice($cardHighlightLines, 0, 6),
         'is_featured' => 0,
         'status' => normalize_property_status($form['status']),
@@ -374,7 +383,7 @@ if ($error !== '') {
 require_once __DIR__ . '/_layout.php';
 admin_layout_top($pageTitle, $activePage);
 ?>
-<section class="admin-card">
+<section class="admin-card property-form">
   <!-- <h2><?php echo $id > 0 ? 'Update Property' : 'Add New Property'; ?></h2> -->
   <?php if ($message !== ''): ?>
     <div class="alert alert-success"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
@@ -513,6 +522,7 @@ admin_layout_top($pageTitle, $activePage);
         <div>
           <label>Postal Code</label>
           <input class="form-control" name="map_postal"
+            inputmode="numeric" pattern="[0-9]*" maxlength="10"
             value="<?php echo htmlspecialchars($form['map_postal'], ENT_QUOTES, 'UTF-8'); ?>">
         </div>
         <div>
@@ -529,6 +539,7 @@ admin_layout_top($pageTitle, $activePage);
         <div>
           <label>WhatsApp Number (digits only)</label>
           <input class="form-control" name="whatsapp_number"
+            inputmode="numeric" pattern="[0-9]*" maxlength="15"
             value="<?php echo htmlspecialchars($form['whatsapp_number'], ENT_QUOTES, 'UTF-8'); ?>"
             placeholder="919999999999">
         </div>
@@ -705,6 +716,10 @@ admin_layout_top($pageTitle, $activePage);
     }
   }
 
+  function isDigitsOnly(value) {
+    return /^\d+$/.test(String(value || '').trim());
+  }
+
   function validateStep(step) {
     clearStepError(step);
 
@@ -740,6 +755,8 @@ admin_layout_top($pageTitle, $activePage);
       var mapEmbed = form.querySelector('[name="map_embed"]');
       var mapCity = form.querySelector('[name="map_city"]');
       var mapState = form.querySelector('[name="map_state"]');
+      var mapPostal = form.querySelector('[name="map_postal"]');
+      var whatsappNumber = form.querySelector('[name="whatsapp_number"]');
 
       if (mapEmbed && mapEmbed.value.trim() === '') {
         message = 'Map location is required. Paste map URL or iframe code.';
@@ -750,6 +767,12 @@ admin_layout_top($pageTitle, $activePage);
       } else if (mapState && mapState.value.trim() === '') {
         message = 'State is required for location.';
         focusField = mapState;
+      } else if (mapPostal && mapPostal.value.trim() !== '' && !isDigitsOnly(mapPostal.value)) {
+        message = 'Postal code must contain digits only.';
+        focusField = mapPostal;
+      } else if (whatsappNumber && whatsappNumber.value.trim() !== '' && !isDigitsOnly(whatsappNumber.value)) {
+        message = 'WhatsApp number must contain digits only.';
+        focusField = whatsappNumber;
       }
     }
 

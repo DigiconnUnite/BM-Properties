@@ -102,12 +102,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-        <div class="admin-auth-image-section">
+        <!-- <div class="admin-auth-image-section">
             <div class="admin-auth-image-content">
                 <h2>BM Properties</h2>
                 <p>Secure administration for properties, gallery, enquiries, and website content.</p>
             </div>
-        </div>
+        </div> -->
     </div>
     <script>
         document.querySelectorAll('.admin-password-toggle').forEach(function (button) {

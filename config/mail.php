@@ -2,10 +2,10 @@
 
 return [
   'mailer' => getenv('MAIL_MAILER') ?: 'smtp',
-  'host' => getenv('MAIL_HOST') ?: 'sandbox.smtp.mailtrap.io',
+  'host' => getenv('MAIL_HOST') ?: '',
   'port' => (int) (getenv('MAIL_PORT') ?: 2525),
-  'username' => getenv('MAIL_USERNAME') ?: '120b154f30d18f',
-  'password' => getenv('MAIL_PASSWORD') ?: '793e5ec90f9768',
+  'username' => getenv('MAIL_USERNAME') ?: '',
+  'password' => getenv('MAIL_PASSWORD') ?: '',
   'encryption' => getenv('MAIL_ENCRYPTION') ?: 'none',
   'from_email' => getenv('MAIL_FROM_ADDRESS') ?: 'bmrealestateagra@gmail.com',
   'from_name' => getenv('MAIL_FROM_NAME') ?: 'BM Properties',

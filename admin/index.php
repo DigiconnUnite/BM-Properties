@@ -23,13 +23,13 @@ admin_layout_top($pageTitle, $activePage);
         <h2>Listed Properties</h2>
         <p class="admin-stat"><?php echo (int) $propertyCount; ?></p>
     </article>
-    <article class="admin-card">
+    <!-- <article class="admin-card">
         <div class="admin-card-icon">
             <i class="fa-solid fa-layer-group"></i>
         </div>
         <h2>Property Types</h2>
         <p class="admin-stat"><?php echo (int) $propertyTypeCount; ?></p>
-    </article>
+    </article> -->
     <article class="admin-card">
         <div class="admin-card-icon">
             <i class="fa-solid fa-images"></i>
@@ -37,13 +37,13 @@ admin_layout_top($pageTitle, $activePage);
         <h2>Gallery Images</h2>
         <p class="admin-stat"><?php echo (int) $galleryCount; ?></p>
     </article>
-    <article class="admin-card">
+    <!-- <article class="admin-card">
         <div class="admin-card-icon">
             <i class="fa-solid fa-star"></i>
         </div>
         <h2>Top Properties</h2>
         <p class="admin-stat"><?php echo (int) $topPropertyCount; ?></p>
-    </article>
+    </article> -->
     <article class="admin-card">
         <div class="admin-card-icon">
             <i class="fa-solid fa-message"></i>

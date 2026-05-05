@@ -42,10 +42,10 @@ function admin_layout_top(string $pageTitle = 'Admin Panel', string $activePage 
         <i class="fa-solid fa-building"></i> Properties
     </a>
 
-    <a class="<?php echo $activePage === 'top-properties' ? 'active' : ''; ?>"
+    <!-- <a class="<?php echo $activePage === 'top-properties' ? 'active' : ''; ?>"
         href="top-properties.php">
         <i class="fa-solid fa-star"></i> Top Properties
-    </a>
+    </a> -->
 
     <a class="<?php echo $activePage === 'hero-section' ? 'active' : ''; ?>"
         href="hero-section.php">
@@ -108,6 +108,10 @@ function admin_layout_top(string $pageTitle = 'Admin Panel', string $activePage 
                     <h1>Admin</h1>
                 </div> -->
                 <div class="admin-header-actions">
+                    <button type="button" class="admin-back-btn" onclick="if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'index.php'; }" aria-label="Go back">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Go Back</span>
+                    </button>
                     <a class="admin-profile-icon <?php echo $activePage === 'profile' ? 'active' : ''; ?>"
                         href="profile.php" aria-label="Profile">
                         <?php echo strtoupper(substr((string) (admin_user()['username'] ?? 'A'), 0, 1)); ?>
