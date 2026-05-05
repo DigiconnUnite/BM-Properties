@@ -151,16 +151,23 @@ admin_layout_top($pageTitle, $activePage);
                         </td>
                         <td><?php echo htmlspecialchars(date('M d, Y', strtotime((string) ($item['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?>
                         </td>
-                        <td class="admin-gallery-actions">
-                            <a class="btn btn-sm btn-outline-primary"
-                                href="gallery.php?edit=<?php echo (int) $item['id']; ?>&page=<?php echo (int) $currentPage; ?>">Edit</a>
-                            <form method="post" class="inline-form" onsubmit="return confirm('Delete this gallery item?');">
-                                <input type="hidden" name="csrf_token"
-                                    value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="id" value="<?php echo (int) $item['id']; ?>">
-                                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
-                            </form>
+                        <td>
+                            <div class="property-action-group">
+                                <a class="property-icon-btn property-edit-btn"
+                                    href="gallery.php?edit=<?php echo (int) $item['id']; ?>&page=<?php echo (int) $currentPage; ?>"
+                                    aria-label="Edit gallery item">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </a>
+                                <form method="post" class="inline-form" onsubmit="return confirm('Delete this gallery item?');">
+                                    <input type="hidden" name="csrf_token"
+                                        value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<?php echo (int) $item['id']; ?>">
+                                    <button class="property-icon-btn property-delete-btn" type="submit" aria-label="Delete gallery item">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>

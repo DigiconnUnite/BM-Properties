@@ -102,34 +102,34 @@ admin_layout_top($pageTitle, $activePage);
         <input type="hidden" name="id" value="<?php echo (int) ($editing['id'] ?? 0); ?>">
         <input type="hidden" name="action" value="save">
 
-        <div>
-            <label>Title (Main Heading)</label>
-            <input class="form-control" name="title" required maxlength="255"
-                value="<?php echo htmlspecialchars((string) ($editing['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
-            <small class="text-muted">Example: "Find your"</small>
-        </div>
-        
-        <div>
-            <label>Subtitle (Rotating Text)</label>
-            <input class="form-control" name="subtitle" required maxlength="255"
-                value="<?php echo htmlspecialchars((string) ($editing['subtitle'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
-            <small class="text-muted">Example: "Dream Home", "Perfect Property", "Perfect Space"</small>
+        <div class="testimonials-form-row admin-form-full">
+            <div>
+                <label>Title (Main Heading)</label>
+                <input class="form-control" name="title" required maxlength="255"
+                    value="<?php echo htmlspecialchars((string) ($editing['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                <small class="text-muted">Example: "Find your"</small>
+            </div>
+            <div>
+                <label>Subtitle (Rotating Text)</label>
+                <input class="form-control" name="subtitle" required maxlength="255"
+                    value="<?php echo htmlspecialchars((string) ($editing['subtitle'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                <small class="text-muted">Example: "Dream Home", "Perfect Property", "Perfect Space"</small>
+            </div>
+            <div>
+                <label>Sort Order</label>
+                <input class="form-control" name="sort_order" type="number" min="0" max="4"
+                    value="<?php echo (int) ($editing['sort_order'] ?? 0); ?>">
+                <small class="text-muted">Order of appearance (0-4)</small>
+            </div>
         </div>
         
         <div class="admin-form-full">
             <label>Description</label>
             <textarea class="form-control" name="description" rows="4" required><?php echo htmlspecialchars((string) ($editing['description'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
-            <small class="text-muted">This description will be displayed below the title and subtitle</small>
+            <!-- <small class="text-muted">This description will be displayed below the title and subtitle</small> -->
         </div>
         
         <div>
-            <label>Sort Order</label>
-            <input class="form-control" name="sort_order" type="number" min="0" max="4"
-                value="<?php echo (int) ($editing['sort_order'] ?? 0); ?>">
-            <small class="text-muted">Order of appearance (0-4)</small>
-        </div>
-                
-        <div class="admin-form-full">
             <label>Upload Image (WEBP only, max 1MB)</label>
             <input class="form-control" type="file" name="image_file" accept=".webp,image/webp" <?php echo $editing ? '' : 'required'; ?>>
             <?php if (isset($editing['image_path']) && $editing['image_path'] !== ''): ?>
@@ -190,14 +190,21 @@ admin_layout_top($pageTitle, $activePage);
                                 <?php echo (int) $item['is_active'] === 1 ? 'Active' : 'Inactive'; ?>
                             </span>
                         </td>
-                        <td class="admin-gallery-actions">
-                            <a class="btn btn-sm btn-outline-primary" href="hero-section.php?edit=<?php echo (int) $item['id']; ?>">Edit</a>
-                            <form method="post" class="inline-form" onsubmit="return confirm('Delete this hero section item?');">
-                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="id" value="<?php echo (int) $item['id']; ?>">
-                                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
-                            </form>
+                        <td>
+                            <div class="property-action-group">
+                                <a class="property-icon-btn property-edit-btn" href="hero-section.php?edit=<?php echo (int) $item['id']; ?>"
+                                    aria-label="Edit hero section">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </a>
+                                <form method="post" class="inline-form" onsubmit="return confirm('Delete this hero section item?');">
+                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<?php echo (int) $item['id']; ?>">
+                                    <button class="property-icon-btn property-delete-btn" type="submit" aria-label="Delete hero section">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>

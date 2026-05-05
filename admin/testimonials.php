@@ -102,20 +102,22 @@ admin_layout_top($pageTitle, $activePage);
     <input type="hidden" name="id" value="<?php echo (int) ($editing['id'] ?? 0); ?>">
     <input type="hidden" name="action" value="save">
 
-    <div>
-      <label>Title</label>
-      <input class="form-control" name="title"
-        value="<?php echo htmlspecialchars((string) ($editing['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
-    </div>
-    <div>
-      <label>Subtitle / Role</label>
-      <input class="form-control" name="subtitle"
-        value="<?php echo htmlspecialchars((string) ($editing['subtitle'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
-    </div>
-    <div>
-      <label>Rating (1 to 5)</label>
-      <input class="form-control" type="number" min="1" max="5" name="rating"
-        value="<?php echo (int) ($editing['rating'] ?? 5); ?>" required>
+    <div class="testimonials-form-row admin-form-full">
+      <div>
+        <label>Title</label>
+        <input class="form-control" name="title"
+          value="<?php echo htmlspecialchars((string) ($editing['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
+      </div>
+      <div>
+        <label>Subtitle / Role</label>
+        <input class="form-control" name="subtitle"
+          value="<?php echo htmlspecialchars((string) ($editing['subtitle'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+      </div>
+      <div>
+        <label>Rating (1 to 5)</label>
+        <input class="form-control" type="number" min="1" max="5" name="rating"
+          value="<?php echo (int) ($editing['rating'] ?? 5); ?>" required>
+      </div>
     </div>
     <div class="admin-form-full">
       <label>Message</label>
@@ -172,15 +174,22 @@ admin_layout_top($pageTitle, $activePage);
               </span>
             </td>
             <td>
-              <a class="btn btn-sm btn-outline-primary"
-                href="testimonials.php?edit=<?php echo (int) $item['id']; ?>">Edit</a>
+              <div class="property-action-group">
+                <a class="property-icon-btn property-edit-btn"
+                  href="testimonials.php?edit=<?php echo (int) $item['id']; ?>"
+                  aria-label="Edit testimonial">
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </a>
               <form method="post" class="inline-form" onsubmit="return confirm('Delete this testimonial?');">
                 <input type="hidden" name="csrf_token"
                   value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="id" value="<?php echo (int) $item['id']; ?>">
-                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                  <button class="property-icon-btn property-delete-btn" type="submit" aria-label="Delete testimonial">
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
               </form>
+              </div>
             </td>
           </tr>
         <?php endforeach; ?>

@@ -857,10 +857,11 @@ body.admin-body.property-form-page {
 }
 
 .properties-hero-title {
-  margin: 6px 0 8px;
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--admin-text);
+      margin-top: 0;
+    font-size: 25px;
+    padding-right: 40px;
+    font-weight: 700;
+    margin-bottom: 20px;
 }
 
 .properties-hero-subtitle {
@@ -890,7 +891,7 @@ body.admin-body.property-form-page {
 }
 
 .dashboard-stats-grid {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .dashboard-actions-card {
@@ -2227,4 +2228,11 @@ body.admin-body.property-form-page {
 .admin-login-head img{
   width: 60px;
   height: 60px;
+}
+
+/* Testimonials Form Row */
+.testimonials-form-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
 }

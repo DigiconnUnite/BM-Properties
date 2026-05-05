@@ -52,16 +52,23 @@ admin_layout_top($pageTitle, $activePage);
                             ?>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-outline-primary me-2 js-message-view"
-                                data-target="message-row-<?php echo (int) $message['id']; ?>">View</button>
-                            <form method="post" class="inline-form" action="modules/messages/delete.php"
-                                onsubmit="return confirm('Delete this message?');">
-                                <input type="hidden" name="csrf_token"
-                                    value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="id" value="<?php echo (int) $message['id']; ?>">
-                                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
-                            </form>
+                            <div class="property-action-group">
+                                <button type="button" class="property-icon-btn property-view-btn js-message-view"
+                                    data-target="message-row-<?php echo (int) $message['id']; ?>"
+                                    aria-label="View message">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                                <form method="post" class="inline-form" action="modules/messages/delete.php"
+                                    onsubmit="return confirm('Delete this message?');">
+                                    <input type="hidden" name="csrf_token"
+                                        value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<?php echo (int) $message['id']; ?>">
+                                    <button class="property-icon-btn property-delete-btn" type="submit" aria-label="Delete message">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     <tr id="message-row-<?php echo (int) $message['id']; ?>" class="d-none">

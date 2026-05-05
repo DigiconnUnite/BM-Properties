@@ -115,15 +115,22 @@ admin_layout_top($pageTitle, $activePage);
                             </span>
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-outline-primary"
-                                href="categories.php?edit=<?php echo (int) $category['id']; ?>">Edit</a>
-                            <form method="post" class="inline-form" onsubmit="return confirm('Delete this category?');">
-                                <input type="hidden" name="csrf_token"
-                                    value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="id" value="<?php echo (int) $category['id']; ?>">
-                                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
-                            </form>
+                            <div class="property-action-group">
+                                <a class="property-icon-btn property-edit-btn"
+                                    href="categories.php?edit=<?php echo (int) $category['id']; ?>"
+                                    aria-label="Edit category">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </a>
+                                <form method="post" class="inline-form" onsubmit="return confirm('Delete this category?');">
+                                    <input type="hidden" name="csrf_token"
+                                        value="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<?php echo (int) $category['id']; ?>">
+                                    <button class="property-icon-btn property-delete-btn" type="submit" aria-label="Delete category">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>
