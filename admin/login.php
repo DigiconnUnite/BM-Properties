@@ -55,8 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="admin-auth-form-section">
             <div class="admin-login-card">
                 <div class="admin-login-head">
-                    <h1>Welcome back</h1>
-                    <p>Sign in to continue to the admin dashboard.</p>
+                    <img src="../images/logo/logo-footer-new2.webp">
+                    <h1>Welcome BM Properties</h1>
+                    <p>Log in to continue to the admin dashboard.</p>
                 </div>
                 <div class="admin-login-content">
 

@@ -757,15 +757,15 @@ body.admin-body.property-form-page {
   background: transparent;
 }
 
-.admin-login-head {
+/* .admin-login-head {
   background: transparent;
   color: #1a1a1a;
   padding: 0 0 30px;
   text-align: left;
-}
+} */
 
 .admin-login-head h1 {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: #fff;
   margin: 0 0 8px;
@@ -863,9 +863,9 @@ body.admin-body.property-form-page {
     min-height: 200px;
   }
 
-  .admin-auth-form-section {
+  /* .admin-auth-form-section {
     padding: 30px 20px;
-  }
+  } */
 }
 
 .auth-kicker {
@@ -964,15 +964,15 @@ body.admin-body.property-form-page {
 .admin-login-head {
   background: #245ebd;
   color: #fff;
-  padding: 36px 28px 22px;
+  padding: 22px 28px 22px;
   text-align: center;
 }
 
-.admin-login-head h1 {
+/* .admin-login-head h1 {
   margin: 0 0 8px;
   font-size: 28px;
   font-weight: 800;
-}
+} */
 
 .admin-login-head p {
   margin: 0;
@@ -1485,4 +1485,9 @@ body.admin-body.property-form-page {
 .property-form{
   background: transparent;
   border: none;
+}
+
+.admin-login-head img{
+  width: 60px;
+  height: 60px;
 }
