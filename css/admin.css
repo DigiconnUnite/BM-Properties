@@ -884,6 +884,154 @@ body.admin-body.property-form-page {
   gap: 16px;
 }
 
+.dashboard-page-layout {
+  display: grid;
+  gap: 18px;
+}
+
+.dashboard-stats-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.dashboard-actions-card {
+  display: grid;
+  gap: 14px;
+}
+
+.dashboard-recent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.dashboard-recent-card {
+  display: grid;
+  gap: 16px;
+}
+
+.dashboard-recent-head {
+  margin-bottom: 0;
+}
+
+.dashboard-recent-head h2 {
+  margin-bottom: 6px;
+}
+
+.dashboard-recent-head p {
+  margin: 0;
+  color: #66748f;
+  font-size: 13px;
+}
+
+.dashboard-recent-list {
+  display: grid;
+  gap: 12px;
+}
+
+.dashboard-recent-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 18px;
+  background: #f8fbff;
+  border: 1px solid #e4ebf5;
+}
+
+.dashboard-recent-thumb,
+.dashboard-recent-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  overflow: hidden;
+  flex: 0 0 58px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1563df 0%, #0f4fb4 100%);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.dashboard-recent-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dashboard-recent-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.dashboard-recent-copy strong,
+.dashboard-recent-copy span,
+.dashboard-recent-copy small {
+  display: block;
+}
+
+.dashboard-recent-copy strong {
+  color: var(--admin-text);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.dashboard-recent-copy span {
+  color: #66748f;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 3px;
+}
+
+.dashboard-recent-copy small {
+  color: #8a97ae;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-top: 3px;
+}
+
+.dashboard-recent-side {
+  flex: 0 0 auto;
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+}
+
+.dashboard-recent-side small {
+  color: #8a97ae;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.dashboard-recent-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eef3fb;
+  color: #254b88;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.dashboard-recent-badge-new {
+  background: rgba(21, 99, 223, 0.1);
+  color: var(--admin-primary);
+}
+
+.dashboard-recent-badge-active {
+  background: rgba(21, 184, 106, 0.12);
+  color: #0f8a49;
+}
+
+.dashboard-recent-badge-inactive {
+  background: rgba(220, 53, 69, 0.12);
+  color: #b02a37;
+}
+
 .properties-stat-card {
   display: grid;
   gap: 16px;
@@ -1084,7 +1232,7 @@ body.admin-body.property-form-page {
 }
 
 .property-status-badge {
-  min-width: 90px;
+  /* min-width: 90px; */
   justify-content: center;
 }
 

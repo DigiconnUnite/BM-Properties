@@ -140,9 +140,9 @@ admin_layout_top($pageTitle, $activePage);
                                         <div class="property-media-title">
                                             <?php echo htmlspecialchars((string) ($property['name'] ?? 'Property'), ENT_QUOTES, 'UTF-8'); ?>
                                         </div>
-                                        <div class="property-media-subtitle">
+                                        <!-- <div class="property-media-subtitle">
                                             <?php echo htmlspecialchars((string) ($property['category'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </td>

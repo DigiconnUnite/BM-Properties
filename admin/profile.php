@@ -104,8 +104,8 @@ admin_layout_top($pageTitle, $activePage);
       <img src="../images/logo/logo-new2.webp" alt="BM Properties logo">
     </div>
     <div class="profile-hero-copy">
-      <span class="profile-hero-kicker">Administrator Profile</span>
-      <h2 class="profile-hero-name"><?php echo htmlspecialchars($adminDisplayName, ENT_QUOTES, 'UTF-8'); ?></h2>
+      <!-- <span class="profile-hero-kicker">Administrator Profile</span> -->
+      <h2 class="profile-hero-name">BM Properties</h2>
       <p class="profile-hero-description">Manage your personal details, contact information, and password in one streamlined place.</p>
       <div class="profile-meta">
         <div class="profile-meta-item">
