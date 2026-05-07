@@ -36,7 +36,7 @@ $propertyCards = [
     [
         'label' => 'Total Properties',
         'value' => number_format($total),
-        'note' => 'All records in the database',
+        'note' => 'Total properties currently listed',
         'icon' => 'fa-building',
     ],
     [

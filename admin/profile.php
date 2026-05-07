@@ -22,17 +22,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($action === 'update_profile') {
     $username = clean_text((string) ($_POST['username'] ?? ''));
     $fullName = clean_text((string) ($_POST['full_name'] ?? ''));
-    $email = strtolower(clean_text((string) ($_POST['email'] ?? '')));
     $facebookUrl = clean_text((string) ($_POST['facebook_url'] ?? '#'));
     $instagramUrl = clean_text((string) ($_POST['instagram_url'] ?? '#'));
     $youtubeUrl = clean_text((string) ($_POST['youtube_url'] ?? '#'));
 
     if ($username === '' || strlen($username) < 4) {
       $error = 'Username must be at least 4 characters.';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $error = 'Please enter a valid email address.';
     } else {
-      update_admin_profile($adminId, $username, $fullName, $email);
+      update_admin_profile($adminId, $username, $fullName, (string) ($admin['email'] ?? ''));
       save_site_settings([
         'office_address' => (string) ($settings['office_address'] ?? ''),
         'phone' => (string) ($settings['phone'] ?? ''),
@@ -74,6 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'phone' => clean_text((string) ($_POST['phone'] ?? '')),
         'email' => clean_text((string) ($_POST['email'] ?? '')),
         'open_time' => clean_text((string) ($_POST['open_time'] ?? '')),
+        'facebook_url' => (string) ($settings['facebook_url'] ?? '#'),
+        'instagram_url' => (string) ($settings['instagram_url'] ?? '#'),
+        'youtube_url' => (string) ($settings['youtube_url'] ?? '#'),
         'page_title_bg' => (string) ($settings['page_title_bg'] ?? 'images/banner/banner2.webp'),
       ]);
       $settings = get_site_settings();
@@ -151,11 +151,6 @@ admin_layout_top($pageTitle, $activePage);
           <input id="username" class="form-control" name="username" required
             value="<?php echo htmlspecialchars((string) ($admin['username'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
             maxlength="80">
-        </div>
-        <div class="admin-form-full">
-          <label for="profile_email">Email</label>
-          <input id="profile_email" type="email" class="form-control" name="email" required
-            value="<?php echo htmlspecialchars((string) ($admin['email'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" maxlength="120">
         </div>
         <div class="admin-form-full">
           <div class="profile-subsection-title">Social Links</div>

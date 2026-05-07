@@ -103,7 +103,7 @@ $globalWhatsappLink = $globalWhatsappNumber !== '' ? ('https://wa.me/' . $global
                             <!-- <span>Follow Us:</span> -->
                             <ul class="list-social d-flex align-items-center mt-12">
                                 <li>
-                                    <a href="#" class="box-icon w-40 social" aria-label="Facebook">
+                                    <a href="<?php echo htmlspecialchars((string) ($settings['facebook_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>" class="box-icon w-40 social" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                                         <svg class="icon" width="9" height="16" viewBox="0 0 9 16" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -113,7 +113,7 @@ $globalWhatsappLink = $globalWhatsappNumber !== '' ? ('https://wa.me/' . $global
                                     </a>
                                 </li>
 
-                                <li><a href="#" class="box-icon w-40 social" aria-label="Instagram">
+                                <li><a href="<?php echo htmlspecialchars((string) ($settings['instagram_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>" class="box-icon w-40 social" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -122,7 +122,7 @@ $globalWhatsappLink = $globalWhatsappNumber !== '' ? ('https://wa.me/' . $global
                                         </svg>
 
                                     </a></li>
-                                <li><a href="#" class="box-icon w-40 social" aria-label="YouTube">
+                                <li><a href="<?php echo htmlspecialchars((string) ($settings['youtube_url'] ?? '#'), ENT_QUOTES, 'UTF-8'); ?>" class="box-icon w-40 social" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
                                         <svg width="16" height="12" viewBox="0 0 16 12" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path

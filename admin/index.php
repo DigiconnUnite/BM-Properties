@@ -37,7 +37,7 @@ admin_layout_top($pageTitle, $activePage);
                 <div class="properties-stat-copy">
                     <span class="properties-stat-label">Listed Properties</span>
                     <strong class="properties-stat-value"><?php echo (int) $propertyCount; ?></strong>
-                    <span class="properties-stat-note">All records in the database</span>
+                    <span class="properties-stat-note">Total properties currently listed</span>
                 </div>
                 <div class="properties-stat-icon">
                     <i class="fa-solid fa-building"></i>
@@ -112,9 +112,9 @@ admin_layout_top($pageTitle, $activePage);
             <div class="admin-card-head dashboard-recent-head">
                 <div>
                     <h2>Recently Added Gallery Images</h2>
-                    <p>Top 5 latest gallery images added in the dashboard.</p>
+                    <!-- <p>Top 5 latest gallery images added in the dashboard.</p> -->
                 </div>
-                <a href="gallery.php">View all</a>
+                <a href="gallery.php" class="view-all">View all</a>
             </div>
             <div class="dashboard-recent-list">
                 <?php foreach ($recentGalleryImages as $galleryItem): ?>
@@ -151,9 +151,9 @@ admin_layout_top($pageTitle, $activePage);
             <div class="admin-card-head dashboard-recent-head">
                 <div>
                     <h2>Recently Added Properties</h2>
-                    <p>Top 5 latest properties added in the dashboard.</p>
+                    <!-- <p>Top 5 latest properties added in the dashboard.</p> -->
                 </div>
-                <a href="properties.php">View all</a>
+                <a href="properties.php" class="view-all">View all</a>
             </div>
             <div class="dashboard-recent-list">
                 <?php foreach ($recentProperties as $property): ?>

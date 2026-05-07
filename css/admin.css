@@ -2236,3 +2236,7 @@ body.admin-body.property-form-page {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
+
+.view-all{
+  text-decoration: none !important;
+}

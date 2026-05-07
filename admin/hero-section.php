@@ -161,8 +161,8 @@ admin_layout_top($pageTitle, $activePage);
             <thead>
                 <tr>
                     <th>Image</th>
-                    <th>Title</th>
-                    <th>Subtitle</th>
+                    <th style="width: 10%;">Title</th>
+                    <th style="width: 10%;">Subtitle</th>
                     <th>Description</th>
                     <th>Order</th>
                     <th>Status</th>
